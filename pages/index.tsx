@@ -48,7 +48,7 @@ const Home: NextPage = () => {
       flexDirection='column'
       width='100wh'
       height='100vh'
-      backgroundColor='gray.200'
+      backgroundColor='blackAlpha.700'
       justifyContent='center'
       alignItems='center'
     >
@@ -65,7 +65,7 @@ const Home: NextPage = () => {
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
           <FaBug style={{ margin: '1rem' }} size={45} />
-          <Heading>Bug Tracker Sign In</Heading>
+          <Heading>Bug Tracker Login</Heading>
         </Flex>
 
         {/* FORM  */}
@@ -76,7 +76,7 @@ const Home: NextPage = () => {
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents='none'>
-                    <CFaUserAlt color='gray.300' />
+                    <CFaUserAlt color='gray.500' />
                   </InputLeftElement>
                   <Input
                     type='email'
@@ -92,8 +92,8 @@ const Home: NextPage = () => {
               {/* PASSWORD */}
               <FormControl>
                 <InputGroup>
-                  <InputLeftElement pointerEvents='none' color='gray.300'>
-                    <CFaLock color='gray.300' />
+                  <InputLeftElement pointerEvents='none' color='gray.500'>
+                    <CFaLock color='gray.500' />
                   </InputLeftElement>
                   <Input
                     type={showPassword ? 'text' : 'password'}
