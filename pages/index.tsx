@@ -15,7 +15,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FaUserAlt, FaLock, FaBug } from 'react-icons/fa';
 
 const helperTexts = [
@@ -23,15 +23,26 @@ const helperTexts = [
   { text: 'Create an account?', hyperText: 'Sign Up', url: 'signup' },
   { text: 'Sign in as a', hyperText: 'Demo User', url: 'demo' },
 ];
-
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
+const iniitalFormValues = {
+  email: '',
+  password: '',
+};
 
 const Home: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formValues, setFormValues] = useState(iniitalFormValues);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFormValues({ ...formValues, [e.target.name]: e.target.value });
+
+  const onSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    console.log('i do be submitting and logging in');
+  };
   return (
     <Flex
       flexDirection='column'
@@ -48,19 +59,17 @@ const Home: NextPage = () => {
         alignItems='center'
         backgroundColor='white'
         boxShadow='md'
-        p={{ base: '1rem', sm: '2rem', md: '3rem', lg: '5rem' }}
+        p={{ base: '1rem', sm: '2rem', md: '3rem' }}
       >
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
-          <div style={{ margin: '1rem' }}>
-            <FaBug size={45} />
-          </div>
+          <FaBug style={{ margin: '1rem' }} size={45} />
           <Heading>Bug Tracker Login</Heading>
         </Flex>
 
         {/* FORM  */}
         <Box minW={{ base: '90%', md: '458px' }}>
-          <form>
+          <form onSubmit={onSubmit}>
             <Stack spacing={4} p='1rem'>
               {/* EMAIL */}
               <FormControl>
@@ -68,7 +77,15 @@ const Home: NextPage = () => {
                   <InputLeftElement pointerEvents='none'>
                     <CFaUserAlt color='gray.300' />
                   </InputLeftElement>
-                  <Input type='email' placeholder='Email Address' />
+                  <Input
+                    type='email'
+                    placeholder='Email Address'
+                    id='email'
+                    name='email'
+                    onChange={onChange}
+                    autoComplete='email'
+                    required
+                  />
                 </InputGroup>
               </FormControl>
               {/* PASSWORD */}
@@ -80,6 +97,11 @@ const Home: NextPage = () => {
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     placeholder='Password'
+                    id='password'
+                    name='password'
+                    onChange={onChange}
+                    autoComplete='current-password'
+                    required
                   />
                   <InputRightElement>
                     <Button
