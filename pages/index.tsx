@@ -17,6 +17,12 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 
+const helperTexts = [
+  { text: 'Forgot your', hyperText: 'Password?', url: 'forgot' },
+  { text: 'Create an account?', hyperText: 'Sign Up', url: 'signup' },
+  { text: 'Sign in as a', hyperText: 'Demo User', url: 'demo' },
+];
+
 const Home: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -77,14 +83,21 @@ const Home: NextPage = () => {
                 </InputGroup>
                 {/* BOTTOM  LINKS */}
                 <FormHelperText textAlign='center'>
-                  <div>
-                    Forgot your{' '}
-                    <Text as='u'>
-                      <Link href='forgot'>Password?</Link>
-                    </Text>
-                  </div>
+                  {helperTexts.map((helperText) => {
+                    return (
+                      <div key={helperText.url}>
+                        {helperText.text}{' '}
+                        <Text as='u'>
+                          <Link href={helperText.url}>
+                            {helperText.hyperText}
+                          </Link>
+                        </Text>
+                      </div>
+                    );
+                  })}
                 </FormHelperText>
               </FormControl>
+              {/* SUBMIT LOGIN */}
               <Button
                 borderRadius={0}
                 type='submit'
