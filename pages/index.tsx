@@ -41,8 +41,8 @@ const Home: NextPage = () => {
 
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    console.log('i do be submitting and logging in');
   };
+
   return (
     <Flex
       flexDirection='column'
@@ -60,6 +60,7 @@ const Home: NextPage = () => {
         backgroundColor='white'
         boxShadow='md'
         p={{ base: '1rem', sm: '2rem', md: '3rem' }}
+        rounded='xl'
       >
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
@@ -122,6 +123,7 @@ const Home: NextPage = () => {
                   width='full'
                   marginTop={5}
                   marginBottom={5}
+                  rounded='xl'
                 >
                   Login
                 </Button>
