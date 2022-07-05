@@ -1,8 +1,8 @@
 import type { NextPage } from 'next';
 import {
-  Avatar,
   Box,
   Button,
+  chakra,
   Flex,
   FormControl,
   FormHelperText,
@@ -16,12 +16,16 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useState } from 'react';
+import { FaUserAlt, FaLock, FaBug } from 'react-icons/fa';
 
 const helperTexts = [
   { text: 'Forgot your', hyperText: 'Password?', url: 'forgot' },
   { text: 'Create an account?', hyperText: 'Sign Up', url: 'signup' },
   { text: 'Sign in as a', hyperText: 'Demo User', url: 'demo' },
 ];
+
+const CFaUserAlt = chakra(FaUserAlt);
+const CFaLock = chakra(FaLock);
 
 const Home: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,8 +51,10 @@ const Home: NextPage = () => {
         p={{ base: '1rem', sm: '2rem', md: '3rem', lg: '5rem' }}
       >
         {/* HEADING */}
-        <Flex>
-          <Avatar />
+        <Flex justifyContent='center' alignItems='center'>
+          <div style={{ margin: '1rem' }}>
+            <FaBug size={45} />
+          </div>
           <Heading>Bug Tracker Login</Heading>
         </Flex>
 
@@ -59,14 +65,18 @@ const Home: NextPage = () => {
               {/* EMAIL */}
               <FormControl>
                 <InputGroup>
-                  {/* <InputLeftElement pointerEvents="none" children={<CFaUserAlt color="gray.300"/>}/> */}
+                  <InputLeftElement pointerEvents='none'>
+                    <CFaUserAlt color='gray.300' />
+                  </InputLeftElement>
                   <Input type='email' placeholder='Email Address' />
                 </InputGroup>
               </FormControl>
               {/* PASSWORD */}
               <FormControl>
                 <InputGroup>
-                  {/* <InputLeftElement pointerEvents='none' color='gray.300' children={<CFaLock color='gray.300'/>}/> */}
+                  <InputLeftElement pointerEvents='none' color='gray.300'>
+                    <CFaLock color='gray.300' />
+                  </InputLeftElement>
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     placeholder='Password'
@@ -81,32 +91,41 @@ const Home: NextPage = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
+                {/* SUBMIT LOGIN */}
+                <Button
+                  borderRadius={0}
+                  type='submit'
+                  variant='solid'
+                  colorScheme='blue'
+                  width='full'
+                  marginTop={5}
+                  marginBottom={5}
+                >
+                  Login
+                </Button>
                 {/* BOTTOM  LINKS */}
                 <FormHelperText textAlign='center'>
                   {helperTexts.map((helperText) => {
                     return (
-                      <div key={helperText.url}>
-                        {helperText.text}{' '}
-                        <Text as='u'>
+                      <Flex
+                        justifyContent='center'
+                        alignItems='center'
+                        key={helperText.url}
+                        padding='.5rem'
+                      >
+                        <Text marginRight={1} fontSize='md'>
+                          {helperText.text}
+                        </Text>
+                        <Text as='u' fontSize='md'>
                           <Link href={helperText.url}>
                             {helperText.hyperText}
                           </Link>
                         </Text>
-                      </div>
+                      </Flex>
                     );
                   })}
                 </FormHelperText>
               </FormControl>
-              {/* SUBMIT LOGIN */}
-              <Button
-                borderRadius={0}
-                type='submit'
-                variant='solid'
-                colorScheme='blue'
-                width='full'
-              >
-                Login
-              </Button>
             </Stack>
           </form>
         </Box>
