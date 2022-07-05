@@ -65,7 +65,7 @@ const Home: NextPage = () => {
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
           <FaBug style={{ margin: '1rem' }} size={45} />
-          <Heading>Bug Tracker Login</Heading>
+          <Heading>Bug Tracker Sign In</Heading>
         </Flex>
 
         {/* FORM  */}
@@ -114,7 +114,7 @@ const Home: NextPage = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                {/* SUBMIT LOGIN */}
+                {/* SUBMIT Sign In */}
                 <Button
                   borderRadius={0}
                   type='submit'
@@ -125,7 +125,7 @@ const Home: NextPage = () => {
                   marginBottom={5}
                   rounded='xl'
                 >
-                  Login
+                  Sign In
                 </Button>
                 {/* BOTTOM  LINKS */}
                 <FormHelperText textAlign='center'>
