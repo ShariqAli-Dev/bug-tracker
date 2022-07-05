@@ -119,7 +119,7 @@ const Home: NextPage = () => {
                   borderRadius={0}
                   type='submit'
                   variant='solid'
-                  colorScheme='blue'
+                  colorScheme='facebook'
                   width='full'
                   marginTop={5}
                   marginBottom={5}
