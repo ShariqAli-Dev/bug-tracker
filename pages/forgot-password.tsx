@@ -19,10 +19,10 @@ import React, { useState } from 'react';
 import { FaUserAlt } from 'react-icons/fa';
 
 const CFaUserAlt = chakra(FaUserAlt);
-const iniitalFormValues = { email: '' };
+const initalFormValues = { email: '' };
 
 const ForgotPassword: NextPage = () => {
-  const [formValues, setFormValues] = useState(iniitalFormValues);
+  const [formValues, setFormValues] = useState(initalFormValues);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
