@@ -19,8 +19,7 @@ import React, { useState } from 'react';
 import { FaUserAlt, FaLock, FaBug } from 'react-icons/fa';
 
 const helperTexts = [
-  { text: 'Forgot your', hyperText: 'Password?', url: 'forgot-password' },
-  { text: 'Create an account?', hyperText: 'Sign Up', url: 'signup' },
+  { text: 'Have an account?', hyperText: 'Sign In', url: '/' },
   { text: 'Sign in as a', hyperText: 'Demo User', url: 'demo' },
 ];
 const CFaUserAlt = chakra(FaUserAlt);
@@ -30,7 +29,7 @@ const iniitalFormValues = {
   password: '',
 };
 
-const Home: NextPage = () => {
+const Signup: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState(iniitalFormValues);
 
@@ -65,7 +64,7 @@ const Home: NextPage = () => {
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
           <FaBug style={{ margin: '1rem' }} size={45} />
-          <Heading>Bug Tracker Login</Heading>
+          <Heading>Bug Tracker Registration</Heading>
         </Flex>
 
         {/* FORM  */}
@@ -114,18 +113,18 @@ const Home: NextPage = () => {
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                {/* SUBMIT Sign In */}
+                {/* SUBMIT LOGIN */}
                 <Button
                   borderRadius={0}
                   type='submit'
                   variant='solid'
-                  colorScheme='facebook'
+                  colorScheme='blue'
                   width='full'
                   marginTop={5}
                   marginBottom={5}
                   rounded='xl'
                 >
-                  Sign In
+                  Sign Up
                 </Button>
                 {/* BOTTOM  LINKS */}
                 <FormHelperText textAlign='center'>
@@ -158,4 +157,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Signup;
