@@ -25,7 +25,7 @@ const NavBar: NextPage = () => {
   return (
     <Stack>
       {/* Home title, user imgage */}
-      <Flex flexDir='row' alignItems='center'>
+      <Flex margin={3} flexDir='row' alignItems='center'>
         <Image
           w='35%'
           alt='user icon'
