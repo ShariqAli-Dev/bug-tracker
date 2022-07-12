@@ -24,14 +24,14 @@ const helperTexts = [
 ];
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
-const iniitalFormValues = {
+const initalFormValues = {
   email: '',
   password: '',
 };
 
 const Signup: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formValues, setFormValues] = useState(iniitalFormValues);
+  const [formValues, setFormValues] = useState(initalFormValues);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
