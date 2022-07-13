@@ -76,7 +76,7 @@ const Demo: NextPage = () => {
             );
           })}
         </SimpleGrid>
-        {/* Hyperlink */}
+        {/* Hyperlink */}p
         <Flex justifyContent='center' alignItems='center' padding='.5rem'>
           <Text color='blackAlpha.700' marginRight={1} fontSize='lg'>
             Take me back to
