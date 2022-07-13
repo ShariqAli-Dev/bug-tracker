@@ -21,14 +21,14 @@ import {
   MdNotificationsActive,
   MdNotificationsOff,
   MdMarkAsUnread,
+  MdArchive,
 } from 'react-icons/md';
-import { FaArchive } from 'react-icons/Fa';
 import { nanoid } from 'nanoid';
 import { initialNotifications } from '../utils/dummyData';
 
 const Notis = chakra(MdNotificationsActive);
 const NoNotis = chakra(MdNotificationsOff);
-const CArchive = chakra(FaArchive);
+const CArchive = chakra(MdArchive);
 const CUnread = chakra(MdMarkAsUnread);
 
 const Notifications: NextPage = () => {
