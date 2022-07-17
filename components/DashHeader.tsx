@@ -2,6 +2,7 @@ import type { NextPage } from 'next';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import QueryForm from './QueryForm';
 import Notifications from './Notifications';
+import UserActions from './UserActions';
 
 const DashHeader: NextPage = () => {
   return (
@@ -29,7 +30,7 @@ const DashHeader: NextPage = () => {
         <Flex justifyContent='space-around' alignItems='center' padding='.5rem'>
           <QueryForm />
           <Notifications />
-          <h1>User Profile</h1>
+          <UserActions />
         </Flex>
       </Box>
     </Flex>
