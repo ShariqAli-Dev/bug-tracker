@@ -12,7 +12,7 @@ const Dashboard: NextPage = () => {
       </Flex>
 
       {/* Components */}
-      <Flex backgroundColor='grey' w='full'>
+      <Flex backgroundColor='blackAlpha.300' w='full'>
         {/* DashHeader Component */}
         <DashHeader />
         {/* Components */}

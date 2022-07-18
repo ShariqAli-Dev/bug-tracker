@@ -7,19 +7,20 @@ import UserActions from './UserActions';
 const DashHeader: NextPage = () => {
   return (
     <Flex
-      backgroundColor='orange'
+      backgroundColor='white'
       w='full'
       h='7%'
       justifyContent='space-between'
       alignItems='center'
+      boxShadow='xl'
     >
       {/* Logged in as Admin */}
       <Box>
         <Flex justifyContent='center' alignItems='center' padding='.5rem'>
-          <Text color='blackAlpha.700' marginRight={1} fontSize='md'>
+          <Text color='blackAlpha.700' marginRight={1} fontSize='lg'>
             Logged in as:
           </Text>
-          <Text color='blackAlpha.700' as='u' fontSize='md'>
+          <Text color='blackAlpha.700' as='u' fontSize='lg'>
             Admin
           </Text>
         </Flex>
