@@ -3,6 +3,7 @@ import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
 import NavBar from '../components/Navbar';
 import DashHeader from '../components/DashHeader';
 import TicketsByPriority from '../components/TicketsByPriority';
+import TicketsByType from '../components/TicketsByType';
 
 const Dashboard: NextPage = () => {
   return (
@@ -30,7 +31,7 @@ const Dashboard: NextPage = () => {
           <GridItem>
             <Flex justifyContent='center' alignItems='center' h='full'>
               <Box h='80%' w='80%'>
-                <TicketsByPriority />
+                <TicketsByType />
               </Box>
             </Flex>
           </GridItem>
