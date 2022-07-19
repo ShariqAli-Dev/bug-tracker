@@ -30,11 +30,11 @@ const Dashboard: NextPage = () => {
 
   useEffect(() => {
     setChartData({
-      labels: ['John', 'Kevin', 'Geroge', 'Micheal', 'Oreo'],
+      labels: ['None', 'Low', 'Medium', 'High'],
       datasets: [
         {
-          label: "Whom'st let the dogs out",
-          data: [12, 55, 34, 120, 720],
+          // label: "Whom'st let the dogs out",
+          data: [2, 3, 4, 1],
           borderColor: 'rgb(53, 162, 235)',
           backgroundColor: ['#9C2A4B', '#320311'],
         },
@@ -45,11 +45,12 @@ const Dashboard: NextPage = () => {
       responsive: true,
       plugins: {
         legend: {
-          position: 'top',
+          position: 'bottom',
+          display: false,
         },
         title: {
           display: true,
-          text: "Whom'st let the dogs out",
+          text: 'Tickets By Priority',
         },
       },
     });
@@ -75,13 +76,25 @@ const Dashboard: NextPage = () => {
             </Flex>
           </GridItem>
           <GridItem>
-            <h1>hehe</h1>
+            <Flex justifyContent='center' alignItems='center' h='full'>
+              <Box h='80%' w='80%'>
+                <Bar options={chartOptions} data={chartData} />
+              </Box>
+            </Flex>
           </GridItem>
           <GridItem>
-            <h1>hehe</h1>
+            <Flex justifyContent='center' alignItems='center' h='full'>
+              <Box h='80%' w='80%'>
+                <Bar options={chartOptions} data={chartData} />
+              </Box>
+            </Flex>
           </GridItem>
           <GridItem>
-            <h1>hehe</h1>
+            <Flex justifyContent='center' alignItems='center' h='full'>
+              <Box h='80%' w='80%'>
+                <Bar options={chartOptions} data={chartData} />
+              </Box>
+            </Flex>
           </GridItem>
         </Grid>
       </Flex>
