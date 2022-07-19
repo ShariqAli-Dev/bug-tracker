@@ -9,7 +9,12 @@ const Dashboard: NextPage = () => {
   return (
     <Flex h='100vh' flexDir='row' overflow='hidden' maxW='2000px'>
       {/* Dashboard/Navbar */}
-      <Flex w='15%' flexDir='column' alignItems='center'>
+      <Flex
+        w='15%'
+        flexDir='column'
+        alignItems='center'
+        boxShadow='2px 0 5px -2px #888'
+      >
         <NavBar />
       </Flex>
 
