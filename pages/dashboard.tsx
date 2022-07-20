@@ -5,6 +5,7 @@ import DashHeader from '../components/DashHeader';
 import TicketsByPriority from '../components/TicketsByPriority';
 import TicketsByType from '../components/TicketsByType';
 import TicketsByProgress from '../components/TicketsByProgress';
+import TicketsByUser from '../components/TicketsByUser';
 
 const Dashboard: NextPage = () => {
   return (
@@ -33,7 +34,7 @@ const Dashboard: NextPage = () => {
               </Box>
             </Flex>
           </GridItem>
-          {/*  */}
+          {/* Tickets By Type */}
           <GridItem>
             <Flex justifyContent='center' alignItems='center' h='full'>
               <Box h='80%' w='80%'>
@@ -41,7 +42,7 @@ const Dashboard: NextPage = () => {
               </Box>
             </Flex>
           </GridItem>
-          {/*  */}
+          {/* Tickets By Progress */}
           <GridItem>
             <Flex justifyContent='center' alignItems='center' h='full'>
               <Box h='80%' w='80%'>
@@ -49,11 +50,11 @@ const Dashboard: NextPage = () => {
               </Box>
             </Flex>
           </GridItem>
-          {/*  */}
+          {/* Tickets By User */}
           <GridItem>
             <Flex justifyContent='center' alignItems='center' h='full'>
               <Box h='80%' w='80%'>
-                <TicketsByPriority />
+                <TicketsByUser />
               </Box>
             </Flex>
           </GridItem>
