@@ -19,12 +19,18 @@ ChartJS.register(
 );
 
 const chartData = {
-  labels: ['None', 'Low', 'Medium', 'High'],
+  labels: [
+    'New',
+    'Open',
+    'In Progress',
+    'Resolved',
+    'Additional Info Required',
+  ],
   datasets: [
     {
-      data: [2, 3, 4, 1],
+      data: [3, 4, 2, 0, 1],
       borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: ['#9C2A4B', '#320311'],
+      backgroundColor: ['#6666cc', '#2d2d86'],
     },
   ],
 };
@@ -38,12 +44,12 @@ const chartOptions = {
     },
     title: {
       display: true,
-      text: 'Tickets By Priority',
+      text: 'Tickets By Progress',
     },
   },
 };
 
-const TicketsByPriority: NextPage = () => {
+const TicketsByProgress: NextPage = () => {
   return (
     <>
       <Bar options={chartOptions} data={chartData} />
@@ -51,4 +57,4 @@ const TicketsByPriority: NextPage = () => {
   );
 };
 
-export default TicketsByPriority;
+export default TicketsByProgress;
