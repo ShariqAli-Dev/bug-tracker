@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { Box, Flex, Grid, GridItem } from '@chakra-ui/react';
+import { Box, Center, Divider, Flex, Grid, GridItem } from '@chakra-ui/react';
 import NavBar from '../components/Navbar';
 import DashHeader from '../components/DashHeader';
 import TicketsByPriority from '../components/TicketsByPriority';
@@ -16,47 +16,68 @@ const Dashboard: NextPage = () => {
         flexDir='column'
         alignItems='center'
         boxShadow='2px 0 5px -2px #888'
+        display={{ base: 'none', md: 'flex' }}
       >
         <NavBar />
       </Flex>
 
       {/* Components */}
-      <Flex backgroundColor='blackAlpha.200' w='full' flexDirection='column'>
+      <Flex
+        backgroundColor='blackAlpha.200'
+        w='full'
+        flexDirection='column'
+        overflowY='auto'
+      >
         {/* DashHeader Component */}
         <DashHeader />
         {/* Components */}
-        <Grid h='full' templateColumns='repeat(2, 1fr)'>
+        <Grid
+          h='full'
+          templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
+        >
           {/* Tickets by priority */}
-          <GridItem>
-            <Flex justifyContent='center' alignItems='center' h='full'>
-              <Box h='80%' w='80%'>
-                <TicketsByPriority />
-              </Box>
-            </Flex>
+          <GridItem
+            marginBottom='1rem'
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
+              <TicketsByPriority />
+            </Box>
           </GridItem>
           {/* Tickets By Type */}
-          <GridItem>
-            <Flex justifyContent='center' alignItems='center' h='full'>
-              <Box h='80%' w='80%'>
-                <TicketsByType />
-              </Box>
-            </Flex>
+          <GridItem
+            marginBottom='1rem'
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
+              <TicketsByType />
+            </Box>
           </GridItem>
           {/* Tickets By Progress */}
-          <GridItem>
-            <Flex justifyContent='center' alignItems='center' h='full'>
-              <Box h='80%' w='80%'>
-                <TicketsByProgress />
-              </Box>
-            </Flex>
+          <GridItem
+            marginBottom='1rem'
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
+              <TicketsByProgress />
+            </Box>
           </GridItem>
           {/* Tickets By User */}
-          <GridItem>
-            <Flex justifyContent='center' alignItems='center' h='full'>
-              <Box h='80%' w='80%'>
-                <TicketsByUser />
-              </Box>
-            </Flex>
+          <GridItem
+            marginBottom='1rem'
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
+              <TicketsByUser />
+            </Box>
           </GridItem>
         </Grid>
       </Flex>

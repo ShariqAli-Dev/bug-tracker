@@ -26,8 +26,10 @@ const UserActions: NextPage = () => {
     <Menu closeOnSelect={true}>
       <MenuButton>
         <Flex justifyContent='space-around' alignItems='center'>
-          <Text margin='1rem'>User Actions</Text>
-          <UserAvatar size='20px' />
+          <Text display={{ base: 'none', md: 'flex' }} margin='1rem'>
+            User Actions
+          </Text>
+          <UserAvatar size='25px' />
         </Flex>
       </MenuButton>
       <MenuList minWidth='240px'>

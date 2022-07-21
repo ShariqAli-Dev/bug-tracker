@@ -16,7 +16,7 @@ const PageNotFound: NextPage = () => {
         <Text fontSize='xl' my={5} textAlign='center'>
           You just hit a route that doesn&#39;t exist...the sadness.
         </Text>
-        <Link href='/'>
+        <Link href='dashboard'>
           <Button>Go Back</Button>
         </Link>
       </Box>

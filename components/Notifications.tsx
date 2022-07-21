@@ -61,7 +61,9 @@ const Notifications: NextPage = () => {
     <>
       <Box>
         <Flex flexDirection='row' alignItems='center'>
-          <Text marginRight={3}>Notifications</Text>
+          <Text display={{ base: 'none', md: 'flex' }} marginRight={3}>
+            Notifications
+          </Text>
           {hasNotis ? (
             <Notis cursor='pointer' size='30px' onClick={onOpen} />
           ) : (

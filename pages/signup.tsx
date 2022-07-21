@@ -63,6 +63,7 @@ const Signup: NextPage = () => {
         boxShadow='md'
         p={{ base: '1rem', sm: '2rem', md: '3rem' }}
         rounded='xl'
+        width={{ base: '85%', md: '65%', lg: '45%', xl: '35%' }}
       >
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
@@ -121,7 +122,7 @@ const Signup: NextPage = () => {
                   borderRadius={0}
                   type='submit'
                   variant='solid'
-                  colorScheme='blue'
+                  colorScheme='facebook'
                   width='full'
                   marginTop={5}
                   marginBottom={5}

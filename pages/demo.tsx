@@ -49,6 +49,7 @@ const Demo: NextPage = () => {
         boxShadow='md'
         p={{ base: '1rem' }}
         rounded='xl'
+        width={{ base: '85%', md: '75%', lg: '65%', xl: '45%' }}
       >
         {/* Heading */}
         <Flex justifyContent='center' alignItems='center'>
@@ -71,7 +72,9 @@ const Demo: NextPage = () => {
                     flexDirection='column'
                   >
                     <Image w='35%' alt='user icon' src={avatar.url} />
-                    <Text fontSize='xl'>{avatar.role}</Text>
+                    <Text textAlign='center' fontSize='xl'>
+                      {avatar.role}
+                    </Text>
                   </Flex>
                 </Box>
               </Link>

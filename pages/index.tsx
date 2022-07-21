@@ -64,6 +64,7 @@ const Home: NextPage = () => {
         boxShadow='md'
         p={{ base: '1rem', sm: '2rem', md: '3rem' }}
         rounded='xl'
+        width={{ base: '85%', md: '65%', lg: '45%', xl: '35%' }}
       >
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
