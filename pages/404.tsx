@@ -1,5 +1,6 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Button, Heading, Text } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import Link from 'next/link';
 
 const PageNotFound: NextPage = () => {
   return (
@@ -12,9 +13,12 @@ const PageNotFound: NextPage = () => {
         alignItems='center'
       >
         <Heading>404: Not Found</Heading>
-        <Text fontSize='xl' my={5}>
-          You just hit a route that doesn&#39;t exist... the sadness.
+        <Text fontSize='xl' my={5} textAlign='center'>
+          You just hit a route that doesn&#39;t exist...the sadness.
         </Text>
+        <Link href='/'>
+          <Button>Go Back</Button>
+        </Link>
       </Box>
     </>
   );
