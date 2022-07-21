@@ -9,12 +9,19 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import { useRouter } from 'next/router';
 
 import { FaUserAlt } from 'react-icons/fa';
 
 const UserAvatar = chakra(FaUserAlt);
 
 const UserActions: NextPage = () => {
+  const router = useRouter();
+
+  const logoutUser = () => {
+    router.push('/');
+  };
+
   return (
     <Menu closeOnSelect={true}>
       <MenuButton>
@@ -24,10 +31,10 @@ const UserActions: NextPage = () => {
         </Flex>
       </MenuButton>
       <MenuList minWidth='240px'>
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>Settings</MenuItem>
+        <MenuItem onClick={() => router.push('profile')}>Profile</MenuItem>
+        <MenuItem onClick={() => router.push('settings')}>Settings</MenuItem>
         <MenuDivider />
-        <MenuItem>Log Out</MenuItem>
+        <MenuItem onClick={logoutUser}>Log Out</MenuItem>
       </MenuList>
     </Menu>
   );

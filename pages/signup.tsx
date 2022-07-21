@@ -17,6 +17,7 @@ import {
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { FaUserAlt, FaLock, FaBug } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 const helperTexts = [
   { text: 'Have an account?', hyperText: 'Sign In', url: '/' },
@@ -32,6 +33,7 @@ const initalFormValues = {
 const Signup: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState(initalFormValues);
+  const router = useRouter();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -40,6 +42,7 @@ const Signup: NextPage = () => {
 
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    router.push('/dashboard');
   };
 
   return (
