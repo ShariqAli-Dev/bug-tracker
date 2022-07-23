@@ -17,6 +17,7 @@ import {
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { FaUserAlt, FaLock, FaBug } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 const helperTexts = [
   { text: 'Have an account?', hyperText: 'Sign In', url: '/' },
@@ -32,6 +33,7 @@ const initalFormValues = {
 const Signup: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState(initalFormValues);
+  const router = useRouter();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -40,6 +42,7 @@ const Signup: NextPage = () => {
 
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    router.push('/dashboard');
   };
 
   return (
@@ -60,6 +63,7 @@ const Signup: NextPage = () => {
         boxShadow='md'
         p={{ base: '1rem', sm: '2rem', md: '3rem' }}
         rounded='xl'
+        width={{ base: '85%', md: '65%', lg: '45%', xl: '35%' }}
       >
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
@@ -118,7 +122,7 @@ const Signup: NextPage = () => {
                   borderRadius={0}
                   type='submit'
                   variant='solid'
-                  colorScheme='blue'
+                  colorScheme='facebook'
                   width='full'
                   marginTop={5}
                   marginBottom={5}

@@ -18,7 +18,7 @@ const avatars = [
   },
   {
     role: 'Project Manager',
-    url: 'https://cdn-icons.flaticon.com/png/512/2202/premium/2202112.png?token=exp=1657069173~hmac=3a14a544d17ad13ad852d627238857b1',
+    url: 'https://cdn-icons-png.flaticon.com/512/236/236831.png',
   },
   {
     role: 'Developer',
@@ -49,6 +49,7 @@ const Demo: NextPage = () => {
         boxShadow='md'
         p={{ base: '1rem' }}
         rounded='xl'
+        width={{ base: '85%', md: '75%', lg: '65%', xl: '45%' }}
       >
         {/* Heading */}
         <Flex justifyContent='center' alignItems='center'>
@@ -63,16 +64,20 @@ const Demo: NextPage = () => {
         >
           {avatars.map((avatar) => {
             return (
-              <Box key={avatar.url}>
-                <Flex
-                  justifyContent='center'
-                  alignItems='center'
-                  flexDirection='column'
-                >
-                  <Image w='35%' alt='user icon' src={avatar.url} />
-                  <Text fontSize='xl'>{avatar.role}</Text>
-                </Flex>
-              </Box>
+              <Link key={avatar.role} href='dashboard'>
+                <Box cursor='pointer'>
+                  <Flex
+                    justifyContent='center'
+                    alignItems='center'
+                    flexDirection='column'
+                  >
+                    <Image w='35%' alt='user icon' src={avatar.url} />
+                    <Text textAlign='center' fontSize='xl'>
+                      {avatar.role}
+                    </Text>
+                  </Flex>
+                </Box>
+              </Link>
             );
           })}
         </SimpleGrid>

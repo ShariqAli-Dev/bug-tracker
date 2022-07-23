@@ -17,6 +17,7 @@ import {
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { FaUserAlt, FaLock, FaBug } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 const helperTexts = [
   { text: 'Forgot your', hyperText: 'Password?', url: 'forgot-password' },
@@ -33,6 +34,7 @@ const initalFormValues = {
 const Home: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState(initalFormValues);
+  const router = useRouter();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -41,6 +43,7 @@ const Home: NextPage = () => {
 
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    router.push('/dashboard');
   };
 
   return (
@@ -61,6 +64,7 @@ const Home: NextPage = () => {
         boxShadow='md'
         p={{ base: '1rem', sm: '2rem', md: '3rem' }}
         rounded='xl'
+        width={{ base: '85%', md: '65%', lg: '45%', xl: '35%' }}
       >
         {/* HEADING */}
         <Flex justifyContent='center' alignItems='center'>
