@@ -61,13 +61,27 @@ const Notifications: NextPage = () => {
     <>
       <Box>
         <Flex flexDirection='row' alignItems='center'>
-          <Text display={{ base: 'none', md: 'flex' }} marginRight={3}>
+          <Text
+            color='primary'
+            display={{ base: 'none', md: 'flex' }}
+            marginRight={3}
+          >
             Notifications
           </Text>
           {hasNotis ? (
-            <Notis cursor='pointer' size='30px' onClick={onOpen} />
+            <Notis
+              color='secondary'
+              cursor='pointer'
+              size='30px'
+              onClick={onOpen}
+            />
           ) : (
-            <NoNotis cursor='pointer' size='30px' onClick={onOpen} />
+            <NoNotis
+              color='secondary'
+              cursor='pointer'
+              size='30px'
+              onClick={onOpen}
+            />
           )}
         </Flex>
       </Box>
@@ -77,23 +91,29 @@ const Notifications: NextPage = () => {
         isOpen={isOpen}
         isCentered
         scrollBehavior='inside'
-        size='xl'
+        size={{ base: 'sm', sm: 'md', md: 'xl' }}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent color='primary'>
           <ModalHeader textAlign='center'>Notifications</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Flex justifyContent='space-between'>
               <Button
+                color={showArchived ? 'primary' : 'tertiary'}
+                backgroundColor={showArchived ? 'tertiary' : 'primary'}
+                border={showArchived ? '2px' : 0}
+                borderColor={showArchived ? 'primary' : ''}
                 onClick={() => setShowArchived(false)}
-                colorScheme={showArchived ? 'gray' : 'facebook'}
               >
                 Read
               </Button>
               <Button
+                color={showArchived ? 'tertiary' : 'primary'}
+                backgroundColor={showArchived ? 'primary' : 'tertiary'}
+                border={showArchived ? 0 : '2px'}
+                borderColor={showArchived ? '' : 'primary'}
                 onClick={() => setShowArchived(true)}
-                colorScheme={showArchived ? 'facebook' : 'gray'}
               >
                 Unread
               </Button>
@@ -113,6 +133,7 @@ const Notifications: NextPage = () => {
                           <Text marginRight='1rem'>{notification.date}</Text>
                           {showArchived ? (
                             <CUnread
+                              color='secondary'
                               onClick={() =>
                                 archiveHandler(
                                   notification.id,
@@ -125,6 +146,7 @@ const Notifications: NextPage = () => {
                             />
                           ) : (
                             <CArchive
+                              color='secondary'
                               onClick={() =>
                                 archiveHandler(
                                   notification.id,
@@ -154,7 +176,7 @@ const Notifications: NextPage = () => {
               </Flex>
             )}
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter display='flex' justifyContent='center'>
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>

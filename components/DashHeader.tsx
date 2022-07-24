@@ -17,8 +17,13 @@ const DashHeader: NextPage = () => {
     >
       {/* Logged in as Admin */}
       <Box display={{ base: 'none', md: 'inline' }}>
-        <Flex justifyContent='center' alignItems='center' padding='.5rem'>
-          <Text color='blackAlpha.700' marginRight={1} fontSize='lg'>
+        <Flex
+          color='primary'
+          justifyContent='center'
+          alignItems='center'
+          padding='.5rem'
+        >
+          <Text marginRight={1} fontSize={{ base: 'md', md: 'lg' }}>
             Logged in as:{' '}
             <span
               style={{

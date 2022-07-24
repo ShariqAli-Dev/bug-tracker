@@ -51,7 +51,7 @@ const Home: NextPage = () => {
       flexDirection='column'
       width='100wh'
       height='100vh'
-      backgroundColor='blackAlpha.700'
+      backgroundColor='primary'
       justifyContent='center'
       alignItems='center'
     >
@@ -67,7 +67,7 @@ const Home: NextPage = () => {
         width={{ base: '85%', md: '65%', lg: '45%', xl: '35%' }}
       >
         {/* HEADING */}
-        <Flex justifyContent='center' alignItems='center'>
+        <Flex color='primary' justifyContent='center' alignItems='center'>
           <FaBug style={{ margin: '1rem' }} size={45} />
           <Heading>Bug Tracker Login</Heading>
         </Flex>
@@ -78,9 +78,9 @@ const Home: NextPage = () => {
             <Stack spacing={4} p='1rem'>
               {/* EMAIL */}
               <FormControl>
-                <InputGroup>
+                <InputGroup color='#7A7A7A'>
                   <InputLeftElement pointerEvents='none'>
-                    <CFaUserAlt color='gray.500' />
+                    <CFaUserAlt />
                   </InputLeftElement>
                   <Input
                     type='email'
@@ -94,10 +94,10 @@ const Home: NextPage = () => {
                 </InputGroup>
               </FormControl>
               {/* PASSWORD */}
-              <FormControl>
+              <FormControl color='#7A7A7A'>
                 <InputGroup>
-                  <InputLeftElement pointerEvents='none' color='gray.500'>
-                    <CFaLock color='gray.500' />
+                  <InputLeftElement pointerEvents='none'>
+                    <CFaLock />
                   </InputLeftElement>
                   <Input
                     type={showPassword ? 'text' : 'password'}
@@ -123,11 +123,18 @@ const Home: NextPage = () => {
                   borderRadius={0}
                   type='submit'
                   variant='solid'
-                  colorScheme='facebook'
                   width='full'
                   marginTop={5}
                   marginBottom={5}
                   rounded='xl'
+                  color='tertiary'
+                  backgroundColor='primary'
+                  _hover={{
+                    backgroundColor: 'tertiary',
+                    color: 'primary',
+                    border: '2px',
+                    borderColor: 'primary',
+                  }}
                 >
                   Sign In
                 </Button>
@@ -140,6 +147,7 @@ const Home: NextPage = () => {
                         alignItems='center'
                         key={helperText.url}
                         padding='.5rem'
+                        color='primary'
                       >
                         <Text marginRight={1} fontSize='md'>
                           {helperText.text}

@@ -29,53 +29,59 @@ const BurgerMenu: NextPage = () => {
     <Center display={{ base: 'inline', md: 'none' }}>
       <Menu>
         <MenuButton>
-          <HamburgerIcon size='25px' />
+          <HamburgerIcon color='secondary' size='25px' />
         </MenuButton>
         <MenuList>
           {/* Dashboard */}
           <MenuItem
+            color='primary'
             onClick={() => router.push('dashboard')}
-            icon={<CAiOutlineUsergroupAdd />}
+            icon={<CAiOutlineUsergroupAdd color='secondary' />}
           >
             Dashboard
           </MenuItem>
 
           {/* Roles */}
           <MenuItem
+            color='primary'
             onClick={() => router.push('roles')}
-            icon={<CAiOutlineUsergroupAdd />}
+            icon={<CAiOutlineUsergroupAdd color='secondary' />}
           >
             Manage Roles
           </MenuItem>
 
           {/* Manage Project Users */}
           <MenuItem
+            color='primary'
             onClick={() => router.push('users')}
-            icon={<CAiOutlineUsergroupAdd />}
+            icon={<CAiOutlineUsergroupAdd color='secondary' />}
           >
             Manage Project Users
           </MenuItem>
 
           {/* My Projects */}
           <MenuItem
+            color='primary'
             onClick={() => router.push('username/projects')}
-            icon={<CAiOutlineUsergroupAdd />}
+            icon={<CAiOutlineUsergroupAdd color='secondary' />}
           >
             My Projects
           </MenuItem>
 
           {/* My Tickets */}
           <MenuItem
+            color='primary'
             onClick={() => router.push('username/tickets')}
-            icon={<CAiOutlineUsergroupAdd />}
+            icon={<CAiOutlineUsergroupAdd color='secondary' />}
           >
             My Tickets
           </MenuItem>
 
           {/*User Profile */}
           <MenuItem
+            color='primary'
             onClick={() => router.push('username')}
-            icon={<CAiOutlineUsergroupAdd />}
+            icon={<CAiOutlineUsergroupAdd color='secondary' />}
           >
             User Profile
           </MenuItem>

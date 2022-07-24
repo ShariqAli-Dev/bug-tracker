@@ -15,21 +15,17 @@ const Dashboard: NextPage = () => {
         w='15%'
         flexDir='column'
         alignItems='center'
-        boxShadow='2px 0 5px -2px #888'
+        boxShadow='2px 0 5px -2px '
         display={{ base: 'none', md: 'flex' }}
       >
         <NavBar />
       </Flex>
 
       {/* Components */}
-      <Flex
-        backgroundColor='blackAlpha.200'
-        w='full'
-        flexDirection='column'
-        overflowY='auto'
-      >
+      <Flex w='full' flexDirection='column' overflowY='auto'>
         {/* DashHeader Component */}
         <DashHeader />
+
         {/* Components */}
         <Grid
           h='full'

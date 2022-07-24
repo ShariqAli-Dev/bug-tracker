@@ -36,7 +36,7 @@ const Demo: NextPage = () => {
       flexDirection='column'
       width='100wh'
       height='100vh'
-      backgroundColor='blackAlpha.700'
+      backgroundColor='primary'
       justifyContent='center'
       alignItems='center'
     >
@@ -50,6 +50,7 @@ const Demo: NextPage = () => {
         p={{ base: '1rem' }}
         rounded='xl'
         width={{ base: '85%', md: '75%', lg: '65%', xl: '45%' }}
+        color='primary'
       >
         {/* Heading */}
         <Flex justifyContent='center' alignItems='center'>
@@ -81,12 +82,12 @@ const Demo: NextPage = () => {
             );
           })}
         </SimpleGrid>
-        {/* Hyperlink */}p
+        {/* Hyperlink */}
         <Flex justifyContent='center' alignItems='center' padding='.5rem'>
-          <Text color='blackAlpha.700' marginRight={1} fontSize='lg'>
+          <Text color='primary' marginRight={1} fontSize='lg'>
             Take me back to
           </Text>
-          <Text color='blackAlpha.700' as='u' fontSize='lg'>
+          <Text color='primary' as='u' fontSize='lg'>
             <Link href='/'>Sign In</Link>
           </Text>
         </Flex>

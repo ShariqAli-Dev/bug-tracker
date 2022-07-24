@@ -28,16 +28,17 @@ const QueryForm: NextPage = () => {
   return (
     <form onSubmit={onSubmit}>
       <FormControl>
-        <InputGroup>
+        <InputGroup color='primary'>
           <Input
             type='text'
             name='query'
             id='query'
             placeholder='Search...'
             onChange={onChange}
+            borderColor='tertiary'
           />
           <InputRightElement pointerEvents='none'>
-            <CHiOutlineSearch />
+            <CHiOutlineSearch color='secondary' />
           </InputRightElement>
         </InputGroup>
       </FormControl>
