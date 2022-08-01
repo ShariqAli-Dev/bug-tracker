@@ -1,4 +1,3 @@
-import type { NextPage } from 'next';
 import {
   chakra,
   FormControl,
@@ -12,7 +11,7 @@ import { HiOutlineSearch } from 'react-icons/hi';
 const CHiOutlineSearch = chakra(HiOutlineSearch);
 const initialFormValues = { query: '' };
 
-const QueryForm: NextPage = () => {
+const QueryForm = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {

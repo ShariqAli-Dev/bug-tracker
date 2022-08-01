@@ -6,7 +6,6 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/react';
-import { NextPage } from 'next';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { useRouter } from 'next/router';
@@ -22,7 +21,7 @@ const navbar = [
   { title: 'User Profile', url: 'username' },
 ];
 
-const BurgerMenu: NextPage = () => {
+const BurgerMenu = () => {
   const router = useRouter();
 
   return (

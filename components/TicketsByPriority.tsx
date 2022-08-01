@@ -1,4 +1,3 @@
-import { NextPage } from 'next';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -18,37 +17,34 @@ ChartJS.register(
   Legend
 );
 
-const chartData = {
-  labels: ['None', 'Low', 'Medium', 'High'],
-  datasets: [
-    {
-      data: [2, 3, 4, 1],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: ['#9C2A4B', '#320311'],
-    },
-  ],
-};
+const TicketsByPriority = () => {
+  const chartData = {
+    labels: ['Low', 'Medium', 'High', 'Immediate'],
+    datasets: [
+      {
+        data: [2, 3, 4, 1],
+        borderColor: '#EBEBEB',
+        backgroundColor: ['#E5E5E5', '#B2B2B2', '#999999', '#666666'],
+      },
+    ],
+  };
 
-const chartOptions = {
-  maintainAspectRatio: false,
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
+  const chartOptions = {
+    maintainAspectRatio: false,
+    responsive: true,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: true,
+        text: 'Tickets By Priority',
+        color: '#606060',
+      },
     },
-    title: {
-      display: true,
-      text: 'Tickets By Priority',
-    },
-  },
-};
+  };
 
-const TicketsByPriority: NextPage = () => {
-  return (
-    <>
-      <Bar options={chartOptions} data={chartData} />
-    </>
-  );
+  return <Bar options={chartOptions} data={chartData} />;
 };
 
 export default TicketsByPriority;

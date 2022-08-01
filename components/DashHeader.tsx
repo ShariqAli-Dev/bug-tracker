@@ -1,11 +1,10 @@
-import type { NextPage } from 'next';
 import { Box, Flex, Text } from '@chakra-ui/react';
 import QueryForm from './QueryForm';
 import Notifications from './Notifications';
 import UserActions from './UserActions';
 import BurgerMenu from './BurgerMenu';
 
-const DashHeader: NextPage = () => {
+const DashHeader = () => {
   return (
     <Flex
       backgroundColor='white'
