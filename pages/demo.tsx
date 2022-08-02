@@ -10,27 +10,29 @@ import {
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { FaBug } from 'react-icons/fa';
+import { useUserStore } from '../store/user';
 
 const avatars = [
   {
-    role: 'Admin',
+    role: 'DEMO_ADMIN',
     url: 'https://cdn-icons-png.flaticon.com/512/236/236831.png',
   },
   {
-    role: 'Project Manager',
+    role: 'DEMO_PROJECT_MANAGER',
     url: 'https://cdn-icons-png.flaticon.com/512/236/236831.png',
   },
   {
-    role: 'Developer',
+    role: 'DEMO_DEVELOPER',
     url: 'https://cdn-icons-png.flaticon.com/512/146/146031.png',
   },
   {
-    role: 'Submitter',
+    role: 'DEMO_SUBMITTER',
     url: 'https://cdn-icons-png.flaticon.com/512/147/147142.png',
   },
 ];
 
 const Demo: NextPage = () => {
+  const demoLogin = useUserStore((state) => state.demoLogin);
   return (
     <Flex
       flexDirection='column'
@@ -63,18 +65,18 @@ const Demo: NextPage = () => {
           spacingX={{ base: '10px', sm: '30px', md: '50px', lg: '80px' }}
           spacingY={{ base: '40px', sm: '60px', md: '80px' }}
         >
-          {avatars.map((avatar) => {
+          {avatars.map(({ role, url }) => {
             return (
-              <Link key={avatar.role} href='dashboard'>
+              <Link onClick={() => demoLogin(role)} key={role} href='dashboard'>
                 <Box cursor='pointer'>
                   <Flex
                     justifyContent='center'
                     alignItems='center'
                     flexDirection='column'
                   >
-                    <Image w='35%' alt='user icon' src={avatar.url} />
+                    <Image w='35%' alt='user icon' src={url} />
                     <Text textAlign='center' fontSize='xl'>
-                      {avatar.role}
+                      {role}
                     </Text>
                   </Flex>
                 </Box>

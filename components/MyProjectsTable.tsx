@@ -20,7 +20,7 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from 'react-icons/bs';
 import { Project } from '../types';
 import { nanoid } from 'nanoid';
-import { userProjects } from '../utils/dummyData';
+import { initialProjects } from '../utils/dummyData';
 
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
@@ -36,7 +36,7 @@ const MyProjectsTable = () => {
         columns: [
           {
             Header: 'Project',
-            accessor: 'project',
+            accessor: 'name',
           },
           {
             Header: 'Description',
@@ -77,7 +77,7 @@ const MyProjectsTable = () => {
   );
 
   useEffect(() => {
-    setData(userProjects);
+    setData(initialProjects);
   }, []);
 
   return (

@@ -1,18 +1,13 @@
-import create from 'zustand/react';
-
-interface UserState {
-  id: number;
-  username: string;
-  email: string;
-  role: string;
-  projectID: number;
-}
+import create from 'zustand';
+import { User } from '../types';
+import { initialUsers } from '../utils/dummyData';
 
 interface UsersState {
-  users?: UserState[];
+  users: User[];
+  getUsers: () => void;
 }
 
-const useUsersState = create<UsersState>((set) => ({
+export const useUsersState = create<UsersState>((set) => ({
   users: [],
-  //   setUsers: () => set({users: })
+  getUsers: () => set({ users: initialUsers }),
 }));
