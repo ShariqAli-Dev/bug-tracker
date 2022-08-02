@@ -3,19 +3,17 @@ import {
   Flex,
   Menu,
   MenuButton,
-  MenuDivider,
   MenuItem,
   MenuList,
   Text,
 } from '@chakra-ui/react';
-import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
 import { FaUserAlt } from 'react-icons/fa';
 
 const UserAvatar = chakra(FaUserAlt);
 
-const UserActions: NextPage = () => {
+const UserActions = () => {
   const router = useRouter();
 
   const logoutUser = () => {

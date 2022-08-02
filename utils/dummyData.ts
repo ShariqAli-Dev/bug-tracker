@@ -1,4 +1,4 @@
-const initialNotifications = [
+export const initialNotifications = [
   {
     message: 'I was archived 01',
     archived: true,
@@ -67,4 +67,95 @@ const initialNotifications = [
   },
 ];
 
-export { initialNotifications };
+export const userProjects = [
+  {
+    project: 'Bug Tracker',
+    description: 'Project management tool to track project issues, bugs, et c',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'CrimsonCodex Youtube',
+    description: 'Youtube channel where I play games like Minecraft & Terraria',
+    contributors: ['shariq ali='],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug trackerbug trackerbug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+  {
+    project: 'Demo Bug Tracker',
+    description: 'Film the video to preview bug tracker',
+    contributors: ['Shariq Ali'],
+  },
+];

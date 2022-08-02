@@ -15,7 +15,6 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import {
   MdNotificationsActive,
@@ -31,7 +30,7 @@ const NoNotis = chakra(MdNotificationsOff);
 const CArchive = chakra(MdArchive);
 const CUnread = chakra(MdMarkAsUnread);
 
-const Notifications: NextPage = () => {
+const Notifications = () => {
   const [hasNotis, setHasNotis] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showArchived, setShowArchived] = useState(false);

@@ -1,4 +1,3 @@
-import { NextPage } from 'next';
 import {
   Box,
   chakra,
@@ -21,7 +20,7 @@ const navbar = [
   { title: 'User Profile', url: 'username' },
 ];
 
-const NavBar: NextPage = () => {
+const NavBar = () => {
   return (
     <Stack>
       {/* Home title, user imgage */}
