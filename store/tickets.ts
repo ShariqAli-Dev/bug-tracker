@@ -7,7 +7,7 @@ interface TicketsState {
   getTickets: () => void;
 }
 
-export const useProjectsState = create<TicketsState>((set) => ({
+export const useProjectsStore = create<TicketsState>((set) => ({
   tickets: [],
   getTickets: () => set({ tickets: initialTickets }),
 }));

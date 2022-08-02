@@ -6,7 +6,7 @@ interface ProjectsState {
   projects: Project[];
 }
 
-export const useProjectsState = create<ProjectsState>((set) => ({
+export const useProjectsStore = create<ProjectsState>((set) => ({
   projects: [],
   getProjects: () => set({ projects: initialProjects }),
 }));
