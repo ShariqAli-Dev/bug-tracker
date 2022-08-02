@@ -1,4 +1,5 @@
 import create from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 import { Ticket } from '../types';
 import { initialTickets } from '../utils/dummyData';
 
@@ -7,7 +8,13 @@ interface TicketsState {
   getTickets: () => void;
 }
 
-export const useProjectsStore = create<TicketsState>((set) => ({
-  tickets: [],
-  getTickets: () => set({ tickets: initialTickets }),
-}));
+const useTicketsStore = create<TicketsState>()(
+  devtools(
+    persist((set) => ({
+      tickets: [],
+      getTickets: () => set({ tickets: initialTickets }),
+    }))
+  )
+);
+
+export default useTicketsStore;

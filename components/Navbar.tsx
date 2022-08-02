@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { AiOutlineUsergroupAdd } from 'react-icons/ai';
+import useUserStore from '../store/user';
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
@@ -21,6 +22,8 @@ const navbar = [
 ];
 
 const NavBar = () => {
+  const username = useUserStore((state) => state.username);
+
   return (
     <Stack>
       {/* Home title, user imgage */}
@@ -36,7 +39,7 @@ const NavBar = () => {
           textAlign='center'
           color='primary'
         >
-          WELCOME user_name
+          WELCOME {username}
         </Heading>
       </Flex>
       {/* Home navbar */}

@@ -1,12 +1,18 @@
 import create from 'zustand';
+import { devtools, persist } from 'zustand/middleware';
 import { Project } from '../types';
 import { initialProjects } from '../utils/dummyData';
 
 interface ProjectsState {
   projects: Project[];
+  getProjects: () => void;
 }
 
-export const useProjectsStore = create<ProjectsState>((set) => ({
-  projects: [],
-  getProjects: () => set({ projects: initialProjects }),
-}));
+const useProjectsStore = create(
+  devtools<ProjectsState>((set) => ({
+    projects: [],
+    getProjects: () => set({ projects: initialProjects }),
+  }))
+);
+
+export default useProjectsStore;

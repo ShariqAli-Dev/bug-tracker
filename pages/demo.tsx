@@ -10,7 +10,7 @@ import {
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { FaBug } from 'react-icons/fa';
-import { useUserStore } from '../store/user';
+import useUserStore from '../store/user';
 
 const avatars = [
   {
@@ -67,20 +67,22 @@ const Demo: NextPage = () => {
         >
           {avatars.map(({ role, url }) => {
             return (
-              <Link onClick={() => demoLogin(role)} key={role} href='dashboard'>
-                <Box cursor='pointer'>
-                  <Flex
-                    justifyContent='center'
-                    alignItems='center'
-                    flexDirection='column'
-                  >
-                    <Image w='35%' alt='user icon' src={url} />
-                    <Text textAlign='center' fontSize='xl'>
-                      {role}
-                    </Text>
-                  </Flex>
-                </Box>
-              </Link>
+              <Box key={role} onClick={() => demoLogin(role)}>
+                <Link href='dashboard'>
+                  <Box cursor='pointer'>
+                    <Flex
+                      justifyContent='center'
+                      alignItems='center'
+                      flexDirection='column'
+                    >
+                      <Image w='35%' alt='user icon' src={url} />
+                      <Text textAlign='center' fontSize='xl'>
+                        {role}
+                      </Text>
+                    </Flex>
+                  </Box>
+                </Link>
+              </Box>
             );
           })}
         </SimpleGrid>
