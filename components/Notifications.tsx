@@ -14,24 +14,23 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
-} from '@chakra-ui/react';
-import { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import {
   MdNotificationsActive,
   MdNotificationsOff,
   MdMarkAsUnread,
   MdArchive,
-} from 'react-icons/md';
-import { nanoid } from 'nanoid';
-import { initialNotifications } from '../utils/dummyData';
+} from "react-icons/md";
+import { nanoid } from "nanoid";
+import { initialNotifications } from "../utils/dummyData";
 
 const Notis = chakra(MdNotificationsActive);
 const NoNotis = chakra(MdNotificationsOff);
 const CArchive = chakra(MdArchive);
 const CUnread = chakra(MdMarkAsUnread);
 
-const Notifications: NextPage = () => {
+const Notifications = () => {
   const [hasNotis, setHasNotis] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showArchived, setShowArchived] = useState(false);
@@ -60,14 +59,28 @@ const Notifications: NextPage = () => {
   return (
     <>
       <Box>
-        <Flex flexDirection='row' alignItems='center'>
-          <Text display={{ base: 'none', md: 'flex' }} marginRight={3}>
+        <Flex flexDirection="row" alignItems="center">
+          <Text
+            color="primary"
+            display={{ base: "none", md: "flex" }}
+            marginRight={3}
+          >
             Notifications
           </Text>
           {hasNotis ? (
-            <Notis cursor='pointer' size='30px' onClick={onOpen} />
+            <Notis
+              color="secondary"
+              cursor="pointer"
+              size="30px"
+              onClick={onOpen}
+            />
           ) : (
-            <NoNotis cursor='pointer' size='30px' onClick={onOpen} />
+            <NoNotis
+              color="secondary"
+              cursor="pointer"
+              size="30px"
+              onClick={onOpen}
+            />
           )}
         </Flex>
       </Box>
@@ -76,26 +89,32 @@ const Notifications: NextPage = () => {
         onClose={onClose}
         isOpen={isOpen}
         isCentered
-        scrollBehavior='inside'
-        size='xl'
+        scrollBehavior="inside"
+        size={{ base: "sm", sm: "md", md: "xl" }}
       >
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader textAlign='center'>Notifications</ModalHeader>
+        <ModalContent color="primary">
+          <ModalHeader textAlign="center">Notifications</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Flex justifyContent='space-between'>
+            <Flex justifyContent="space-between">
               <Button
+                color={showArchived ? "primary" : "tertiary"}
+                backgroundColor={showArchived ? "tertiary" : "primary"}
+                border={showArchived ? "2px" : 0}
+                borderColor={showArchived ? "primary" : ""}
                 onClick={() => setShowArchived(false)}
-                colorScheme={showArchived ? 'gray' : 'facebook'}
               >
-                Read
+                New
               </Button>
               <Button
+                color={showArchived ? "tertiary" : "primary"}
+                backgroundColor={showArchived ? "primary" : "tertiary"}
+                border={showArchived ? 0 : "2px"}
+                borderColor={showArchived ? "" : "primary"}
                 onClick={() => setShowArchived(true)}
-                colorScheme={showArchived ? 'facebook' : 'gray'}
               >
-                Unread
+                Archived
               </Button>
             </Flex>
 
@@ -107,33 +126,35 @@ const Notifications: NextPage = () => {
                   )
                   .map((notification) => {
                     return (
-                      <Box p='1rem' key={nanoid()} w='full'>
-                        <Flex flexDirection='row' alignItems='center'>
-                          <Text w='85%'>{notification.message}</Text>
-                          <Text marginRight='1rem'>{notification.date}</Text>
+                      <Box p="1rem" key={nanoid()} w="full">
+                        <Flex flexDirection="row" alignItems="center">
+                          <Text w="85%">{notification.message}</Text>
+                          <Text marginRight="1rem">{notification.date}</Text>
                           {showArchived ? (
                             <CUnread
+                              color="secondary"
                               onClick={() =>
                                 archiveHandler(
                                   notification.id,
                                   notification.archived
                                 )
                               }
-                              cursor='pointer'
-                              size='20px'
-                              margin='auto'
+                              cursor="pointer"
+                              size="20px"
+                              margin="auto"
                             />
                           ) : (
                             <CArchive
+                              color="secondary"
                               onClick={() =>
                                 archiveHandler(
                                   notification.id,
                                   notification.archived
                                 )
                               }
-                              cursor='pointer'
-                              size='20px'
-                              margin='auto'
+                              cursor="pointer"
+                              size="20px"
+                              margin="auto"
                             />
                           )}
                         </Flex>
@@ -142,19 +163,19 @@ const Notifications: NextPage = () => {
                   })}
               </div>
             ) : (
-              <Flex justifyContent='space-around'>
+              <Flex justifyContent="space-around">
                 <Alert
-                  status='warning'
-                  width='80%'
-                  marginTop='2rem'
-                  padding='1rem'
+                  status="warning"
+                  width="80%"
+                  marginTop="2rem"
+                  padding="1rem"
                 >
                   <AlertIcon /> Seems like you have no notifications
                 </Alert>
               </Flex>
             )}
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter display="flex" justifyContent="center">
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>

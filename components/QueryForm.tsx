@@ -1,18 +1,17 @@
-import type { NextPage } from 'next';
 import {
   chakra,
   FormControl,
   Input,
   InputGroup,
   InputRightElement,
-} from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { HiOutlineSearch } from 'react-icons/hi';
+} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { HiOutlineSearch } from "react-icons/hi";
 
 const CHiOutlineSearch = chakra(HiOutlineSearch);
-const initialFormValues = { query: '' };
+const initialFormValues = { query: "" };
 
-const QueryForm: NextPage = () => {
+const QueryForm = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,16 +27,17 @@ const QueryForm: NextPage = () => {
   return (
     <form onSubmit={onSubmit}>
       <FormControl>
-        <InputGroup>
+        <InputGroup color="primary">
           <Input
-            type='text'
-            name='query'
-            id='query'
-            placeholder='Search...'
+            type="text"
+            name="query"
+            id="query"
+            placeholder="Search..."
             onChange={onChange}
+            borderColor="tertiary"
           />
-          <InputRightElement pointerEvents='none'>
-            <CHiOutlineSearch />
+          <InputRightElement pointerEvents="none">
+            <CHiOutlineSearch color="secondary" />
           </InputRightElement>
         </InputGroup>
       </FormControl>

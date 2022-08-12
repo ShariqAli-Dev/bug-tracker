@@ -1,85 +1,71 @@
-import type { NextPage } from 'next';
-import { Box, Center, Divider, Flex, Grid, GridItem } from '@chakra-ui/react';
-import NavBar from '../components/Navbar';
-import DashHeader from '../components/DashHeader';
-import TicketsByPriority from '../components/TicketsByPriority';
-import TicketsByType from '../components/TicketsByType';
-import TicketsByProgress from '../components/TicketsByProgress';
-import TicketsByUser from '../components/TicketsByUser';
+import type { NextPage } from "next";
+import { Box, Flex } from "@chakra-ui/react";
+import NavBar from "../components/Navbar";
+import DashHeader from "../components/DashHeader";
+import MyProjectsTable from "../components/MyProjectsTable";
+import TicketsByType from "../components/TicketsByType";
+import TicketsByPriority from "../components/TicketsByPriority";
+import TicketsByStatus from "../components/TicketsByStatus";
 
 const Dashboard: NextPage = () => {
   return (
-    <Flex h='100vh' flexDir='row' overflow='hidden' maxW='2000px'>
+    <Flex
+      h={{ base: "140vh", md: "100vh" }}
+      flexDir="row"
+      overflow="hidden"
+      scrollBehavior="auto"
+    >
       {/* Dashboard/Navbar */}
       <Flex
-        w='15%'
-        flexDir='column'
-        alignItems='center'
-        boxShadow='2px 0 5px -2px #888'
-        display={{ base: 'none', md: 'flex' }}
+        w="15%"
+        flexDir="column"
+        alignItems="center"
+        boxShadow="2px 0 5px -2px "
+        display={{ base: "none", md: "flex" }}
       >
         <NavBar />
       </Flex>
 
       {/* Components */}
-      <Flex
-        backgroundColor='blackAlpha.200'
-        w='full'
-        flexDirection='column'
-        overflowY='auto'
-      >
+      <Flex w="full" flexDirection="column" overflowY="auto">
         {/* DashHeader Component */}
         <DashHeader />
-        {/* Components */}
-        <Grid
-          h='full'
-          templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
+        {/* Contents */} {/* <DaGrid/> */}
+        <Flex
+          flexDirection="column"
+          justifyContent="space-evenly"
+          alignItems="center"
+          h="full"
         >
-          {/* Tickets by priority */}
-          <GridItem
-            marginBottom='1rem'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
+          <MyProjectsTable />
+          <Flex
+            flexDirection={{ base: "column", md: "row" }}
+            height="30%"
+            justifyContent="space-around"
+            width="full"
+            alignItems="center"
           >
-            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
-              <TicketsByPriority />
-            </Box>
-          </GridItem>
-          {/* Tickets By Type */}
-          <GridItem
-            marginBottom='1rem'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-          >
-            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
+            <Box
+              height={{ base: "full", md: "90%" }}
+              width={{ base: "60%", md: "27%" }}
+            >
               <TicketsByType />
             </Box>
-          </GridItem>
-          {/* Tickets By Progress */}
-          <GridItem
-            marginBottom='1rem'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-          >
-            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
-              <TicketsByProgress />
+            <Box
+              height={{ base: "full", md: "90%" }}
+              width={{ base: "60%", md: "27%" }}
+            >
+              <TicketsByPriority />
             </Box>
-          </GridItem>
-          {/* Tickets By User */}
-          <GridItem
-            marginBottom='1rem'
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-          >
-            <Box h={{ base: '15rem', md: '80%' }} w={{ base: '80%' }}>
-              <TicketsByUser />
+
+            <Box
+              height={{ base: "full", md: "90%" }}
+              width={{ base: "60%", md: "27%" }}
+            >
+              <TicketsByStatus />
             </Box>
-          </GridItem>
-        </Grid>
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );
