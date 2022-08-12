@@ -1,7 +1,7 @@
-import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { Ticket } from '../types';
-import { initialTickets } from '../utils/dummyData';
+import create from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { Ticket } from "../types";
+import { initialTickets } from "../utils/dummyData";
 
 interface TicketsState {
   tickets: Ticket[];

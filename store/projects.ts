@@ -1,7 +1,7 @@
-import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { Project } from '../types';
-import { initialProjects } from '../utils/dummyData';
+import create from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { Project } from "../types";
+import { initialProjects } from "../utils/dummyData";
 
 interface ProjectsState {
   projects: Project[];

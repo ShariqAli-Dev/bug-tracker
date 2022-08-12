@@ -4,12 +4,12 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-} from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { HiOutlineSearch } from 'react-icons/hi';
+} from "@chakra-ui/react";
+import React, { useState } from "react";
+import { HiOutlineSearch } from "react-icons/hi";
 
 const CHiOutlineSearch = chakra(HiOutlineSearch);
-const initialFormValues = { query: '' };
+const initialFormValues = { query: "" };
 
 const QueryForm = () => {
   const [formValues, setFormValues] = useState(initialFormValues);
@@ -27,17 +27,17 @@ const QueryForm = () => {
   return (
     <form onSubmit={onSubmit}>
       <FormControl>
-        <InputGroup color='primary'>
+        <InputGroup color="primary">
           <Input
-            type='text'
-            name='query'
-            id='query'
-            placeholder='Search...'
+            type="text"
+            name="query"
+            id="query"
+            placeholder="Search..."
             onChange={onChange}
-            borderColor='tertiary'
+            borderColor="tertiary"
           />
-          <InputRightElement pointerEvents='none'>
-            <CHiOutlineSearch color='secondary' />
+          <InputRightElement pointerEvents="none">
+            <CHiOutlineSearch color="secondary" />
           </InputRightElement>
         </InputGroup>
       </FormControl>

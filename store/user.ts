@@ -1,7 +1,7 @@
-import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { Notification } from '../types';
-import { initialNotifications } from '../utils/dummyData';
+import create from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { Notification } from "../types";
+import { initialNotifications } from "../utils/dummyData";
 
 interface UserState {
   id: number | undefined;
@@ -17,12 +17,12 @@ const useUserStore = create<UserState>()(
   devtools(
     persist((set) => ({
       id: undefined,
-      username: '',
-      role: '',
+      username: "",
+      role: "",
       notifications: [],
       login: (username, password) =>
-        set({ id: 0, username: username, role: 'DEMO_ADMIN' }),
-      demoLogin: (role) => set({ id: 9999, username: 'DEMO_USER', role }),
+        set({ id: 0, username: username, role: "DEMO_ADMIN" }),
+      demoLogin: (role) => set({ id: 9999, username: "DEMO_USER", role }),
       getNotifications: (userID) =>
         set({ notifications: initialNotifications }),
     }))

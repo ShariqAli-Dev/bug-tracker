@@ -6,8 +6,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -19,12 +19,12 @@ ChartJS.register(
 
 const TicketsByPriority = () => {
   const chartData = {
-    labels: ['Low', 'Medium', 'High', 'Immediate'],
+    labels: ["Low", "Medium", "High", "Immediate"],
     datasets: [
       {
         data: [2, 3, 4, 1],
-        borderColor: '#EBEBEB',
-        backgroundColor: ['#E5E5E5', '#B2B2B2', '#999999', '#666666'],
+        borderColor: "#EBEBEB",
+        backgroundColor: ["#E5E5E5", "#B2B2B2", "#999999", "#666666"],
       },
     ],
   };
@@ -38,8 +38,8 @@ const TicketsByPriority = () => {
       },
       title: {
         display: true,
-        text: 'Tickets By Priority',
-        color: '#606060',
+        text: "Tickets By Priority",
+        color: "#606060",
       },
     },
   };

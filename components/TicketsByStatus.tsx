@@ -1,5 +1,5 @@
-import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from "chart.js";
+import { Pie } from "react-chartjs-2";
 ChartJs.register(Tooltip, Title, ArcElement, Legend);
 
 const TicketsByStatus = () => {
@@ -10,12 +10,12 @@ const TicketsByStatus = () => {
         responsive: true,
         plugins: {
           legend: {
-            position: 'bottom',
+            position: "bottom",
           },
           title: {
             display: true,
-            text: 'Tickets By Status',
-            color: '#606060',
+            text: "Tickets By Status",
+            color: "#606060",
           },
         },
       }}
@@ -23,10 +23,10 @@ const TicketsByStatus = () => {
         datasets: [
           {
             data: [4, 8, 2],
-            backgroundColor: ['#666666', '#999999', '#B2B2B2'],
+            backgroundColor: ["#666666", "#999999", "#B2B2B2"],
           },
         ],
-        labels: ['New', 'In Progress', 'Resolved'],
+        labels: ["New", "In Progress", "Resolved"],
       }}
     />
   );

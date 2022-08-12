@@ -1,7 +1,7 @@
-import create from 'zustand';
-import { devtools, persist } from 'zustand/middleware';
-import { User } from '../types';
-import { initialUsers } from '../utils/dummyData';
+import create from "zustand";
+import { devtools, persist } from "zustand/middleware";
+import { User } from "../types";
+import { initialUsers } from "../utils/dummyData";
 
 interface UsersState {
   users: User[];
