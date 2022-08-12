@@ -14,16 +14,16 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
-} from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import {
   MdNotificationsActive,
   MdNotificationsOff,
   MdMarkAsUnread,
   MdArchive,
-} from 'react-icons/md';
-import { nanoid } from 'nanoid';
-import { initialNotifications } from '../utils/dummyData';
+} from "react-icons/md";
+import { nanoid } from "nanoid";
+import { initialNotifications } from "../utils/dummyData";
 
 const Notis = chakra(MdNotificationsActive);
 const NoNotis = chakra(MdNotificationsOff);
@@ -59,26 +59,26 @@ const Notifications = () => {
   return (
     <>
       <Box>
-        <Flex flexDirection='row' alignItems='center'>
+        <Flex flexDirection="row" alignItems="center">
           <Text
-            color='primary'
-            display={{ base: 'none', md: 'flex' }}
+            color="primary"
+            display={{ base: "none", md: "flex" }}
             marginRight={3}
           >
             Notifications
           </Text>
           {hasNotis ? (
             <Notis
-              color='secondary'
-              cursor='pointer'
-              size='30px'
+              color="secondary"
+              cursor="pointer"
+              size="30px"
               onClick={onOpen}
             />
           ) : (
             <NoNotis
-              color='secondary'
-              cursor='pointer'
-              size='30px'
+              color="secondary"
+              cursor="pointer"
+              size="30px"
               onClick={onOpen}
             />
           )}
@@ -89,32 +89,32 @@ const Notifications = () => {
         onClose={onClose}
         isOpen={isOpen}
         isCentered
-        scrollBehavior='inside'
-        size={{ base: 'sm', sm: 'md', md: 'xl' }}
+        scrollBehavior="inside"
+        size={{ base: "sm", sm: "md", md: "xl" }}
       >
         <ModalOverlay />
-        <ModalContent color='primary'>
-          <ModalHeader textAlign='center'>Notifications</ModalHeader>
+        <ModalContent color="primary">
+          <ModalHeader textAlign="center">Notifications</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Flex justifyContent='space-between'>
+            <Flex justifyContent="space-between">
               <Button
-                color={showArchived ? 'primary' : 'tertiary'}
-                backgroundColor={showArchived ? 'tertiary' : 'primary'}
-                border={showArchived ? '2px' : 0}
-                borderColor={showArchived ? 'primary' : ''}
+                color={showArchived ? "primary" : "tertiary"}
+                backgroundColor={showArchived ? "tertiary" : "primary"}
+                border={showArchived ? "2px" : 0}
+                borderColor={showArchived ? "primary" : ""}
                 onClick={() => setShowArchived(false)}
               >
-                Read
+                New
               </Button>
               <Button
-                color={showArchived ? 'tertiary' : 'primary'}
-                backgroundColor={showArchived ? 'primary' : 'tertiary'}
-                border={showArchived ? 0 : '2px'}
-                borderColor={showArchived ? '' : 'primary'}
+                color={showArchived ? "tertiary" : "primary"}
+                backgroundColor={showArchived ? "primary" : "tertiary"}
+                border={showArchived ? 0 : "2px"}
+                borderColor={showArchived ? "" : "primary"}
                 onClick={() => setShowArchived(true)}
               >
-                Unread
+                Archived
               </Button>
             </Flex>
 
@@ -126,35 +126,35 @@ const Notifications = () => {
                   )
                   .map((notification) => {
                     return (
-                      <Box p='1rem' key={nanoid()} w='full'>
-                        <Flex flexDirection='row' alignItems='center'>
-                          <Text w='85%'>{notification.message}</Text>
-                          <Text marginRight='1rem'>{notification.date}</Text>
+                      <Box p="1rem" key={nanoid()} w="full">
+                        <Flex flexDirection="row" alignItems="center">
+                          <Text w="85%">{notification.message}</Text>
+                          <Text marginRight="1rem">{notification.date}</Text>
                           {showArchived ? (
                             <CUnread
-                              color='secondary'
+                              color="secondary"
                               onClick={() =>
                                 archiveHandler(
                                   notification.id,
                                   notification.archived
                                 )
                               }
-                              cursor='pointer'
-                              size='20px'
-                              margin='auto'
+                              cursor="pointer"
+                              size="20px"
+                              margin="auto"
                             />
                           ) : (
                             <CArchive
-                              color='secondary'
+                              color="secondary"
                               onClick={() =>
                                 archiveHandler(
                                   notification.id,
                                   notification.archived
                                 )
                               }
-                              cursor='pointer'
-                              size='20px'
-                              margin='auto'
+                              cursor="pointer"
+                              size="20px"
+                              margin="auto"
                             />
                           )}
                         </Flex>
@@ -163,19 +163,19 @@ const Notifications = () => {
                   })}
               </div>
             ) : (
-              <Flex justifyContent='space-around'>
+              <Flex justifyContent="space-around">
                 <Alert
-                  status='warning'
-                  width='80%'
-                  marginTop='2rem'
-                  padding='1rem'
+                  status="warning"
+                  width="80%"
+                  marginTop="2rem"
+                  padding="1rem"
                 >
                   <AlertIcon /> Seems like you have no notifications
                 </Alert>
               </Flex>
             )}
           </ModalBody>
-          <ModalFooter display='flex' justifyContent='center'>
+          <ModalFooter display="flex" justifyContent="center">
             <Button onClick={onClose}>Close</Button>
           </ModalFooter>
         </ModalContent>
