@@ -7,11 +7,13 @@ import {
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
 } from "type-graphql";
 import { __initialRole__, __tokenSecret__ } from "../constants";
 import argon2 from "argon2";
 import buildToken from "../utils/buildToken";
+import jwt from "jsonwebtoken";
 
 @ObjectType()
 class FieldError {
@@ -46,6 +48,14 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => UserResponse, { nullable: true })
+  async me(@Arg("token") token: string, @Ctx() { em }: MyContext) {
+    jwt.verify(token, __tokenSecret__, async (err, decoded: any) => {
+      if (err) return null;
+      return await em.findOne(Users, { id: decoded.token });
+    });
+  }
+
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UserInput,
