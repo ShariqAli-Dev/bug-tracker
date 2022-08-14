@@ -3,7 +3,7 @@ import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
 @Entity()
-export class User {
+export class Users {
   @Field()
   @PrimaryKey()
   id!: number;
