@@ -94,4 +94,27 @@ export class UserResolver {
       }),
     };
   }
+
+  @Mutation(() => UserResponse)
+  async login(
+    @Arg("options") options: UserInput,
+    @Ctx() { em }: MyContext
+  ): Promise<UserResponse> {
+    const user = await em.findOne(Users, { email: options.email });
+    if (!user) {
+      return {
+        errors: [{ field: "email", message: "that email doesn't exist" }],
+      };
+    }
+
+    const valid = await argon2.verify(user.password, options.password);
+    if (!valid) {
+      return { errors: [{ field: "password", message: "incorrect password" }] };
+    }
+
+    return {
+      user,
+      token: buildToken({ email: user.email, role: user.role, id: user.id }),
+    };
+  }
 }
