@@ -18,9 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
-import { Project } from "../types";
 import { nanoid } from "nanoid";
-import { initialProjects } from "../utils/dummyData";
 import useProjectsStore from "../store/projects";
 
 const ArrowRight = chakra(AiOutlineArrowRight);
