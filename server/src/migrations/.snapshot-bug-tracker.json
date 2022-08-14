@@ -44,6 +44,15 @@
           "nullable": false,
           "mappedType": "text"
         },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
         "password": {
           "name": "password",
           "type": "text",
