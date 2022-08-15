@@ -74,18 +74,21 @@ const Register: NextPage = () => {
 
               if (data?.register.errors) {
                 // send a toast alert
-                toast({
-                  title: data.register.errors[0].field,
-                  description: data.register.errors[0].message,
-                  status: "error",
-                  duration: 3000,
-                  isClosable: true,
-                  variant: "subtle",
-                  containerStyle: {
-                    color: "primary",
-                  },
-                  position: "top",
-                });
+                if (!toast.isActive("register-error")) {
+                  toast({
+                    id: "register-error",
+                    title: data.register.errors[0].field,
+                    description: data.register.errors[0].message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                    variant: "subtle",
+                    containerStyle: {
+                      color: "primary",
+                    },
+                    position: "top",
+                  });
+                }
               } else if (data?.register.user) {
                 // worked
                 login({
