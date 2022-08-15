@@ -83,7 +83,7 @@ const Register: NextPage = () => {
           <Formik
             initialValues={{ email: "", password: "" }}
             onSubmit={(values) => {
-              register({ options: values });
+              return register({ options: values });
             }}
           >
             {({ values, handleChange, isSubmitting }) => (
