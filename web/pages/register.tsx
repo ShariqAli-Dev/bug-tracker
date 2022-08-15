@@ -13,6 +13,7 @@ import {
   InputRightElement,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -33,6 +34,7 @@ const Register: NextPage = () => {
   const [, register] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const toast = useToast();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -66,8 +68,24 @@ const Register: NextPage = () => {
         <Box minW={{ base: "90%", md: "458px" }}>
           <Formik
             initialValues={{ email: "", password: "" }}
-            onSubmit={(values) => {
-              return register({ options: values });
+            onSubmit={async (values) => {
+              const { data } = await register({ options: values });
+
+              if (data?.register.errors) {
+                // send a toast alert
+                toast({
+                  title: data.register.errors[0].field,
+                  description: data.register.errors[0].message,
+                  status: "error",
+                  duration: 3000,
+                  isClosable: true,
+                  variant: "subtle",
+                  containerStyle: {
+                    color: "primary",
+                  },
+                  position: "top",
+                });
+              }
             }}
           >
             {({ values, handleChange, isSubmitting }) => (
