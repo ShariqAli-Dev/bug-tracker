@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
+import { useMutation } from "urql";
 
 const helperTexts = [
   { text: "Have an account?", hyperText: "Sign In", url: "/" },
@@ -27,7 +28,25 @@ const helperTexts = [
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
+const REGISTER_MUT = `
+mutation Register($options: UserInput!) {
+  register(options: $options) {
+    errors {
+      field
+      message
+    }
+    user {
+      email
+      id
+      role
+    }
+    token
+  }
+}
+`;
+
 const Register: NextPage = () => {
+  const [, register] = useMutation(REGISTER_MUT);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
@@ -64,7 +83,7 @@ const Register: NextPage = () => {
           <Formik
             initialValues={{ email: "", password: "" }}
             onSubmit={(values) => {
-              console.log(values);
+              register({ options: values });
             }}
           >
             {({ values, handleChange, isSubmitting }) => (
