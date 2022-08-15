@@ -18,17 +18,16 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 
 const helperTexts = [
-  { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
-  { text: "Create an account?", hyperText: "Sign Up", url: "register" },
+  { text: "Have an account?", hyperText: "Sign In", url: "/" },
   { text: "Sign in as a", hyperText: "Demo User", url: "demo" },
 ];
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
-const Home: NextPage = () => {
+const Register: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
@@ -57,7 +56,7 @@ const Home: NextPage = () => {
         {/* HEADING */}
         <Flex color="primary" justifyContent="center" alignItems="center">
           <FaBug style={{ margin: "1rem" }} size={45} />
-          <Heading>Bug Tracker Login</Heading>
+          <Heading>Bug Tracker Registration</Heading>
         </Flex>
 
         {/* FORM  */}
@@ -82,14 +81,13 @@ const Home: NextPage = () => {
                         placeholder="Email Address"
                         id="email"
                         name="email"
-                        autoComplete="email"
-                        value={values.email}
                         onChange={handleChange}
+                        value={values.email}
+                        autoComplete="email"
                         required
                       />
                     </InputGroup>
                   </FormControl>
-
                   {/* PASSWORD */}
                   <FormControl color="#7A7A7A">
                     <InputGroup>
@@ -101,9 +99,9 @@ const Home: NextPage = () => {
                         placeholder="Password"
                         id="password"
                         name="password"
-                        autoComplete="current-password"
                         value={values.password}
                         onChange={handleChange}
+                        autoComplete="current-password"
                         required
                       />
                       <InputRightElement>
@@ -116,18 +114,16 @@ const Home: NextPage = () => {
                         </Button>
                       </InputRightElement>
                     </InputGroup>
-
-                    {/* SUBMIT Sign In */}
+                    {/* SUBMIT LOGIN */}
                     <Button
                       borderRadius={0}
                       type="submit"
-                      variant="solid"
+                      backgroundColor="primary"
                       width="full"
                       marginTop={5}
                       marginBottom={5}
                       rounded="xl"
                       color="tertiary"
-                      backgroundColor="primary"
                       _hover={{
                         backgroundColor: "tertiary",
                         color: "primary",
@@ -136,9 +132,8 @@ const Home: NextPage = () => {
                       }}
                       isLoading={isSubmitting}
                     >
-                      Sign In
+                      Sign Up
                     </Button>
-
                     {/* BOTTOM  LINKS */}
                     <FormHelperText textAlign="center">
                       {helperTexts.map((helperText) => {
@@ -173,4 +168,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default Register;
