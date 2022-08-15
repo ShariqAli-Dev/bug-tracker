@@ -1,30 +1,41 @@
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { Notification } from "../types";
+import { Notification, User } from "../types";
 import { initialNotifications } from "../utils/dummyData";
 
 interface UserState {
   id: number | undefined;
-  username: string;
+  email: string;
   role: string;
   notifications: Notification[];
-  login: (username: string, password: string) => void;
+  login: (details: User & { token: string }) => void;
   getNotifications: (userID: number) => void;
   demoLogin: (role: string) => void;
+  logout: () => void;
 }
+
+const initialState = {
+  id: undefined,
+  email: "",
+  role: "",
+  notifications: [],
+};
 
 const useUserStore = create<UserState>()(
   devtools(
     persist((set) => ({
-      id: undefined,
-      username: "",
-      role: "",
-      notifications: [],
-      login: (username, password) =>
-        set({ id: 0, username: username, role: "DEMO_ADMIN" }),
-      demoLogin: (role) => set({ id: 9999, username: "DEMO_USER", role }),
+      ...initialState,
+      login: ({ id, email, role, token }) => {
+        localStorage.setItem("token", token);
+        set({ id, email, role });
+      },
       getNotifications: (userID) =>
         set({ notifications: initialNotifications }),
+      demoLogin: (role) => set({ id: 9999, email: "DEMO_USER", role }),
+      logout: () => {
+        localStorage.removeItem("token");
+        set(initialState);
+      },
     }))
   )
 );

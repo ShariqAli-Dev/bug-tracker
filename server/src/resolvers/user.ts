@@ -14,6 +14,7 @@ import { __initialRole__, __tokenSecret__ } from "../constants";
 import argon2 from "argon2";
 import buildToken from "../utils/buildToken";
 import jwt from "jsonwebtoken";
+import { EntityManager } from "@mikro-orm/postgresql";
 
 @ObjectType()
 class FieldError {
@@ -73,15 +74,20 @@ export class UserResolver {
     }
 
     const hashedPassword = await argon2.hash(options.password);
-    const user = em.create(Users, {
-      email: options.email,
-      password: hashedPassword,
-      role: __initialRole__,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+    let user;
     try {
-      await em.persistAndFlush(user);
+      const result = await (em as EntityManager)
+        .createQueryBuilder(Users)
+        .getKnexQuery()
+        .insert({
+          email: options.email,
+          password: hashedPassword,
+          role: __initialRole__,
+          created_at: new Date(),
+          updated_at: new Date(),
+        })
+        .returning("*");
+      user = result[0];
     } catch (err) {
       if (err.code === "23505") {
         return {

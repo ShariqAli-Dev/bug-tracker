@@ -13,12 +13,15 @@ import {
   InputRightElement,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
+import { useRegisterMutation } from "../generated/graphql";
+import useUserStore from "../store/user";
 
 const helperTexts = [
   { text: "Have an account?", hyperText: "Sign In", url: "/" },
@@ -28,8 +31,11 @@ const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
 const Register: NextPage = () => {
+  const [, register] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const toast = useToast();
+  const login = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -63,8 +69,36 @@ const Register: NextPage = () => {
         <Box minW={{ base: "90%", md: "458px" }}>
           <Formik
             initialValues={{ email: "", password: "" }}
-            onSubmit={(values) => {
-              console.log(values);
+            onSubmit={async (values) => {
+              const { data } = await register({ options: values });
+
+              if (data?.register.errors) {
+                // send a toast alert
+                if (!toast.isActive("register-error")) {
+                  toast({
+                    id: "register-error",
+                    title: data.register.errors[0].field,
+                    description: data.register.errors[0].message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                    variant: "subtle",
+                    containerStyle: {
+                      color: "primary",
+                    },
+                    position: "top",
+                  });
+                }
+              } else if (data?.register.user) {
+                // worked
+                login({
+                  id: data.register.user.id,
+                  email: data.register.user.email,
+                  role: data.register.user.role,
+                  token: data.register.token as string,
+                });
+                router.push("/dashboard");
+              }
             }}
           >
             {({ values, handleChange, isSubmitting }) => (

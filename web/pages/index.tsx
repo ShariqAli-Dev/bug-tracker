@@ -13,12 +13,15 @@ import {
   InputRightElement,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
+import useUserStore from "../store/user";
+import { useLoginMutation } from "../generated/graphql";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
@@ -30,7 +33,10 @@ const CFaLock = chakra(FaLock);
 
 const Home: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [, login] = useLoginMutation();
   const router = useRouter();
+  const toast = useToast();
+  const loginZ = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -64,8 +70,35 @@ const Home: NextPage = () => {
         <Box minW={{ base: "90%", md: "458px" }}>
           <Formik
             initialValues={{ email: "", password: "" }}
-            onSubmit={(values) => {
-              console.log(values);
+            onSubmit={async (values) => {
+              const { data } = await login({ options: values });
+
+              if (data?.login.errors) {
+                if (!toast.isActive("login-error")) {
+                  toast({
+                    id: "login-error",
+                    title: data.login.errors[0].field,
+                    description: data.login.errors[0].message,
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                    variant: "subtle",
+                    containerStyle: {
+                      color: "primary",
+                    },
+                    position: "top",
+                  });
+                }
+              } else if (data?.login.user) {
+                // worked
+                loginZ({
+                  id: data.login.user.id,
+                  email: data.login.user.email,
+                  role: data.login.user.role,
+                  token: data.login.token as string,
+                });
+                router.push("/dashboard");
+              }
             }}
           >
             {({ values, handleChange, isSubmitting }) => (
