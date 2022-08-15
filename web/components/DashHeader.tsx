@@ -3,8 +3,10 @@ import QueryForm from "./QueryForm";
 import Notifications from "./Notifications";
 import UserActions from "./UserActions";
 import BurgerMenu from "./BurgerMenu";
+import useUserStore from "../store/user";
 
 const DashHeader = () => {
+  const role = useUserStore((state) => state.role);
   return (
     <Flex
       backgroundColor="white"
@@ -29,7 +31,7 @@ const DashHeader = () => {
                 textDecoration: "underline",
               }}
             >
-              Admin
+              {role.toUpperCase()}
             </span>
           </Text>
         </Flex>
