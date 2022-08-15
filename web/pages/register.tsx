@@ -30,7 +30,7 @@ const initalFormValues = {
   password: "",
 };
 
-const Signup: NextPage = () => {
+const Register: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formValues, setFormValues] = useState(initalFormValues);
   const router = useRouter();
@@ -168,4 +168,4 @@ const Signup: NextPage = () => {
   );
 };
 
-export default Signup;
+export default Register;

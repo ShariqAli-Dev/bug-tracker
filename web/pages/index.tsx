@@ -22,7 +22,7 @@ import { Formik, Form } from "formik";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
-  { text: "Create an account?", hyperText: "Sign Up", url: "signup" },
+  { text: "Create an account?", hyperText: "Sign Up", url: "register" },
   { text: "Sign in as a", hyperText: "Demo User", url: "demo" },
 ];
 const CFaUserAlt = chakra(FaUserAlt);
