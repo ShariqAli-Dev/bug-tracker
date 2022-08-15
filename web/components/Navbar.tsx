@@ -16,13 +16,13 @@ const navbar = [
   { title: "Dashboard", url: "dashboard" },
   { title: "Manage Roles", url: "roles" },
   { title: "Manage Project Users", url: "users" },
-  { title: "My Projects", url: "username/projects" },
-  { title: "My Tickets", url: "username/tickets" },
-  { title: "User Profile", url: "username" },
+  { title: "My Projects", url: "projects" },
+  { title: "My Tickets", url: "tickets" },
+  { title: "User Profile", url: "profile" },
 ];
 
 const NavBar = () => {
-  const username = useUserStore((state) => state.username);
+  const role = useUserStore((state) => state.role);
 
   return (
     <Stack>
@@ -39,7 +39,7 @@ const NavBar = () => {
           textAlign="center"
           color="primary"
         >
-          WELCOME {username}
+          WELCOME {role}
         </Heading>
       </Flex>
       {/* Home navbar */}

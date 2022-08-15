@@ -32,7 +32,10 @@ const useUserStore = create<UserState>()(
       getNotifications: (userID) =>
         set({ notifications: initialNotifications }),
       demoLogin: (role) => set({ id: 9999, email: "DEMO_USER", role }),
-      logout: () => set(initialState),
+      logout: () => {
+        localStorage.removeItem("token");
+        set(initialState);
+      },
     }))
   )
 );
