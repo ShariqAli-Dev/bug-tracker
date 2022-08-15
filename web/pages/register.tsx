@@ -20,6 +20,7 @@ import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
 import { useMutation } from "urql";
+import { useRegisterMutation } from "../generated/graphql";
 
 const helperTexts = [
   { text: "Have an account?", hyperText: "Sign In", url: "/" },
@@ -28,25 +29,8 @@ const helperTexts = [
 const CFaUserAlt = chakra(FaUserAlt);
 const CFaLock = chakra(FaLock);
 
-const REGISTER_MUT = `
-mutation Register($options: UserInput!) {
-  register(options: $options) {
-    errors {
-      field
-      message
-    }
-    user {
-      email
-      id
-      role
-    }
-    token
-  }
-}
-`;
-
 const Register: NextPage = () => {
-  const [, register] = useMutation(REGISTER_MUT);
+  const [, register] = useRegisterMutation();
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
