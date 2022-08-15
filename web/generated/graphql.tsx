@@ -70,6 +70,13 @@ export type Users = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type LoginMutationVariables = Exact<{
+  options: UserInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', token?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
+
 export type RegisterMutationVariables = Exact<{
   options: UserInput;
 }>;
@@ -78,6 +85,26 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', token?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', email: string, id: number, role: string } | null } };
 
 
+export const LoginDocument = gql`
+    mutation Login($options: UserInput!) {
+  login(options: $options) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      email
+      role
+    }
+    token
+  }
+}
+    `;
+
+export function useLoginMutation() {
+  return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
 export const RegisterDocument = gql`
     mutation Register($options: UserInput!) {
   register(options: $options) {

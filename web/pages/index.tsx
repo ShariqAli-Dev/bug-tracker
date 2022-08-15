@@ -13,12 +13,14 @@ import {
   InputRightElement,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
+import useUserStore from "../store/user";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
@@ -31,6 +33,8 @@ const CFaLock = chakra(FaLock);
 const Home: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const toast = useToast();
+  const login = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
