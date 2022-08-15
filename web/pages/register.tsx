@@ -20,8 +20,8 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
-import { useMutation } from "urql";
 import { useRegisterMutation } from "../generated/graphql";
+import useUserStore from "../store/user";
 
 const helperTexts = [
   { text: "Have an account?", hyperText: "Sign In", url: "/" },
@@ -35,6 +35,7 @@ const Register: NextPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const toast = useToast();
+  const login = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -85,6 +86,15 @@ const Register: NextPage = () => {
                   },
                   position: "top",
                 });
+              } else if (data?.register.user) {
+                // worked
+                login({
+                  id: data.register.user.id,
+                  email: data.register.user.email,
+                  role: data.register.user.role,
+                  token: data.register.token as string,
+                });
+                router.push("/dashboard");
               }
             }}
           >
