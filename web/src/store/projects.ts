@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { Project } from "../types";
@@ -8,11 +10,13 @@ interface ProjectsState {
   getProjects: () => void;
 }
 
-const useProjectsStore = create(
-  devtools<ProjectsState>((set) => ({
-    projects: [],
-    getProjects: () => set({ projects: initialProjects }),
-  }))
+const useProjectsStore = create<ProjectsState>()(
+  devtools(
+    persist((set) => ({
+      projects: [],
+      getProjects: () => set({ projects: initialProjects }),
+    }))
+  )
 );
 
 export default useProjectsStore;

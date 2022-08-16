@@ -5,36 +5,28 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-} from '@chakra-ui/react';
-import { NextPage } from 'next';
-import { GiHamburgerMenu } from 'react-icons/gi';
-import { AiOutlineUsergroupAdd } from 'react-icons/ai';
-import { useRouter } from 'next/router';
+} from "@chakra-ui/react";
+import { NextPage } from "next";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { useRouter } from "next/router";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const HamburgerIcon = chakra(GiHamburgerMenu);
-const navbar = [
-  { title: 'Dashboard', url: 'dashboard' },
-  { title: 'Manage Roles', url: 'roles' },
-  { title: 'Manage Project Users', url: 'users' },
-  { title: 'My Projects', url: 'username/projects' },
-  { title: 'My Tickets', url: 'username/tickets' },
-  { title: 'User Profile', url: 'username' },
-];
 
 const BurgerMenu: NextPage = () => {
   const router = useRouter();
 
   return (
-    <Center display={{ base: 'inline', md: 'none' }}>
+    <Center display={{ base: "inline", md: "none" }}>
       <Menu>
         <MenuButton>
-          <HamburgerIcon size='25px' />
+          <HamburgerIcon size="25px" />
         </MenuButton>
         <MenuList>
           {/* Dashboard */}
           <MenuItem
-            onClick={() => router.push('dashboard')}
+            onClick={() => router.push("dashboard")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             Dashboard
@@ -42,7 +34,7 @@ const BurgerMenu: NextPage = () => {
 
           {/* Roles */}
           <MenuItem
-            onClick={() => router.push('roles')}
+            onClick={() => router.push("roles")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             Manage Roles
@@ -50,7 +42,7 @@ const BurgerMenu: NextPage = () => {
 
           {/* Manage Project Users */}
           <MenuItem
-            onClick={() => router.push('users')}
+            onClick={() => router.push("users")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             Manage Project Users
@@ -58,7 +50,7 @@ const BurgerMenu: NextPage = () => {
 
           {/* My Projects */}
           <MenuItem
-            onClick={() => router.push('username/projects')}
+            onClick={() => router.push("username/projects")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             My Projects
@@ -66,7 +58,7 @@ const BurgerMenu: NextPage = () => {
 
           {/* My Tickets */}
           <MenuItem
-            onClick={() => router.push('username/tickets')}
+            onClick={() => router.push("username/tickets")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             My Tickets
@@ -74,7 +66,7 @@ const BurgerMenu: NextPage = () => {
 
           {/*User Profile */}
           <MenuItem
-            onClick={() => router.push('username')}
+            onClick={() => router.push("username")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             User Profile

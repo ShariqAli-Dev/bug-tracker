@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { Notification, User } from "../types";
@@ -29,8 +30,7 @@ const useUserStore = create<UserState>()(
         localStorage.setItem("token", token);
         set({ id, email, role });
       },
-      getNotifications: (userID) =>
-        set({ notifications: initialNotifications }),
+      getNotifications: () => set({ notifications: initialNotifications }),
       demoLogin: (role) => set({ id: 9999, email: "DEMO_USER", role }),
       logout: () => {
         localStorage.removeItem("token");
