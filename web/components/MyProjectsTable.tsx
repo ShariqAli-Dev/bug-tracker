@@ -66,20 +66,19 @@ const MyProjectsTable = () => {
   );
 
   const {
-    getTableProps,
+    // getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
+    // pageOptions,`
     pageCount,
     gotoPage,
     nextPage,
     previousPage,
-    setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex },
   } = useTable(
     {
       columns,
@@ -142,7 +141,7 @@ const MyProjectsTable = () => {
               ))}
             </Thead>
             <Tbody {...getTableBodyProps()}>
-              {page.map((row, i) => {
+              {page.map((row) => {
                 prepareRow(row);
                 return (
                   <Tr {...row.getRowProps()} key={nanoid()}>
