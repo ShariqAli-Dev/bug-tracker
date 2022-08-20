@@ -10,9 +10,9 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { __initialRole__, __tokenSecret__ } from "../constants";
+import { __initialRole__, __accessTokenSecret__ } from "../constants";
 import argon2 from "argon2";
-import buildToken from "../utils/buildToken";
+import { buildAccessToken, buildRefreshToken } from "../utils/buildToken";
 import jwt from "jsonwebtoken";
 import { EntityManager } from "@mikro-orm/postgresql";
 
@@ -51,7 +51,7 @@ class UserResponse {
 export class UserResolver {
   @Query(() => UserResponse, { nullable: true })
   async me(@Arg("token") token: string, @Ctx() { em }: MyContext) {
-    jwt.verify(token, __tokenSecret__, async (err, decoded: any) => {
+    jwt.verify(token, __accessTokenSecret__, async (err, decoded: any) => {
       if (err) return null;
       return await em.findOne(Users, { id: decoded.token });
     });
@@ -102,19 +102,14 @@ export class UserResolver {
     }
 
     return {
-      user,
-      token: buildToken({
-        email: options.email,
-        role: __initialRole__,
-        id: user.id,
-      }),
+      token: buildAccessToken(user, { expiresIn: "15m" }),
     };
   }
 
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UserInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, res }: MyContext
   ): Promise<UserResponse> {
     const user = await em.findOne(Users, { email: options.email });
     if (!user) {
@@ -128,9 +123,12 @@ export class UserResolver {
       return { errors: [{ field: "password", message: "incorrect password" }] };
     }
 
+    res.cookie("joemamanuts", buildRefreshToken(user, { expiresIn: "7d" }), {
+      httpOnly: true,
+    });
+
     return {
-      user,
-      token: buildToken({ email: user.email, role: user.role, id: user.id }),
+      token: buildAccessToken(user, { expiresIn: "15m" }),
     };
   }
 }
