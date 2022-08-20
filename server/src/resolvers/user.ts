@@ -17,6 +17,7 @@ import { buildAccessToken, buildRefreshToken } from "../utils/buildToken";
 import jwt from "jsonwebtoken";
 import { EntityManager } from "@mikro-orm/postgresql";
 import { isAuth } from "./userMiddleware";
+import { sendRefreshToken } from "src/utils/sendToken";
 
 @ObjectType()
 class FieldError {
@@ -46,17 +47,21 @@ class UserResponse {
   user?: Users;
 
   @Field(() => String, { nullable: true })
-  token?: string;
+  accessToken?: string;
 }
 
 @Resolver()
 export class UserResolver {
   @Query(() => UserResponse, { nullable: true })
-  async me(@Arg("token") token: string, @Ctx() { em }: MyContext) {
-    jwt.verify(token, __accessTokenSecret__, async (err, decoded: any) => {
-      if (err) return null;
-      return await em.findOne(Users, { id: decoded.token });
-    });
+  async me(@Arg("accessToken") accessToken: string, @Ctx() { em }: MyContext) {
+    jwt.verify(
+      accessToken,
+      __accessTokenSecret__,
+      async (err, decoded: any) => {
+        if (err) return null;
+        return await em.findOne(Users, { id: decoded.token });
+      }
+    );
   }
 
   @Query(() => String)
@@ -68,7 +73,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UserInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, res }: MyContext
   ): Promise<UserResponse> {
     if (options.password.length <= 2) {
       return {
@@ -108,9 +113,9 @@ export class UserResolver {
         };
       }
     }
-
+    sendRefreshToken(res, buildRefreshToken(user));
     return {
-      token: buildAccessToken(user, { expiresIn: "15m" }),
+      accessToken: buildAccessToken(user),
     };
   }
 
@@ -130,13 +135,9 @@ export class UserResolver {
     if (!valid) {
       return { errors: [{ field: "password", message: "incorrect password" }] };
     }
-
-    res.cookie("joemamanuts", buildRefreshToken(user, { expiresIn: "7d" }), {
-      httpOnly: true,
-    });
-
+    sendRefreshToken(res, buildRefreshToken(user));
     return {
-      token: buildAccessToken(user, { expiresIn: "15m" }),
+      accessToken: buildAccessToken(user),
     };
   }
 }
