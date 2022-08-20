@@ -9,6 +9,7 @@ interface UserState {
   email: string;
   role: string;
   notifications: Notification[];
+  token: string;
   login: (details: User & { token: string }) => void;
   getNotifications: (userID: number) => void;
   demoLogin: (role: string) => void;
@@ -20,6 +21,7 @@ const initialState = {
   email: "",
   role: "",
   notifications: [],
+  token: "",
 };
 
 const useUserStore = create<UserState>()(
@@ -27,13 +29,11 @@ const useUserStore = create<UserState>()(
     persist((set) => ({
       ...initialState,
       login: ({ id, email, role, token }) => {
-        localStorage.setItem("token", token);
-        set({ id, email, role });
+        set({ id, email, role, token });
       },
       getNotifications: () => set({ notifications: initialNotifications }),
-      demoLogin: (role) => set({ id: 9999, email: "DEMO_USER", role }),
+      demoLogin: (role) => set({ id: 9999, email: "demo@demo.com", role }),
       logout: () => {
-        localStorage.removeItem("token");
         set(initialState);
       },
     }))

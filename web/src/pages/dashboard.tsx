@@ -6,8 +6,20 @@ import MyProjectsTable from "../components/MyProjectsTable";
 import TicketsByType from "../components/TicketsByType";
 import TicketsByPriority from "../components/TicketsByPriority";
 import TicketsByStatus from "../components/TicketsByStatus";
+import useUserStore from "../store/user";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const Dashboard: NextPage = () => {
+  const token = useUserStore((state) => state.token);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/");
+    }
+  }, []);
+
   return (
     <Flex
       h={{ base: "140vh", md: "100vh" }}

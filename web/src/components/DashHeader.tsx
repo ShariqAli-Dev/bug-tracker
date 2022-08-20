@@ -31,7 +31,7 @@ const DashHeader = () => {
                 textDecoration: "underline",
               }}
             >
-              {role.toUpperCase()}
+              {role.toUpperCase()}role
             </span>
           </Text>
         </Flex>
