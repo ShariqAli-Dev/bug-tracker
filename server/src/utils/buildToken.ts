@@ -1,14 +1,17 @@
 import jwt from "jsonwebtoken";
-import { __tokenSecret__ } from "../constants";
+import { User } from "../types";
+import { __accessTokenSecret__, __refreshTokenSecret__ } from "../constants";
 
-export default (payload: {
-  email: string;
-  role: string;
-  id: number;
-}): string => {
-  const options = {
-    expiresIn: "10h",
-  };
+export const buildAccessToken = (
+  payload: User,
+  options: jwt.SignOptions
+): string => {
+  return jwt.sign({ payload }, __accessTokenSecret__, options);
+};
 
-  return jwt.sign(payload, __tokenSecret__, options);
+export const buildRefreshToken = (
+  payload: User,
+  options: jwt.SignOptions
+): string => {
+  return jwt.sign({ payload }, __refreshTokenSecret__, options);
 };
