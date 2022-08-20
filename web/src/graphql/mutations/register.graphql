@@ -9,6 +9,6 @@ mutation Register($options: UserInput!) {
       id
       role
     }
-    token
+    accessToken
   }
 }

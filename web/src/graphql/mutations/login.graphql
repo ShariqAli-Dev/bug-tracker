@@ -9,6 +9,6 @@ mutation Login($options: UserInput!) {
       email
       role
     }
-    token
+    accessToken
   }
 }

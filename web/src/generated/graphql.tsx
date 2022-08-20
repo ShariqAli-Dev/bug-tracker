@@ -40,13 +40,14 @@ export type MutationRegisterArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  bye: Scalars['String'];
   hello: Scalars['String'];
   me?: Maybe<UserResponse>;
 };
 
 
 export type QueryMeArgs = {
-  token: Scalars['String'];
+  accessToken: Scalars['String'];
 };
 
 export type UserInput = {
@@ -56,8 +57,8 @@ export type UserInput = {
 
 export type UserResponse = {
   __typename?: 'UserResponse';
+  accessToken?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<FieldError>>;
-  token?: Maybe<Scalars['String']>;
   user?: Maybe<Users>;
 };
 
@@ -75,14 +76,14 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', token?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', accessToken?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
 
 export type RegisterMutationVariables = Exact<{
   options: UserInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', token?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', email: string, id: number, role: string } | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', accessToken?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', email: string, id: number, role: string } | null } };
 
 
 export const LoginDocument = gql`
@@ -97,7 +98,7 @@ export const LoginDocument = gql`
       email
       role
     }
-    token
+    accessToken
   }
 }
     `;
@@ -117,7 +118,7 @@ export const RegisterDocument = gql`
       id
       role
     }
-    token
+    accessToken
   }
 }
     `;
