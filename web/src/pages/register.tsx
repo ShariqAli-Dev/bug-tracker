@@ -22,6 +22,7 @@ import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
 import { useRegisterMutation } from "../generated/graphql";
 import useUserStore from "../store/user";
+import { setAccessToken } from "../accessTokens";
 
 const helperTexts = [
   { text: "Have an account?", hyperText: "Sign In", url: "/" },
@@ -89,14 +90,19 @@ const Register: NextPage = () => {
                     position: "top",
                   });
                 }
-              } else if (data?.register.user) {
+              } else if (data?.register.accessToken) {
                 // worked
-                login({
-                  id: data.register.user.id,
-                  email: data.register.user.email,
-                  role: data.register.user.role,
-                  token: data.register.token as string,
-                });
+                // login({
+                //   id: data.register.user.id,
+                //   email: data.register.user.email,
+                //   role: data.register.user.role,
+                //   token: data.register.token as string,
+                // });
+                // login({ accessToken: data.register.accessToken });
+                console.log(data.register.accessToken);
+
+                setAccessToken(data.register.accessToken);
+
                 router.push("/dashboard");
               }
             }}

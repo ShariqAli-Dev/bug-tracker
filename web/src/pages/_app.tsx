@@ -3,11 +3,18 @@ import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Provider, createClient } from "urql";
 import theme from "../theme";
+import { getAccessToken } from "../accessTokens";
 
 const client = createClient({
   url: "http://localhost:4000/graphql",
-  fetchOptions: {
-    credentials: "include", // sends a cookie
+  fetchOptions: () => {
+    const token = getAccessToken();
+    return {
+      credentials: "include", // sends a cookie
+      headers: {
+        authorization: token ? `bearer ${token}` : "",
+      },
+    };
   },
 });
 

@@ -9,8 +9,8 @@ interface UserState {
   email: string;
   role: string;
   notifications: Notification[];
-  token: string;
-  login: (details: User & { token: string }) => void;
+  accessToken: string;
+  login: (details: { accessToken: string }) => void;
   getNotifications: (userID: number) => void;
   demoLogin: (role: string) => void;
   logout: () => void;
@@ -21,15 +21,15 @@ const initialState = {
   email: "",
   role: "",
   notifications: [],
-  token: "",
+  accessToken: "",
 };
 
 const useUserStore = create<UserState>()(
   devtools(
     persist((set) => ({
       ...initialState,
-      login: ({ id, email, role, token }) => {
-        set({ id, email, role, token });
+      login: ({ accessToken }) => {
+        set({ accessToken });
       },
       getNotifications: () => set({ notifications: initialNotifications }),
       demoLogin: (role) => set({ id: 9999, email: "demo@demo.com", role }),
