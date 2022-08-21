@@ -45,8 +45,8 @@ class UserResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 
-  @Field(() => Users, { nullable: true })
-  user?: Users;
+  // @Field(() => Users, { nullable: true })
+  // user?: Users;
 
   @Field(() => String, { nullable: true })
   accessToken?: string;
@@ -77,14 +77,10 @@ export class UserResolver {
     @Arg("userId", () => Int) userId: number,
     @Ctx() { em }: MyContext
   ) {
-    // await getRepository(User).increment({ id: userId }, "tokenVersion", 1);
     const user = await em.findOneOrFail(Users, { id: userId });
-    wrap(user).assign(
-      {
-        tokenVersion: user.tokenVersion + 1,
-      }
-      // { updateByPrimaryKey: false }
-    );
+    wrap(user).assign({
+      tokenVersion: user.tokenVersion + 1,
+    });
 
     return true;
   }
