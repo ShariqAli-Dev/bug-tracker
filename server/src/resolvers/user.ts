@@ -5,6 +5,7 @@ import {
   Ctx,
   Field,
   InputType,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -17,7 +18,8 @@ import { buildAccessToken, buildRefreshToken } from "../utils/buildToken";
 import jwt from "jsonwebtoken";
 import { EntityManager } from "@mikro-orm/postgresql";
 import { isAuth } from "./userMiddleware";
-import { sendRefreshToken } from "src/utils/sendToken";
+import { sendRefreshToken } from "../utils/sendToken";
+import { wrap } from "@mikro-orm/core";
 
 @ObjectType()
 class FieldError {
@@ -68,6 +70,23 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   bye() {
     return "bye!";
+  }
+
+  @Mutation(() => Boolean)
+  async revokeRefreshTokenForUser(
+    @Arg("userId", () => Int) userId: number,
+    @Ctx() { em }: MyContext
+  ) {
+    // await getRepository(User).increment({ id: userId }, "tokenVersion", 1);
+    const user = await em.findOneOrFail(Users, { id: userId });
+    wrap(user).assign(
+      {
+        tokenVersion: user.tokenVersion + 1,
+      }
+      // { updateByPrimaryKey: false }
+    );
+
+    return true;
   }
 
   @Mutation(() => UserResponse)

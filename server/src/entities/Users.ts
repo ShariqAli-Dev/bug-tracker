@@ -24,6 +24,10 @@ export class Users {
   @Property({ type: "text" })
   role!: string;
 
+  @Field()
+  @Property({ type: "int", default: 0 })
+  tokenVersion: number = 0;
+
   @Property({ type: "text" })
   password!: string;
 }

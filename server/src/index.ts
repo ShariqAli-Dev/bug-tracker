@@ -27,7 +27,7 @@ const main = async () => {
       credentials: true,
     })
   );
-  app.post("/refresh-token", (req, res) => {
+  app.post("/refresh-token", async (req, res) => {
     const token = req.cookies.refreshToken;
 
     if (!token) {
@@ -39,15 +39,20 @@ const main = async () => {
     try {
       payload = verify(token, __refreshTokenSecret__) as Users;
     } catch (err) {
-      console.log(err);
       return res.send({ ok: false, accessToken: "" });
     }
 
     // token is valid
     // we can send back an access token
-    const user = fork.findOne(Users, { id: payload.id }) as unknown as Users;
+    const user = (await fork.findOne(Users, {
+      id: payload.id,
+    })) as unknown as Users;
 
     if (!user) {
+      return res.send({ ok: false, accessToken: "" });
+    }
+
+    if (user.tokenVersion !== payload.tokenVersion) {
       return res.send({ ok: false, accessToken: "" });
     }
 
