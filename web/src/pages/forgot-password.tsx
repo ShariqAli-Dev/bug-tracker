@@ -15,10 +15,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
-import { useRouter } from "next/router";
-import { getAccessToken } from "../accessTokens";
 
 const CFaUserAlt = chakra(FaUserAlt);
 const initalFormValues = { email: "" };
@@ -32,13 +30,6 @@ const ForgotPassword: NextPage = () => {
   const onSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
   };
-
-  const router = useRouter();
-  useEffect(() => {
-    if (!getAccessToken()) {
-      router.push("/");
-    }
-  }, []);
 
   return (
     <Flex

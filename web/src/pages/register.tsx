@@ -103,7 +103,6 @@ const Register: NextPage = () => {
                 //   token: data.register.token as string,
                 // });
                 // login({ accessToken: data.register.accessToken });
-                console.log(data.register.accessToken);
 
                 setAccessToken(data.register.accessToken);
 
