@@ -9,8 +9,12 @@ import TicketsByStatus from "../components/TicketsByStatus";
 import { useEffect } from "react";
 import { getAccessToken } from "../accessTokens";
 import { useRouter } from "next/router";
+import { useMeQuery } from "../generated/graphql";
 
 const Dashboard: NextPage = () => {
+  const [{ data, fetching }] = useMeQuery({
+    variables: { accessToken: getAccessToken() },
+  });
   const router = useRouter();
   useEffect(() => {
     if (!getAccessToken()) {

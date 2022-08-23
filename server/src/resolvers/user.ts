@@ -45,8 +45,8 @@ class UserResponse {
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 
-  // @Field(() => Users, { nullable: true })
-  // user?: Users;
+  @Field(() => Users, { nullable: true })
+  user?: Users;
 
   @Field(() => String, { nullable: true })
   accessToken?: string;
@@ -55,15 +55,25 @@ class UserResponse {
 @Resolver()
 export class UserResolver {
   @Query(() => UserResponse, { nullable: true })
-  async me(@Arg("accessToken") accessToken: string, @Ctx() { em }: MyContext) {
-    jwt.verify(
-      accessToken,
-      __accessTokenSecret__,
-      async (err, decoded: any) => {
-        if (err) return null;
-        return await em.findOne(Users, { id: decoded.token });
-      }
-    );
+  async me(
+    @Arg("accessToken", () => String) accessToken: string,
+    @Ctx() { em }: MyContext
+  ) {
+    if (!accessToken) {
+      return {
+        errors: [
+          {
+            field: "invalid token",
+            message: `token of ${accessToken} is invalid`,
+          },
+        ],
+      };
+    }
+    const decoded = jwt.verify(accessToken, __accessTokenSecret__) as {
+      id: number;
+    };
+    const user = await em.findOne(Users, { id: decoded.id });
+    return { user };
   }
 
   @Query(() => String)
