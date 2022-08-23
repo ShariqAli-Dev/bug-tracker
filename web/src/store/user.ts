@@ -30,7 +30,6 @@ const useUserStore = create<UserState>()(
       ...initialState,
       login: (accessToken) => {
         setAccessToken(accessToken);
-        alert(process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET);
         const decoded = jwt.verify(
           accessToken,
           process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET as string
