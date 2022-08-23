@@ -25,5 +25,10 @@
     "baseUrl": "."
   },
   "exclude": ["node_modules"],
-  "include": ["./src/**/*.tsx", "./src/**/*.ts", "../toErrorMap.ts"]
+  "include": [
+    "./src/**/*.tsx",
+    "./src/**/*.ts",
+    "../toErrorMap.ts",
+    "src/index.js"
+  ]
 }

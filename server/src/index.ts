@@ -28,16 +28,16 @@ const main = async () => {
     })
   );
   app.post("/refresh-token", async (req, res) => {
-    const token = req.cookies.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
 
-    if (!token) {
+    if (!refreshToken) {
       return res.send({ ok: false, accessToken: "" });
     }
 
     let payload = null;
 
     try {
-      payload = verify(token, __refreshTokenSecret__) as Users;
+      payload = verify(refreshToken, __refreshTokenSecret__) as Users;
     } catch (err) {
       return res.send({ ok: false, accessToken: "" });
     }

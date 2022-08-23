@@ -27,7 +27,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src/components/AuthCheck.tcs"
+    "src/components/AuthCheck.tcs",
+    "src/pages/_app.tsx"
   ],
   "exclude": ["node_modules"]
 }
