@@ -16,13 +16,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
 import useUserStore from "../store/user";
 import { useLoginMutation } from "../generated/graphql";
-import { setAccessToken } from "../accessTokens";
+import { getAccessToken, setAccessToken } from "../accessTokens";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
@@ -40,7 +40,11 @@ const Home: NextPage = () => {
   const loginZ = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
-
+  useEffect(() => {
+    if (!getAccessToken()) {
+      router.push("/");
+    }
+  }, []);
   return (
     <Flex
       flexDirection="column"

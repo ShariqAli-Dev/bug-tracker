@@ -20,8 +20,6 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { nanoid } from "nanoid";
 import useProjectsStore from "../store/projects";
-import { useRouter } from "next/router";
-import { getAccessToken } from "../accessTokens";
 
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
@@ -30,12 +28,6 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 const MyProjectsTable = () => {
   const data = useProjectsStore((state) => state.projects);
-  const router = useRouter();
-  useEffect(() => {
-    if (!getAccessToken()) {
-      router.push("/");
-    }
-  }, []);
 
   const columns = useMemo(
     () => [
