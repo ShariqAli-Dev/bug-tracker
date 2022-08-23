@@ -42,6 +42,7 @@ const useUserStore = create<UserState>()(
       demoLogin: (role) => set({ id: 9999, email: "demo@demo.com", role }),
       logout: () => {
         set(initialState);
+        setAccessToken("");
       },
     }))
   )
