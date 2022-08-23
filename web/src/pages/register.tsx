@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import {
   Box,
   Button,
@@ -15,14 +14,17 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
-import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
+import type { NextPage } from "next";
+import { withUrqlClient } from "next-urql";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { FaBug, FaLock, FaUserAlt } from "react-icons/fa";
+import { getAccessToken } from "../accessTokens";
 import { useRegisterMutation } from "../generated/graphql";
 import useUserStore from "../store/user";
-import { getAccessToken, setAccessToken } from "../accessTokens";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const helperTexts = [
   { text: "Have an account?", hyperText: "Sign In", url: "/" },
@@ -212,4 +214,4 @@ const Register: NextPage = () => {
   );
 };
 
-export default Register;
+export default withUrqlClient(createUrqlClient)(Register);
