@@ -16,12 +16,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
 import useUserStore from "../store/user";
 import { useLoginMutation } from "../generated/graphql";
+import { getAccessToken, setAccessToken } from "../accessTokens";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
@@ -39,7 +40,11 @@ const Home: NextPage = () => {
   const loginZ = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
-
+  useEffect(() => {
+    if (!getAccessToken()) {
+      router.push("/");
+    }
+  }, []);
   return (
     <Flex
       flexDirection="column"
@@ -89,14 +94,16 @@ const Home: NextPage = () => {
                     position: "top",
                   });
                 }
-              } else if (data?.login.user) {
+              } else if (data?.login.accessToken) {
                 // worked
-                loginZ({
-                  id: data.login.user.id,
-                  email: data.login.user.email,
-                  role: data.login.user.role,
-                  token: data.login.token as string,
-                });
+                // loginZ({
+                //   id: data.login.user.id,
+                //   email: data.login.user.email,
+                //   role: data.login.user.role,
+                //   token: data.login.token as string,
+                // });
+                console.log(data.login.accessToken);
+                setAccessToken(data.login.accessToken);
                 router.push("/dashboard");
               }
             }}

@@ -9,7 +9,10 @@ import {
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { FaBug } from "react-icons/fa";
+import { getAccessToken } from "../accessTokens";
 import useUserStore from "../store/user";
 
 const avatars = [
@@ -33,6 +36,12 @@ const avatars = [
 
 const Demo: NextPage = () => {
   const demoLogin = useUserStore((state) => state.demoLogin);
+  const router = useRouter();
+  useEffect(() => {
+    if (!getAccessToken()) {
+      router.push("/");
+    }
+  }, []);
   return (
     <Flex
       flexDirection="column"

@@ -39,7 +39,7 @@ const NavBar = () => {
           textAlign="center"
           color="primary"
         >
-          WELCOME {role}
+          WELCOME role
         </Heading>
       </Flex>
       {/* Home navbar */}

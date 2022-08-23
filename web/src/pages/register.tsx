@@ -16,12 +16,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Form, Formik } from "formik";
 import { useRegisterMutation } from "../generated/graphql";
 import useUserStore from "../store/user";
+import { getAccessToken, setAccessToken } from "../accessTokens";
 
 const helperTexts = [
   { text: "Have an account?", hyperText: "Sign In", url: "/" },
@@ -38,7 +39,11 @@ const Register: NextPage = () => {
   const login = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
-
+  useEffect(() => {
+    if (!getAccessToken()) {
+      router.push("/");
+    }
+  }, []);
   return (
     <Flex
       flexDirection="column"
@@ -89,14 +94,18 @@ const Register: NextPage = () => {
                     position: "top",
                   });
                 }
-              } else if (data?.register.user) {
+              } else if (data?.register.accessToken) {
                 // worked
-                login({
-                  id: data.register.user.id,
-                  email: data.register.user.email,
-                  role: data.register.user.role,
-                  token: data.register.token as string,
-                });
+                // login({
+                //   id: data.register.user.id,
+                //   email: data.register.user.email,
+                //   role: data.register.user.role,
+                //   token: data.register.token as string,
+                // });
+                // login({ accessToken: data.register.accessToken });
+
+                setAccessToken(data.register.accessToken);
+
                 router.push("/dashboard");
               }
             }}

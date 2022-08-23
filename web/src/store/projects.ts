@@ -13,7 +13,7 @@ interface ProjectsState {
 const useProjectsStore = create<ProjectsState>()(
   devtools(
     persist((set) => ({
-      projects: [],
+      projects: initialProjects,
       getProjects: () => set({ projects: initialProjects }),
     }))
   )
