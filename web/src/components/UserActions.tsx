@@ -9,31 +9,23 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FaUserAlt } from "react-icons/fa";
-import { useByeQuery } from "../generated/graphql";
+import useProjectsStore from "../store/projects";
+import useTicketsStore from "../store/tickets";
+import useUserStore from "../store/user";
 
 const UserAvatar = chakra(FaUserAlt);
 
 const UserActions = () => {
   const router = useRouter();
-  const [{ data, error, fetching }, bye] = useByeQuery();
-
-  if (fetching) {
-    return <div>loading...</div>;
-  }
-
-  if (error) {
-    console.log(error);
-  }
-
-  if (!data) {
-    return <div>no data</div>;
-  }
-
-  return <div>{JSON.stringify(data)}</div>;
+  const logout = useUserStore((state) => state.logout);
+  const resetTickets = useTicketsStore((state) => state.reset);
+  const resetProjects = useProjectsStore((state) => state.reset);
 
   const logoutUser = () => {
-    // logout();
-    // router.push("/");
+    logout();
+    resetTickets();
+    resetProjects();
+    router.push("/");
   };
 
   return (

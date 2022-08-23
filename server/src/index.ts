@@ -42,8 +42,6 @@ const main = async () => {
       return res.send({ ok: false, accessToken: "" });
     }
 
-    // token is valid
-    // we can send back an access token
     const user = (await fork.findOne(Users, {
       id: payload.id,
     })) as unknown as Users;

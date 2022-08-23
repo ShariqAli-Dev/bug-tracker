@@ -6,13 +6,19 @@ import { initialTickets } from "../utils/dummyData";
 interface TicketsState {
   tickets: Ticket[];
   getTickets: () => void;
+  reset: () => void;
 }
+
+const initialState = {
+  tickets: [],
+};
 
 const useTicketsStore = create<TicketsState>()(
   devtools(
     persist((set) => ({
-      tickets: [],
+      ...initialState,
       getTickets: () => set({ tickets: initialTickets }),
+      reset: () => set(initialState),
     }))
   )
 );

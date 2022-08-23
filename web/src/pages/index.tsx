@@ -22,7 +22,9 @@ import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
 import useUserStore from "../store/user";
 import { useLoginMutation } from "../generated/graphql";
-import { getAccessToken, setAccessToken } from "../accessTokens";
+import { getAccessToken } from "../accessTokens";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
@@ -102,8 +104,7 @@ const Home: NextPage = () => {
                 //   role: data.login.user.role,
                 //   token: data.login.token as string,
                 // });
-                console.log(data.login.accessToken);
-                setAccessToken(data.login.accessToken);
+                loginZ(data.login.accessToken);
                 router.push("/dashboard");
               }
             }}
@@ -213,4 +214,4 @@ const Home: NextPage = () => {
   );
 };
 
-export default Home;
+export default withUrqlClient(createUrqlClient)(Home);
