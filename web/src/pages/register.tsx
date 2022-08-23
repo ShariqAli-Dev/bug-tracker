@@ -104,7 +104,8 @@ const Register: NextPage = () => {
                 // });
                 // login({ accessToken: data.register.accessToken });
 
-                setAccessToken(data.register.accessToken);
+                // setAccessToken(data.register.accessToken);
+                login(data.register.accessToken);
 
                 router.push("/dashboard");
               }

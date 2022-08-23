@@ -102,8 +102,7 @@ const Home: NextPage = () => {
                 //   role: data.login.user.role,
                 //   token: data.login.token as string,
                 // });
-                console.log(data.login.accessToken);
-                setAccessToken(data.login.accessToken);
+                loginZ(data.login.accessToken);
                 router.push("/dashboard");
               }
             }}
