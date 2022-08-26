@@ -21,11 +21,13 @@ import { Form, Formik } from "formik";
 import { useForgotPasswordMutation } from "../../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
+import { useState } from "react";
 
 const CFaUserAlt = chakra(FaUserAlt);
 
 const ForgotPassword: NextPage = () => {
   const [, forgotPassword] = useForgotPasswordMutation();
+  const [disabled, setDisabled] = useState(false);
   const toast = useToast();
 
   return (
@@ -57,6 +59,7 @@ const ForgotPassword: NextPage = () => {
           <Formik
             initialValues={{ email: "" }}
             onSubmit={async (values) => {
+              setDisabled(true);
               await forgotPassword({ email: values.email });
               if (!toast.isActive("forgot-password")) {
                 toast({
@@ -106,6 +109,7 @@ const ForgotPassword: NextPage = () => {
                     marginTop={5}
                     marginBottom={5}
                     rounded="xl"
+                    disabled={disabled}
                     isLoading={isSubmitting}
                   >
                     Request Reset Link
