@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
-import { __prod__, __refreshTokenSecret__ } from "./constants";
+import { __PGPassword__, __prod__, __refreshTokenSecret__ } from "./constants";
 import mickoConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
@@ -13,8 +13,19 @@ import { verify } from "jsonwebtoken";
 import { Users } from "./entities/Users";
 import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
 import { sendRefreshToken } from "./utils/sendToken";
+import { DataSource } from "typeorm";
+require("dotenv").config();
 
 const main = async () => {
+  const conn = new DataSource({
+    type: "postgres",
+    database: process.env.DB_NAME + "2",
+    username: "postgres",
+    password: __PGPassword__,
+    logging: true,
+    synchronize: true,
+  });
+
   const orm = await MikroORM.init(mickoConfig);
   await orm.getMigrator().up();
   const fork = orm.em.fork();
