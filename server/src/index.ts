@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { __PGPassword__, __prod__, __refreshTokenSecret__ } from "./constants";
+import { __refreshTokenSecret__ } from "./constants";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -11,22 +11,10 @@ import { verify } from "jsonwebtoken";
 import { Users } from "./entities/Users";
 import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
 import { sendRefreshToken } from "./utils/sendToken";
-import { DataSource } from "typeorm";
-import { Review } from "./entities/Review";
-require("dotenv").config();
-
-export const myDataSource = new DataSource({
-  type: "postgres",
-  database: process.env.DB_NAME + "2",
-  username: "postgres",
-  password: __PGPassword__,
-  logging: true,
-  synchronize: true,
-  entities: [Review, Users],
-});
+import { myDataSource } from "./data-source";
 
 const main = async () => {
-  const conn = myDataSource;
+  await myDataSource.initialize();
   const app = express();
   app.use(
     cookieParser(),

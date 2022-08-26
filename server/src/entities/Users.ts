@@ -13,7 +13,7 @@ import {
 export class Users extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Field()
   @CreateDateColumn({ type: "date" })
@@ -25,16 +25,16 @@ export class Users extends BaseEntity {
 
   @Field()
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Field()
-  @Column({})
-  role: string;
+  @Column()
+  role!: string;
 
   @Field()
-  @Column({ type: "int" })
-  tokenVersion: number = 0;
+  @Column({ type: "int", default: 0 })
+  tokenVersion!: number;
 
   @Column()
-  password: string;
+  password!: string;
 }

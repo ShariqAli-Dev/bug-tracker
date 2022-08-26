@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "typeorm": "typeorm-ts-node-commonjs",
     "watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon dist/index.js",

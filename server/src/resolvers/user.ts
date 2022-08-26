@@ -28,7 +28,7 @@ import { isAuth } from "./userMiddleware";
 import { sendRefreshToken } from "../utils/sendToken";
 import { wrap } from "@mikro-orm/core";
 import { sendMail } from "../utils/sendMail";
-import { myDataSource } from "../index";
+import { myDataSource } from "../data-source";
 
 @ObjectType()
 class FieldError {
@@ -178,6 +178,7 @@ export class UserResolver {
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
+      // UserInput.create({}).save()
       const result = await myDataSource
         .createQueryBuilder()
         .insert()
@@ -190,12 +191,8 @@ export class UserResolver {
         })
         .returning("*")
         .execute();
-      console.log({ result });
-      user = result.raw;
+      user = result.raw[0];
     } catch (err) {
-      console.log("-------------------------------------------------");
-      console.log({ err });
-      console.log("-------------------------------------------------");
       if (err.code === "23505") {
         return {
           errors: [
@@ -218,7 +215,10 @@ export class UserResolver {
     @Arg("options") options: UserInput,
     @Ctx() { res }: MyContext
   ): Promise<UserResponse> {
-    const user = Users.findOne({ where: { email: options.email } }) as any;
+    const user = (await Users.findOne({
+      where: { email: options.email },
+    })) as any;
+
     if (!user) {
       return {
         errors: [{ field: "email", message: "that email doesn't exist" }],
