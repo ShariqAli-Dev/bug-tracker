@@ -26,6 +26,7 @@ export const myDataSource = new DataSource({
 });
 
 const main = async () => {
+  const conn = myDataSource;
   const app = express();
   app.use(
     cookieParser(),
@@ -49,9 +50,9 @@ const main = async () => {
       return res.send({ ok: false, accessToken: "" });
     }
 
-    const user = (await fork.findOne(Users, {
-      id: payload.id,
-    })) as unknown as Users;
+    const user = Users.findOne({
+      where: { id: payload.id },
+    }) as unknown as Users;
 
     if (!user) {
       return res.send({ ok: false, accessToken: "" });

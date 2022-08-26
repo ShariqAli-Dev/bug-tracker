@@ -149,7 +149,9 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   async revokeRefreshTokenForUser(@Arg("userId", () => Int) userId: number) {
-    const user = await em.findOneOrFail(Users, { id: userId });
+    const user = (await Users.findOne({ where: { id: userId } })) as
+      | Users
+      | any;
     wrap(user).assign({
       tokenVersion: user.tokenVersion + 1,
     });
@@ -181,6 +183,7 @@ export class UserResolver {
         .insert()
         .into(Users)
         .values({
+          id: 200,
           email: options.email,
           password: hashedPassword,
           role: __initialRole__,
@@ -190,7 +193,9 @@ export class UserResolver {
       console.log({ result });
       user = result.raw;
     } catch (err) {
-      console.log("err:", err);
+      console.log("-------------------------------------------------");
+      console.log({ err });
+      console.log("-------------------------------------------------");
       if (err.code === "23505") {
         return {
           errors: [
@@ -213,7 +218,7 @@ export class UserResolver {
     @Arg("options") options: UserInput,
     @Ctx() { res }: MyContext
   ): Promise<UserResponse> {
-    const user = Users.findOne({ where: { email: options.email } });
+    const user = Users.findOne({ where: { email: options.email } }) as any;
     if (!user) {
       return {
         errors: [{ field: "email", message: "that email doesn't exist" }],
