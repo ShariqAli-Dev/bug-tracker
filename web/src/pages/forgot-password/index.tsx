@@ -13,6 +13,7 @@ import {
   InputLeftElement,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FaUserAlt } from "react-icons/fa";
@@ -25,6 +26,7 @@ const CFaUserAlt = chakra(FaUserAlt);
 
 const ForgotPassword: NextPage = () => {
   const [, forgotPassword] = useForgotPasswordMutation();
+  const toast = useToast();
 
   return (
     <Flex
@@ -56,6 +58,21 @@ const ForgotPassword: NextPage = () => {
             initialValues={{ email: "" }}
             onSubmit={async (values) => {
               await forgotPassword({ email: values.email });
+              if (!toast.isActive("forgot-password")) {
+                toast({
+                  id: "forgot-password",
+                  title: "Password Reset Sent",
+                  description: "you should get an email soon",
+                  status: "success",
+                  duration: 3000,
+                  isClosable: true,
+                  variant: "subtle",
+                  containerStyle: {
+                    color: "primary",
+                  },
+                  position: "top",
+                });
+              }
             }}
           >
             {({ values, handleChange, isSubmitting }) => (
