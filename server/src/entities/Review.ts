@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -9,18 +10,18 @@ import {
 
 @ObjectType()
 @Entity()
-export class Review {
+export class Review extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
   @CreateDateColumn({ type: "date" })
-  createdAt: Date = new Date();
+  createdAt: Date;
 
   @Field()
   @UpdateDateColumn({ type: "date" })
-  updatedAt: Date = new Date();
+  updatedAt: Date;
 
   @Field()
   @Column({ type: "int" })
