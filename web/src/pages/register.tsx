@@ -41,11 +41,7 @@ const Register: NextPage = () => {
   const login = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
-  useEffect(() => {
-    if (!getAccessToken()) {
-      router.push("/");
-    }
-  }, []);
+
   return (
     <Flex
       flexDirection="column"
@@ -107,7 +103,7 @@ const Register: NextPage = () => {
                 // login({ accessToken: data.register.accessToken });
 
                 // setAccessToken(data.register.accessToken);
-                login(data.register.accessToken);
+                login(data.register.accessToken as string);
 
                 router.push("/dashboard");
               }

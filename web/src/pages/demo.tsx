@@ -36,12 +36,7 @@ const avatars = [
 
 const Demo: NextPage = () => {
   const demoLogin = useUserStore((state) => state.demoLogin);
-  const router = useRouter();
-  useEffect(() => {
-    if (!getAccessToken()) {
-      router.push("/");
-    }
-  }, []);
+
   return (
     <Flex
       flexDirection="column"
