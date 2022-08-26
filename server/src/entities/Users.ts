@@ -35,6 +35,6 @@ export class Users extends BaseEntity {
   @Column({ type: "int" })
   tokenVersion: number = 0;
 
-  @Column({})
+  @Column()
   password!: string;
 }

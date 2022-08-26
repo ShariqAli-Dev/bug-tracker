@@ -28,7 +28,7 @@ export class Review extends BaseEntity {
   userID!: number;
 
   @Field()
-  @Column({})
+  @Column()
   review!: string;
 
   @Field()

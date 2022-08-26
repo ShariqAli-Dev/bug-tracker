@@ -1,7 +1,5 @@
 import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
 import { __PGPassword__, __prod__, __refreshTokenSecret__ } from "./constants";
-import mickoConfig from "./mikro-orm.config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -14,23 +12,20 @@ import { Users } from "./entities/Users";
 import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
 import { sendRefreshToken } from "./utils/sendToken";
 import { DataSource } from "typeorm";
+import { Review } from "./entities/Review";
 require("dotenv").config();
 
+export const myDataSource = new DataSource({
+  type: "postgres",
+  database: process.env.DB_NAME + "2",
+  username: "postgres",
+  password: __PGPassword__,
+  logging: true,
+  synchronize: true,
+  entities: [Review, Users],
+});
+
 const main = async () => {
-  const conn = new DataSource({
-    type: "postgres",
-    database: process.env.DB_NAME + "2",
-    username: "postgres",
-    password: __PGPassword__,
-    logging: true,
-    synchronize: true,
-    entities: [],
-  });
-
-  const orm = await MikroORM.init(mickoConfig);
-  await orm.getMigrator().up();
-  const fork = orm.em.fork();
-
   const app = express();
   app.use(
     cookieParser(),
@@ -78,7 +73,7 @@ const main = async () => {
       resolvers: [HelloResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: fork, req, res }),
+    context: ({ req, res }) => ({ req, res }),
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({
