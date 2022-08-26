@@ -24,6 +24,7 @@ const main = async () => {
     password: __PGPassword__,
     logging: true,
     synchronize: true,
+    entities: [],
   });
 
   const orm = await MikroORM.init(mickoConfig);
