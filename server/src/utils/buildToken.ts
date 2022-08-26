@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 // import { User } from "../types";
-import { __accessTokenSecret__, __refreshTokenSecret__ } from "../constants";
+import {
+  __accessTokenSecret__,
+  __passwordResetTokenSecret__,
+  __refreshTokenSecret__,
+} from "../constants";
 import { Users } from "../entities/Users";
 
 export const buildAccessToken = (user: Users): string => {
@@ -26,4 +30,13 @@ export const buildRefreshToken = (user: Users): string => {
     __refreshTokenSecret__,
     { expiresIn: "7d" }
   );
+};
+
+export const buildPasswordResetToken = (
+  email: string,
+  userId: number
+): string => {
+  return jwt.sign({ email, userId }, __passwordResetTokenSecret__, {
+    expiresIn: "3d",
+  });
 };

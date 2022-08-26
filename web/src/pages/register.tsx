@@ -19,9 +19,8 @@ import type { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FaBug, FaLock, FaUserAlt } from "react-icons/fa";
-import { getAccessToken } from "../accessTokens";
 import { useRegisterMutation } from "../generated/graphql";
 import useUserStore from "../store/user";
 import { createUrqlClient } from "../utils/createUrqlClient";
@@ -41,11 +40,7 @@ const Register: NextPage = () => {
   const login = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
-  useEffect(() => {
-    if (!getAccessToken()) {
-      router.push("/");
-    }
-  }, []);
+
   return (
     <Flex
       flexDirection="column"
@@ -107,7 +102,7 @@ const Register: NextPage = () => {
                 // login({ accessToken: data.register.accessToken });
 
                 // setAccessToken(data.register.accessToken);
-                login(data.register.accessToken);
+                login(data.register.accessToken as string);
 
                 router.push("/dashboard");
               }

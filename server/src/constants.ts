@@ -7,4 +7,6 @@ export const __accessTokenSecret__ =
   process.env.ACCESS_TOKEN_SECRET || "its a secret to us all";
 export const __refreshTokenSecret__ =
   process.env.REFRESH_TOKEN_SECRET || "its a secret to us all";
+export const __passwordResetTokenSecret__ =
+  process.env.PASSWORD_RESET_SECRET || "its a secret to us all";
 export const __initialRole__ = "developer";
