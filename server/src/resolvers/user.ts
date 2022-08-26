@@ -26,7 +26,6 @@ import {
 import jwt from "jsonwebtoken";
 import { isAuth } from "./userMiddleware";
 import { sendRefreshToken } from "../utils/sendToken";
-import { wrap } from "@mikro-orm/core";
 import { sendMail } from "../utils/sendMail";
 import { myDataSource } from "../data-source";
 
@@ -148,13 +147,11 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async revokeRefreshTokenForUser(@Arg("userId", () => Int) userId: number) {
-    const user = (await Users.findOne({ where: { id: userId } })) as
-      | Users
-      | any;
-    wrap(user).assign({
-      tokenVersion: user.tokenVersion + 1,
-    });
+  async revokeRefreshTokenForUser(@Arg("id", () => Int) id: number) {
+    const user = await Users.findOne({ where: { id } });
+    if (user) {
+      Users.update({ id }, { tokenVersion: user.tokenVersion + 1 });
+    }
 
     return true;
   }
