@@ -24,11 +24,10 @@ import {
   buildRefreshToken,
 } from "../utils/buildToken";
 import jwt from "jsonwebtoken";
-import { EntityManager } from "@mikro-orm/postgresql";
 import { isAuth } from "./userMiddleware";
 import { sendRefreshToken } from "../utils/sendToken";
-import { wrap } from "@mikro-orm/core";
 import { sendMail } from "../utils/sendMail";
+import { myDataSource } from "../data-source";
 
 @ObjectType()
 class FieldError {
@@ -64,10 +63,7 @@ class UserResponse {
 @Resolver()
 export class UserResolver {
   @Query(() => UserResponse, { nullable: true })
-  async me(
-    @Arg("accessToken", () => String) accessToken: string,
-    @Ctx() { em }: MyContext
-  ) {
+  async me(@Arg("accessToken", () => String) accessToken: string) {
     if (!accessToken) {
       return {
         errors: [
@@ -81,7 +77,7 @@ export class UserResolver {
     const decoded = jwt.verify(accessToken, __accessTokenSecret__) as {
       id: number;
     };
-    const user = await em.findOne(Users, { id: decoded.id });
+    const user = await Users.findOne({ where: { id: decoded.id } });
     return { user };
   }
 
@@ -94,8 +90,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
-    @Arg("newPassword") newPassword: string,
-    @Ctx() { em }: MyContext
+    @Arg("newPassword") newPassword: string
   ): Promise<UserResponse> {
     if (newPassword.length <= 2) {
       return {
@@ -117,7 +112,10 @@ export class UserResolver {
       };
     }
 
-    const user = await em.findOne(Users, { id: decoded.userId });
+    const user = await Users.findOne({
+      where: { id: decoded.userId },
+    });
+
     if (!user) {
       return {
         errors: [
@@ -129,19 +127,15 @@ export class UserResolver {
       };
     }
     user.password = await argon2.hash(newPassword);
-    await em.persistAndFlush(user);
+    Users.update({ id: decoded.userId }, { password: newPassword });
 
     return { user };
   }
 
   @Mutation(() => Boolean)
-  async forgotPassword(@Arg("email") email: string, @Ctx() { em }: MyContext) {
-    const user = await em.findOne(Users, { email });
-
-    if (!user) {
-      return true;
-    }
-
+  async forgotPassword(@Arg("email") email: string) {
+    const user = await Users.findOne({ where: { email } });
+    if (!user) return true;
     const token = buildPasswordResetToken(email, user.id);
 
     await sendMail(
@@ -153,14 +147,11 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async revokeRefreshTokenForUser(
-    @Arg("userId", () => Int) userId: number,
-    @Ctx() { em }: MyContext
-  ) {
-    const user = await em.findOneOrFail(Users, { id: userId });
-    wrap(user).assign({
-      tokenVersion: user.tokenVersion + 1,
-    });
+  async revokeRefreshTokenForUser(@Arg("id", () => Int) id: number) {
+    const user = await Users.findOne({ where: { id } });
+    if (user) {
+      Users.update({ id }, { tokenVersion: user.tokenVersion + 1 });
+    }
 
     return true;
   }
@@ -168,7 +159,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UserInput,
-    @Ctx() { em, res }: MyContext
+    @Ctx() { res }: MyContext
   ): Promise<UserResponse> {
     if (options.password.length <= 2) {
       return {
@@ -184,18 +175,20 @@ export class UserResolver {
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
-      const result = await (em as EntityManager)
-        .createQueryBuilder(Users)
-        .getKnexQuery()
-        .insert({
+      // UserInput.create({}).save()
+      const result = await myDataSource
+        .createQueryBuilder()
+        .insert()
+        .into(Users)
+        .values({
+          id: 200,
           email: options.email,
           password: hashedPassword,
           role: __initialRole__,
-          created_at: new Date(),
-          updated_at: new Date(),
         })
-        .returning("*");
-      user = result[0];
+        .returning("*")
+        .execute();
+      user = result.raw[0];
     } catch (err) {
       if (err.code === "23505") {
         return {
@@ -217,9 +210,12 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UserInput,
-    @Ctx() { em, res }: MyContext
+    @Ctx() { res }: MyContext
   ): Promise<UserResponse> {
-    const user = await em.findOne(Users, { email: options.email });
+    const user = (await Users.findOne({
+      where: { email: options.email },
+    })) as any;
+
     if (!user) {
       return {
         errors: [{ field: "email", message: "that email doesn't exist" }],

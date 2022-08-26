@@ -1,7 +1,5 @@
 import "reflect-metadata";
-import { MikroORM } from "@mikro-orm/core";
-import { __prod__, __refreshTokenSecret__ } from "./constants";
-import mickoConfig from "./mikro-orm.config";
+import { __refreshTokenSecret__ } from "./constants";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -13,12 +11,10 @@ import { verify } from "jsonwebtoken";
 import { Users } from "./entities/Users";
 import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
 import { sendRefreshToken } from "./utils/sendToken";
+import { myDataSource } from "./data-source";
 
 const main = async () => {
-  const orm = await MikroORM.init(mickoConfig);
-  await orm.getMigrator().up();
-  const fork = orm.em.fork();
-
+  await myDataSource.initialize();
   const app = express();
   app.use(
     cookieParser(),
@@ -42,9 +38,9 @@ const main = async () => {
       return res.send({ ok: false, accessToken: "" });
     }
 
-    const user = (await fork.findOne(Users, {
-      id: payload.id,
-    })) as unknown as Users;
+    const user = Users.findOne({
+      where: { id: payload.id },
+    }) as unknown as Users;
 
     if (!user) {
       return res.send({ ok: false, accessToken: "" });
@@ -66,7 +62,7 @@ const main = async () => {
       resolvers: [HelloResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: fork, req, res }),
+    context: ({ req, res }) => ({ req, res }),
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({

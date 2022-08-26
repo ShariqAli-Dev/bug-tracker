@@ -10,7 +10,7 @@ import {
 
 @ObjectType()
 @Entity()
-export class Users extends BaseEntity {
+export class Review extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -24,17 +24,14 @@ export class Users extends BaseEntity {
   updatedAt: Date;
 
   @Field()
-  @Column({ unique: true })
-  email!: string;
+  @Column({ type: "int" })
+  userID!: number;
 
   @Field()
   @Column()
-  role!: string;
+  review!: string;
 
   @Field()
-  @Column({ type: "int", default: 0 })
-  tokenVersion!: number;
-
-  @Column()
-  password!: string;
+  @Column({ type: "int" })
+  rating!: number;
 }
