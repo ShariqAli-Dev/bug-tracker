@@ -18,8 +18,7 @@ export class ReviewResolver {
     @Arg("review") review: string,
     @Arg("rating") rating: number
   ): Promise<Review> {
-    // 2 sql queries
-    return Review.create({ userID, review, rating }).save();
+    return Review.create({ review, rating, creatorID: userID }).save();
   }
 
   @Mutation(() => Review, { nullable: true })
