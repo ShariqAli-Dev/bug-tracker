@@ -16,14 +16,6 @@ export class Review extends BaseEntity {
   id!: number;
 
   @Field()
-  @CreateDateColumn({ type: "date" })
-  createdAt: Date;
-
-  @Field()
-  @UpdateDateColumn({ type: "date" })
-  updatedAt: Date;
-
-  @Field()
   @Column({ type: "int" })
   userID!: number;
 
@@ -34,4 +26,12 @@ export class Review extends BaseEntity {
   @Field()
   @Column({ type: "int" })
   rating!: number;
+
+  @Field()
+  @CreateDateColumn({ type: "date" })
+  createdAt: Date;
+
+  @Field()
+  @UpdateDateColumn({ type: "date" })
+  updatedAt: Date;
 }

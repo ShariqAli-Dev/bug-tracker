@@ -16,14 +16,6 @@ export class Users extends BaseEntity {
   id!: number;
 
   @Field()
-  @CreateDateColumn({ type: "date" })
-  createdAt: Date;
-
-  @Field()
-  @UpdateDateColumn({ type: "date" })
-  updatedAt: Date;
-
-  @Field()
   @Column({ unique: true })
   email!: string;
 
@@ -37,4 +29,12 @@ export class Users extends BaseEntity {
 
   @Column()
   password!: string;
+
+  @Field()
+  @CreateDateColumn({ type: "date" })
+  createdAt: Date;
+
+  @Field()
+  @UpdateDateColumn({ type: "date" })
+  updatedAt: Date;
 }
