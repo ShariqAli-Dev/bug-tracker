@@ -14,7 +14,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
+  Id: string;
   String: string;
   Boolean: boolean;
   Int: number;
@@ -55,7 +55,7 @@ export type MutationRegisterArgs = {
 };
 
 export type MutationRevokeRefreshTokenForUserArgs = {
-  userID: Scalars["Int"];
+  userId: Scalars["Int"];
 };
 
 export type Query = {

@@ -26,7 +26,7 @@ export class Review extends BaseEntity {
   rating!: number;
 
   @Column()
-  creatorID: number;
+  creatorId: number;
 
   @ManyToOne(() => Users, (user) => user.reviews)
   creator: Users;

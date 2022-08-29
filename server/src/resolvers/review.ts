@@ -1,4 +1,3 @@
-import { Users } from "../entities/Users";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Review } from "../entities/Review";
 @Resolver()
@@ -15,18 +14,18 @@ export class ReviewResolver {
 
   @Mutation(() => Review)
   async createReview(
-    @Arg("userID") userID: number,
+    @Arg("userId") userId: number,
     @Arg("review") review: string,
     @Arg("rating") rating: number
   ): Promise<Review> {
-    if (!userID) {
+    if (!userId) {
       throw new Error("not authenticated");
     }
 
     return Review.create({
       review,
       rating,
-      creatorID: userID,
+      creatorId: userId,
     }).save();
   }
 
