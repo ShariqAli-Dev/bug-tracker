@@ -19,15 +19,6 @@ export class Users extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToMany(() => Review, (review) => review.creator)
-  reviews: Review[];
-
-  @OneToMany(() => Notification, (notification) => notification.user)
-  notifications: Notification[];
-
-  @OneToMany(() => User_Project, (user_project) => user_project.user)
-  user_project: User_Project[];
-
   @Field()
   @Column({ unique: true })
   email!: string;
@@ -42,6 +33,15 @@ export class Users extends BaseEntity {
 
   @Column()
   password!: string;
+
+  @OneToMany(() => Review, (review) => review.creator)
+  reviews: Review[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
+
+  @OneToMany(() => User_Project, (user_project) => user_project.user)
+  user_project: User_Project[];
 
   @Field()
   @CreateDateColumn()
