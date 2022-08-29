@@ -19,28 +19,23 @@ export class Review extends BaseEntity {
 
   @Field()
   @Column()
-  creatorID: number;
-
-  @ManyToOne(() => Users, (user) => user.reviews)
-  creator: Users;
-
-  @Field()
-  @Column({ type: "int" })
-  userID!: number;
-
-  @Field()
-  @Column()
   review!: string;
 
   @Field()
   @Column({ type: "int" })
   rating!: number;
 
+  @Column()
+  creatorID: number;
+
+  @ManyToOne(() => Users, (user) => user.reviews)
+  creator: Users;
+
   @Field()
-  @CreateDateColumn({ type: "date" })
+  @CreateDateColumn()
   createdAt: Date;
 
   @Field()
-  @UpdateDateColumn({ type: "date" })
+  @UpdateDateColumn()
   updatedAt: Date;
 }

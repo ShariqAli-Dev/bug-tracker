@@ -36,10 +36,10 @@ export class Users extends BaseEntity {
   password!: string;
 
   @Field()
-  @CreateDateColumn({ type: "date" })
+  @CreateDateColumn()
   createdAt: Date;
 
   @Field()
-  @UpdateDateColumn({ type: "date" })
+  @UpdateDateColumn()
   updatedAt: Date;
 }
