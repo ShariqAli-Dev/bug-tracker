@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Notification } from "./Notification";
 import { Review } from "./Review";
 
 @ObjectType()
@@ -19,6 +20,9 @@ export class Users extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.creator)
   reviews: Review[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
 
   @Field()
   @Column({ unique: true })
