@@ -1,4 +1,4 @@
-import { isAuth } from "src/middleware/isAuth";
+import { isAuth } from "../middleware/isAuth";
 import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { Review } from "../entities/Review";
 @Resolver()
