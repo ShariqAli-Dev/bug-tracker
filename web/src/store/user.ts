@@ -12,7 +12,7 @@ interface UserState {
   role: string;
   notifications: Notification[];
   login: (accessToken: string) => void;
-  getNotifications: (userID: number) => void;
+  getNotifications: (userId: number) => void;
   demoLogin: (role: string) => void;
   logout: () => void;
 }

@@ -12,9 +12,11 @@ import { Users } from "./entities/Users";
 import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
 import { sendRefreshToken } from "./utils/sendToken";
 import { myDataSource } from "./data-source";
+import { ReviewResolver } from "./resolvers/review";
 
 const main = async () => {
   await myDataSource.initialize();
+
   const app = express();
   app.use(
     cookieParser(),
@@ -59,7 +61,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver],
+      resolvers: [HelloResolver, UserResolver, ReviewResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res }),

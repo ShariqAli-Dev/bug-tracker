@@ -70,7 +70,7 @@ export const initialNotifications = [
 export const initialProjects = [
   {
     id: 0,
-    creatorID: 0,
+    creatorId: 0,
     name: "Bug Tracker",
     description: "Project management tool to track project issues, bugs, et c",
     assignedPersonale: [
@@ -95,7 +95,7 @@ export const initialProjects = [
   },
   {
     id: 1,
-    creatorID: 0,
+    creatorId: 0,
     name: "Bug Tracker",
     description: "Project management tool to track project issues, bugs, et c",
     assignedPersonale: [
@@ -120,7 +120,7 @@ export const initialProjects = [
   },
   {
     id: 2,
-    creatorID: 0,
+    creatorId: 0,
     name: "Bug Tracker",
     description: "Project management tool to track project issues, bugs, et c",
     assignedPersonale: [
@@ -151,28 +151,28 @@ export const initialUsers = [
     username: "DEMO_USER",
     email: "DEMO_USER@email.com",
     role: "DEMO_ADMIN",
-    projectID: 0,
+    projectId: 0,
   },
   {
     id: 1,
     username: "DEMO_USER",
     email: "DEMO_USER@email.com",
     role: "DEMO_ADMIN",
-    projectID: 0,
+    projectId: 0,
   },
   {
     id: 2,
     username: "DEMO_USER",
     email: "DEMO_USER@email.com",
     role: "DEMO_ADMIN",
-    projectID: 0,
+    projectId: 0,
   },
   {
     id: 3,
     username: "DEMO_USER",
     email: "DEMO_USER@email.com",
     role: "DEMO_ADMIN",
-    projectID: 0,
+    projectId: 0,
   },
 ];
 
@@ -196,7 +196,7 @@ export const initialTickets = [
     ],
     history: [
       {
-        property: "assignedToUserID",
+        property: "assignedToUserId",
         oldValue: "name",
         newValue: "name",
         dateChanged: "11/9/2019",

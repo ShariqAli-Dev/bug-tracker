@@ -14,12 +14,19 @@ export class ReviewResolver {
 
   @Mutation(() => Review)
   async createReview(
-    @Arg("userID") userID: number,
+    @Arg("userId") userId: number,
     @Arg("review") review: string,
     @Arg("rating") rating: number
   ): Promise<Review> {
-    // 2 sql queries
-    return Review.create({ userID, review, rating }).save();
+    if (!userId) {
+      throw new Error("not authenticated");
+    }
+
+    return Review.create({
+      review,
+      rating,
+      creatorId: userId,
+    }).save();
   }
 
   @Mutation(() => Review, { nullable: true })
