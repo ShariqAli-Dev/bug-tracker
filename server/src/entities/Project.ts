@@ -4,32 +4,29 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Users } from "./Users";
+import { User_Project } from "./User_Project";
 
 @ObjectType()
 @Entity()
-export class Review extends BaseEntity {
+export class Project extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
   @Column()
-  review!: string;
+  name!: string;
 
   @Field()
-  @Column({ type: "int" })
-  rating!: number;
+  @Column()
+  description!: string;
 
-  @ManyToOne(() => Users, (user) => user.reviews)
-  creator: Users;
-
-  @Column({ type: "int" })
-  creatorId: number;
+  @OneToMany(() => User_Project, (user_project) => user_project.project)
+  user_project: User_Project[];
 
   @Field()
   @CreateDateColumn()

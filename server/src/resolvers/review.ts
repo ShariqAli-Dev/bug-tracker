@@ -1,4 +1,5 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { isAuth } from "../middleware/isAuth";
+import { Arg, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { Review } from "../entities/Review";
 @Resolver()
 export class ReviewResolver {
@@ -13,13 +14,14 @@ export class ReviewResolver {
   }
 
   @Mutation(() => Review)
+  @UseMiddleware(isAuth)
   async createReview(
     @Arg("userId") userId: number,
     @Arg("review") review: string,
     @Arg("rating") rating: number
   ): Promise<Review> {
-    if (!userId) {
-      throw new Error("not authenticated");
+    if (!userId || !review || !rating) {
+      throw new Error("invalid input");
     }
 
     return Review.create({

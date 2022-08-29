@@ -12,24 +12,24 @@ import { Users } from "./Users";
 
 @ObjectType()
 @Entity()
-export class Review extends BaseEntity {
+export class Notification extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
   @Column()
-  review!: string;
+  message!: string;
 
   @Field()
-  @Column({ type: "int" })
-  rating!: number;
+  @Column({ type: "boolean" })
+  read!: boolean;
 
-  @ManyToOne(() => Users, (user) => user.reviews)
-  creator: Users;
+  @ManyToOne(() => Users, (user) => user.notifications)
+  user: Users;
 
   @Column({ type: "int" })
-  creatorId: number;
+  userId: number;
 
   @Field()
   @CreateDateColumn()

@@ -8,7 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Notification } from "./Notification";
 import { Review } from "./Review";
+import { User_Project } from "./User_Project";
 
 @ObjectType()
 @Entity()
@@ -16,9 +18,6 @@ export class Users extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @OneToMany(() => Review, (review) => review.creator)
-  reviews: Review[];
 
   @Field()
   @Column({ unique: true })
@@ -34,6 +33,15 @@ export class Users extends BaseEntity {
 
   @Column()
   password!: string;
+
+  @OneToMany(() => Review, (review) => review.creator)
+  reviews: Review[];
+
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
+
+  @OneToMany(() => User_Project, (user_project) => user_project.user)
+  user_project: User_Project[];
 
   @Field()
   @CreateDateColumn()

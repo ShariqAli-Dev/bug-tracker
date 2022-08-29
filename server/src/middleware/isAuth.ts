@@ -1,11 +1,9 @@
 import { verify } from "jsonwebtoken";
 import { __accessTokenSecret__ } from "../constants";
 import { MyContext } from "../types";
-import { Middleware } from "type-graphql/dist/interfaces/Middleware";
+import { MiddlewareFn } from "type-graphql";
 
-// bearer token
-
-export const isAuth: Middleware<MyContext> = ({ context }, next) => {
+export const isAuth: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const authorization = context.req.headers["authorization"];
 
   if (!authorization) {

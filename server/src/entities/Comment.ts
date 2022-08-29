@@ -8,28 +8,29 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Users } from "./Users";
+import { Ticket } from "./Ticket";
 
 @ObjectType()
 @Entity()
-export class Review extends BaseEntity {
+export class Comment extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
   @Column()
-  review!: string;
+  ticketId!: number;
 
   @Field()
-  @Column({ type: "int" })
-  rating!: number;
+  @Column()
+  commentorId!: number;
 
-  @ManyToOne(() => Users, (user) => user.reviews)
-  creator: Users;
+  @Field()
+  @Column()
+  message!: string;
 
-  @Column({ type: "int" })
-  creatorId: number;
+  @ManyToOne(() => Ticket, (ticket) => ticket.comments)
+  ticket: Ticket;
 
   @Field()
   @CreateDateColumn()

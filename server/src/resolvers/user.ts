@@ -24,7 +24,7 @@ import {
   buildRefreshToken,
 } from "../utils/buildToken";
 import jwt from "jsonwebtoken";
-import { isAuth } from "./userMiddleware";
+import { isAuth } from "../middleware/isAuth";
 import { sendRefreshToken } from "../utils/sendToken";
 import { sendMail } from "../utils/sendMail";
 import { myDataSource } from "../data-source";
