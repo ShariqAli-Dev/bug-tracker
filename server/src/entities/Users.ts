@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Notification } from "./Notification";
 import { Review } from "./Review";
+import { User_Project } from "./User_Project";
 
 @ObjectType()
 @Entity()
@@ -23,6 +24,9 @@ export class Users extends BaseEntity {
 
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];
+
+  @OneToMany(() => User_Project, (user_project) => user_project.user)
+  user_project: User_Project[];
 
   @Field()
   @Column({ unique: true })
