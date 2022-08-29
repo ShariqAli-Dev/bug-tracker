@@ -104,7 +104,7 @@ export class UserResolver {
     }
     const decoded = jwt.verify(token, __passwordResetTokenSecret__) as {
       email: string;
-      userId: number;
+      userID: number;
     };
     if (!decoded) {
       return {
@@ -113,7 +113,7 @@ export class UserResolver {
     }
 
     const user = await Users.findOne({
-      where: { id: decoded.userId },
+      where: { id: decoded.userID },
     });
 
     if (!user) {
@@ -127,7 +127,7 @@ export class UserResolver {
       };
     }
     user.password = await argon2.hash(newPassword);
-    Users.update({ id: decoded.userId }, { password: newPassword });
+    Users.update({ id: decoded.userID }, { password: newPassword });
 
     return { user };
   }

@@ -1,3 +1,4 @@
+import { Users } from "../entities/Users";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Review } from "../entities/Review";
 @Resolver()
@@ -18,7 +19,15 @@ export class ReviewResolver {
     @Arg("review") review: string,
     @Arg("rating") rating: number
   ): Promise<Review> {
-    return Review.create({ review, rating, creatorID: userID }).save();
+    if (!userID) {
+      throw new Error("not authenticated");
+    }
+
+    return Review.create({
+      review,
+      rating,
+      creatorID: userID,
+    }).save();
   }
 
   @Mutation(() => Review, { nullable: true })

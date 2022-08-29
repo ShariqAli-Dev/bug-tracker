@@ -4,7 +4,7 @@ import { Users } from "./entities/Users";
 
 export type MyContext = {
   req: Request & {
-    session: Session & Partial<SessionData> & { userId?: number };
+    session: Session & Partial<SessionData> & { userID?: number };
   };
   res: Response;
   payload?: Users;

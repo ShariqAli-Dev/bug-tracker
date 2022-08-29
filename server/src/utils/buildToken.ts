@@ -34,9 +34,9 @@ export const buildRefreshToken = (user: Users): string => {
 
 export const buildPasswordResetToken = (
   email: string,
-  userId: number
+  userID: number
 ): string => {
-  return jwt.sign({ email, userId }, __passwordResetTokenSecret__, {
+  return jwt.sign({ email, userID }, __passwordResetTokenSecret__, {
     expiresIn: "3d",
   });
 };
