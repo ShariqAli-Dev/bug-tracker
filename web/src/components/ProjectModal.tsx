@@ -46,6 +46,7 @@ const ProjectModal = (props: ProjectModalProps) => {
           <Formik
             initialValues={{
               name: "",
+              description: "",
             }}
             onSubmit={() => {
               console.log("i do be formik submitting");
@@ -55,11 +56,22 @@ const ProjectModal = (props: ProjectModalProps) => {
               <Form>
                 {/* Project Name */}
                 <Box pb={2}>
-                  <InputField name="name" label="name" />
+                  <InputField
+                    onChange={handleChange}
+                    value={values.name}
+                    name="name"
+                    label="name"
+                  />
                 </Box>
                 {/* Project Description */}
                 <Box pb={2}>
-                  <InputField name="description" label="description" textarea />
+                  <InputField
+                    onChange={handleChange}
+                    value={values.description}
+                    name="description"
+                    label="description"
+                    textarea
+                  />
                 </Box>
                 {/* Add Team Members */}
                 <Box
@@ -88,21 +100,16 @@ const ProjectModal = (props: ProjectModalProps) => {
                     );
                   })}
                 </Box>
+                <Box width="full" display="flex" justifyContent="space-around">
+                  <Button type="submit" isLoading={isSubmitting}>
+                    Send notification
+                  </Button>
+                  <Button onClick={onClose}>Cancel</Button>
+                </Box>
               </Form>
             )}
           </Formik>
         </ModalBody>
-
-        <ModalFooter>
-          <Button
-            onClick={() => {
-              console.log("sending create quest");
-            }}
-          >
-            Send notification
-          </Button>
-          <Button onClick={onClose}>Cancel</Button>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );
