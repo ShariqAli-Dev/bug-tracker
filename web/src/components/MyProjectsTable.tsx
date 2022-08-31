@@ -215,10 +215,12 @@ const MyProjectsTable = () => {
       </Flex>
 
       <ProjectModel
-        finalRef={finalRef}
-        initialRef={initialRef}
-        isOpen={isOpen}
-        onClose={onClose}
+        pageProps={{
+          finalRef: finalRef,
+          initialRef: initialRef,
+          isOpen: isOpen,
+          onClose: onClose,
+        }}
       />
     </>
   );
