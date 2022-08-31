@@ -4,11 +4,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Comment } from "./Comment";
+import { Project } from "./Project";
 
 @ObjectType()
 @Entity()
@@ -50,6 +52,9 @@ export class Ticket extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.ticket)
   comments: Comment[];
+
+  @ManyToOne(() => Project, (project) => project.tickets)
+  project: Project;
 
   @Field()
   @UpdateDateColumn()
