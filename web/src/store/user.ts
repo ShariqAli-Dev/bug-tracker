@@ -11,10 +11,12 @@ interface UserState {
   email: string;
   role: string;
   notifications: Notification[];
+  accessToken: string;
   login: (accessToken: string) => void;
   getNotifications: (userId: number) => void;
   demoLogin: (role: string) => void;
   logout: () => void;
+  setAccessToken: (accessToken: string) => void;
 }
 
 const initialState = {
@@ -22,27 +24,30 @@ const initialState = {
   email: "",
   role: "",
   notifications: [],
+  accessToken: "",
 };
 
 const useUserStore = create<UserState>()(
   devtools(
     persist((set) => ({
       ...initialState,
-      login: (accessToken) => {
-        setAccessToken(accessToken);
+      login: async (accessToken) => {
         const decoded = jwt.verify(
           accessToken,
           process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET as string
         ) as User;
 
-        set({ id: decoded.id, email: decoded.email, role: decoded.role });
+        set({
+          id: decoded.id,
+          email: decoded.email,
+          role: decoded.role,
+          accessToken,
+        });
       },
       getNotifications: () => set({ notifications: initialNotifications }),
       demoLogin: (role) => set({ id: 9999, email: "demo@demo.com", role }),
-      logout: () => {
-        set(initialState);
-        setAccessToken("");
-      },
+      logout: () => set(initialState),
+      setAccessToken: (accessToken) => set({ accessToken }),
     }))
   )
 );

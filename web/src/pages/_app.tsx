@@ -1,17 +1,25 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import jwt from "jsonwebtoken";
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getAccessToken, setAccessToken } from "../accessTokens";
+import useUserStore from "../store/user";
 import "../styles/globals.css";
 import theme from "../theme";
 
 function BugTracker({ Component, pageProps }: AppProps) {
   const [loading, setLoading] = useState(true);
+  const { accessToken, setAccessToken } = useUserStore((state) => ({
+    accessToken: state.accessToken,
+    setAccessToken: state.setAccessToken,
+  }));
+
+  const router = useRouter();
 
   useEffect(() => {
     // if accessToken doesn't exist, get it
-    if (!getAccessToken()) {
+    if (!accessToken) {
+      alert("token does not exist");
       fetch("http://localhost:4000/refresh-token", {
         method: "POST",
         credentials: "include",
@@ -21,29 +29,36 @@ function BugTracker({ Component, pageProps }: AppProps) {
         setLoading(false);
       });
     } else {
-      const decoded: any = jwt.verify(
-        getAccessToken(),
-        process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET as string
-      );
-      const date = parseInt(
-        new Date()
-          .getTime()
-          .toString()
-          .substring(0, decoded.exp.toString().length)
-      );
-      if (date - decoded.exp <= 120) {
-        // result is in seconds
-        fetch("http://localhost:4000/refresh-token", {
-          method: "POST",
-          credentials: "include",
-        }).then(async (data) => {
-          const { accessToken } = await data.json();
-          setAccessToken(accessToken);
+      alert("token exists");
+      try {
+        const decoded: any = jwt.verify(
+          accessToken,
+          process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET as string
+        );
+        const date = parseInt(
+          new Date()
+            .getTime()
+            .toString()
+            .substring(0, decoded.exp.toString().length)
+        );
+        if (date - decoded.exp <= 120) {
+          // result is in seconds
+          fetch("http://localhost:4000/refresh-token", {
+            method: "POST",
+            credentials: "include",
+          }).then(async (data) => {
+            const { accessToken } = await data.json();
+            setAccessToken(accessToken);
+            setLoading(false);
+          });
           setLoading(false);
-        });
+        } else {
+          setLoading(false);
+        }
+      } catch {
+        alert("token expired");
         setLoading(false);
-      } else {
-        setLoading(false);
+        router.push("/");
       }
     }
   }, []);
