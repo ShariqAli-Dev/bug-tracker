@@ -51,9 +51,15 @@ export class ProjectResolver {
       typeof name !== "undefined" &&
       typeof description !== "undefined"
     ) {
-      Project.update({ id }, { name, description });
+      await Project.update({ id }, { name, description });
     }
 
     return project;
+  }
+
+  @Mutation(() => Boolean)
+  async deleteProject(@Arg("id") id: number) {
+    await Project.delete(id);
+    return true;
   }
 }
