@@ -8,9 +8,14 @@ import {
   Button,
   Box,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import { withUrqlClient } from "next-urql";
 import { MutableRefObject, useState } from "react";
+import { useCreateProjectMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
+
 import { InputField } from "./InputField";
 
 interface ProjectModalProps {
@@ -26,6 +31,9 @@ const ProjectModal = (props: ProjectModalProps) => {
     { name: "shariq", selected: false },
     { name: "john", selected: false },
   ]);
+  const [, createProject] = useCreateProjectMutation();
+  const toast = useToast();
+
   return (
     <Modal
       initialFocusRef={initialRef}
@@ -47,8 +55,43 @@ const ProjectModal = (props: ProjectModalProps) => {
               name: "",
               description: "",
             }}
-            onSubmit={() => {
-              console.log("i do be formik submitting");
+            onSubmit={async (options) => {
+              try {
+                await createProject({ options });
+                // update state
+                if (!toast.isActive("newProjectSuccess")) {
+                  toast({
+                    id: "newProjectSuccess",
+                    title: "Project Sucess",
+                    description: "We succesfully created the project",
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                    variant: "subtle",
+                    containerStyle: {
+                      color: "primary",
+                    },
+                    position: "top",
+                  });
+                }
+              } catch {
+                if (!toast.isActive("newProjectError")) {
+                  toast({
+                    id: "newProjectError",
+                    title: "Project Error",
+                    description:
+                      "Unfortunately, we  could not create the project",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                    variant: "subtle",
+                    containerStyle: {
+                      color: "primary",
+                    },
+                    position: "top",
+                  });
+                }
+              }
             }}
           >
             {({ values, handleChange, isSubmitting }) => (
@@ -60,6 +103,7 @@ const ProjectModal = (props: ProjectModalProps) => {
                     value={values.name}
                     name="name"
                     label="name"
+                    required
                   />
                 </Box>
                 {/* Project Description */}
@@ -70,6 +114,7 @@ const ProjectModal = (props: ProjectModalProps) => {
                     name="description"
                     label="description"
                     textarea
+                    required
                   />
                 </Box>
                 {/* Add Team Members */}
@@ -114,4 +159,4 @@ const ProjectModal = (props: ProjectModalProps) => {
   );
 };
 
-export default ProjectModal;
+export default withUrqlClient(createUrqlClient)(ProjectModal);
