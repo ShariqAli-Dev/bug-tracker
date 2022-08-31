@@ -3,7 +3,7 @@ import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
 
 @InputType()
 class ProjectInput {
-  @Field()
+  @Field({ nullable: true })
   id?: number;
 
   @Field()
