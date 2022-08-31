@@ -47,14 +47,17 @@ export class Ticket extends BaseEntity {
   @Column()
   status: string; // new in-progress resolved
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column({ type: "int" })
+  projectId: number;
 
   @OneToMany(() => Comment, (comment) => comment.ticket)
   comments: Comment[];
 
   @ManyToOne(() => Project, (project) => project.tickets)
   project: Project;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Field()
   @UpdateDateColumn()
