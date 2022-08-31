@@ -1,5 +1,17 @@
 import { Project } from "../entities/Project";
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+
+@InputType()
+class ProjectInput {
+  @Field()
+  id?: number;
+
+  @Field()
+  name!: string;
+
+  @Field()
+  description!: string;
+}
 
 @Resolver()
 export class ProjectResolver {
@@ -14,10 +26,8 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
-  async createProject(
-    @Arg("description") description: string,
-    @Arg("name") name: string
-  ): Promise<Project> {
+  async createProject(@Arg("options") options: ProjectInput): Promise<Project> {
+    const { name, description } = options;
     if (!name || !description) {
       throw new Error("invalid input");
     }
@@ -30,7 +40,7 @@ export class ProjectResolver {
 
   @Mutation(() => Project, { nullable: true })
   async updateProject(
-    @Arg("options") options: { id: number; name: string; description: string }
+    @Arg("options") options: ProjectInput
   ): Promise<Project | null> {
     const { id, name, description } = options;
     const project = await Project.findOne({ where: { id } });
