@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { useTable, usePagination } from "react-table";
 import {
   Table,
@@ -15,11 +15,13 @@ import {
   chakra,
   Box,
   Button,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { nanoid } from "nanoid";
 import useProjectsStore from "../store/projects";
+import ProjectModel from "./ProjectModal";
 
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
@@ -28,6 +30,9 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 const MyProjectsTable = () => {
   const data = useProjectsStore((state) => state.projects);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
 
   const columns = useMemo(
     () => [
@@ -85,7 +90,7 @@ const MyProjectsTable = () => {
           color="tertiary"
           w="full"
         >
-          <Box margin="6px">
+          <Box margin="6px" ref={finalRef}>
             <Text>Your Projects</Text>
             <Text display={{ base: "none", md: "block" }}>
               Alll the projects you have in the database
@@ -97,6 +102,7 @@ const MyProjectsTable = () => {
             backgroundColor="tertiary"
             border="1px"
             borderColor="primary"
+            onClick={onOpen}
           >
             Create New Project
           </Button>
@@ -207,6 +213,15 @@ const MyProjectsTable = () => {
           />
         </Tooltip>
       </Flex>
+
+      <ProjectModel
+        pageProps={{
+          finalRef: finalRef,
+          initialRef: initialRef,
+          isOpen: isOpen,
+          onClose: onClose,
+        }}
+      />
     </>
   );
 };

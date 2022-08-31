@@ -9,8 +9,8 @@ export class ReviewResolver {
   }
 
   @Query(() => Review, { nullable: true })
-  post(@Arg("id") id: number): Promise<Review | undefined | null> {
-    return Review.findOne({ where: { id } });
+  async post(@Arg("id") id: number): Promise<Review | undefined | null> {
+    return await Review.findOne({ where: { id } });
   }
 
   @Mutation(() => Review)

@@ -40,8 +40,8 @@ export class Users extends BaseEntity {
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];
 
-  @OneToMany(() => User_Project, (user_project) => user_project.user)
-  user_project: User_Project[];
+  // @OneToMany(() => User_Project, (user_project) => user_project.user)
+  // user_project: User_Project[];
 
   @Field()
   @CreateDateColumn()

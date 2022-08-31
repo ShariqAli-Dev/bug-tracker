@@ -13,6 +13,7 @@ import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
 import { sendRefreshToken } from "./utils/sendToken";
 import { myDataSource } from "./data-source";
 import { ReviewResolver } from "./resolvers/review";
+import { ProjectResolver } from "./resolvers/project";
 
 const main = async () => {
   await myDataSource.initialize();
@@ -61,7 +62,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver, ReviewResolver],
+      resolvers: [HelloResolver, UserResolver, ReviewResolver, ProjectResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res }),

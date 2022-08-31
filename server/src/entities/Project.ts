@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Ticket } from "./Ticket";
 import { User_Project } from "./User_Project";
 
 @ObjectType()
@@ -25,8 +26,11 @@ export class Project extends BaseEntity {
   @Column()
   description!: string;
 
-  @OneToMany(() => User_Project, (user_project) => user_project.project)
-  user_project: User_Project[];
+  @OneToMany(() => Ticket, (ticket) => ticket.project)
+  tickets: Ticket[];
+
+  // @OneToMany(() => User_Project, (user_project) => user_project.project)
+  // user_project: User_Project[];
 
   @Field()
   @CreateDateColumn()
