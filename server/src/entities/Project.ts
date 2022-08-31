@@ -25,8 +25,8 @@ export class Project extends BaseEntity {
   @Column()
   description!: string;
 
-  @OneToMany(() => User_Project, (user_project) => user_project.project)
-  user_project: User_Project[];
+  // @OneToMany(() => User_Project, (user_project) => user_project.project)
+  // user_project: User_Project[];
 
   @Field()
   @CreateDateColumn()

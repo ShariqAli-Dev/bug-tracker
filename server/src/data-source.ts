@@ -25,7 +25,7 @@ export const myDataSource = new DataSource({
     Project,
     Review,
     Ticket,
-    User_Project,
+    // User_Project,
     Users,
   ],
   migrations: [],
