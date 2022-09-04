@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
-import { setAccessToken } from "../accessTokens";
 import { Notification, User } from "../types";
 import { initialNotifications } from "../utils/dummyData";
 import jwt from "jsonwebtoken";

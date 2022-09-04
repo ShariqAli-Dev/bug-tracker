@@ -14,11 +14,11 @@ const Dashboard: NextPage = () => {
   const accessToken = useUserStore((state) => state.accessToken);
 
   const router = useRouter();
-  useEffect(() => {
-    if (!accessToken) {
-      router.push("/");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!accessToken) {
+  //     router.push("/");
+  //   }
+  // }, []);
 
   return (
     <Flex
