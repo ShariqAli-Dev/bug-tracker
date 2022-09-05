@@ -31,8 +31,13 @@ function BugTracker({ Component, pageProps }: AppProps) {
     */
 
   useEffect(() => {
+    alert("i am runnng");
+    const path = router.pathname;
     if (
-      ["/", "/demo", "/register", "/forgot-password"].includes(router.pathname)
+      path === "/" ||
+      path === "/demo" ||
+      path === "/register" ||
+      path === "/forgot-password"
     ) {
       setLoading(false);
     }
