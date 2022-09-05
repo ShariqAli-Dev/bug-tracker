@@ -22,7 +22,7 @@ export const createUrqlClient = (ssrExchange: any) => {
     fetchOptions: () => {
       return {
         credentials: "include", // sends a cookie
-      };
+      } as const;
     },
     exchanges: [
       dedupExchange,

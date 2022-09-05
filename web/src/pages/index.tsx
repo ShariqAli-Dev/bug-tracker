@@ -90,7 +90,7 @@ const Home: NextPage = () => {
                     position: "top",
                   });
                 }
-              } else if (data?.login.accessToken) {
+              } else if (data?.login.user) {
                 // loginZ(data.login.accessToken);
                 // router.push("/dashboard");
               }

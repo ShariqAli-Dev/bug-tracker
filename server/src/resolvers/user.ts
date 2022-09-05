@@ -54,17 +54,16 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-  @Query(() => UserResponse, { nullable: true })
+  @Query(() => Users, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
     // you are not logged in
     if (!req.session.userId) {
       return null;
     }
 
-    const user = await Users.findOne({
+    return Users.findOne({
       where: { id: req.session.userId },
     });
-    return user;
   }
 
   @Query(() => String)

@@ -14,7 +14,7 @@ import { UserResolver } from "./resolvers/user";
 // import cookieParser from "cookie-parser";
 import { verify } from "jsonwebtoken";
 import { Users } from "./entities/Users";
-import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
+
 import { sendRefreshToken } from "./utils/sendToken";
 import { myDataSource } from "./data-source";
 import { ReviewResolver } from "./resolvers/review";
@@ -58,39 +58,39 @@ const main = async () => {
     })
   );
 
-  app.post("/refresh-token", async (req, res) => {
-    const refreshToken = req.cookies.refreshToken;
+  // app.post("/refresh-token", async (req, res) => {
+  //   const refreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) {
-      return res.send({ ok: false, accessToken: "" });
-    }
+  //   if (!refreshToken) {
+  //     return res.send({ ok: false, accessToken: "" });
+  //   }
 
-    let payload = null;
+  //   let payload = null;
 
-    try {
-      payload = verify(refreshToken, __refreshTokenSecret__) as Users;
-    } catch (err) {
-      return res.send({ ok: false, accessToken: "" });
-    }
+  //   try {
+  //     payload = verify(refreshToken, __refreshTokenSecret__) as Users;
+  //   } catch (err) {
+  //     return res.send({ ok: false, accessToken: "" });
+  //   }
 
-    const user = Users.findOne({
-      where: { id: payload.id },
-    }) as unknown as Users;
+  //   const user = Users.findOne({
+  //     where: { id: payload.id },
+  //   }) as unknown as Users;
 
-    if (!user) {
-      return res.send({ ok: false, accessToken: "" });
-    }
+  //   if (!user) {
+  //     return res.send({ ok: false, accessToken: "" });
+  //   }
 
-    if (user.tokenVersion !== payload.tokenVersion) {
-      return res.send({ ok: false, accessToken: "" });
-    }
+  //   if (user.tokenVersion !== payload.tokenVersion) {
+  //     return res.send({ ok: false, accessToken: "" });
+  //   }
 
-    sendRefreshToken(res, buildRefreshToken(user));
-    return res.send({
-      ok: true,
-      accessToken: buildAccessToken(user),
-    });
-  });
+  //   sendRefreshToken(res, buildRefreshToken(user));
+  //   return res.send({
+  //     ok: true,
+  //     accessToken: buildAccessToken(user),
+  //   });
+  // });
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
