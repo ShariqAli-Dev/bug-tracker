@@ -14,7 +14,7 @@ interface UserState {
   login: (accessToken: string) => void;
   getNotifications: (userId: number) => void;
   demoLogin: (role: string) => void;
-  logout: () => void;
+  reset: () => void;
   setAccessToken: (accessToken: string) => void;
 }
 
@@ -45,7 +45,7 @@ const useUserStore = create<UserState>()(
       },
       getNotifications: () => set({ notifications: initialNotifications }),
       demoLogin: (role) => set({ id: 9999, email: "demo@demo.com", role }),
-      logout: () => set(initialState),
+      reset: () => set(initialState),
       setAccessToken: (accessToken) => set({ accessToken }),
     }))
   )

@@ -16,6 +16,7 @@ import {
   __initialRole__,
   __accessTokenSecret__,
   __passwordResetTokenSecret__,
+  __cookieName__,
 } from "../constants";
 import argon2 from "argon2";
 
@@ -221,5 +222,21 @@ export class UserResolver {
     return {
       user,
     };
+  }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { req, res }: MyContext) {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        res.clearCookie(__cookieName__);
+        if (err) {
+          console.log(err);
+          resolve(false);
+          return;
+        }
+
+        resolve(true);
+      })
+    );
   }
 }
