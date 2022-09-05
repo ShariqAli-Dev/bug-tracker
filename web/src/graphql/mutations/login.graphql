@@ -8,9 +8,6 @@ mutation Login($options: UserInput!) {
       id
       email
       role
-      tokenVersion
-      createdAt
-      updatedAt
     }
   }
 }

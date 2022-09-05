@@ -116,16 +116,11 @@ export type Query = {
   __typename?: 'Query';
   bye: Scalars['String'];
   hello: Scalars['String'];
-  me?: Maybe<UserResponse>;
+  me?: Maybe<Users>;
   post?: Maybe<Review>;
   posts: Array<Review>;
   project?: Maybe<Project>;
   projects: Array<Project>;
-};
-
-
-export type QueryMeArgs = {
-  accessToken: Scalars['String'];
 };
 
 
@@ -154,7 +149,6 @@ export type UserInput = {
 
 export type UserResponse = {
   __typename?: 'UserResponse';
-  accessToken?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<Users>;
 };
@@ -196,26 +190,24 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string, tokenVersion: number, createdAt: any, updatedAt: any } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
 
 export type RegisterMutationVariables = Exact<{
   options: UserInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', accessToken?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ByeQuery = { __typename?: 'Query', bye: string };
 
-export type MeQueryVariables = Exact<{
-  accessToken: Scalars['String'];
-}>;
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', email: string, id: number, role: string, tokenVersion: number } | null } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Users', id: number, role: string } | null };
 
 
 export const ChangePasswordDocument = gql`
@@ -270,9 +262,6 @@ export const LoginDocument = gql`
       id
       email
       role
-      tokenVersion
-      createdAt
-      updatedAt
     }
   }
 }
@@ -288,7 +277,11 @@ export const RegisterDocument = gql`
       field
       message
     }
-    accessToken
+    user {
+      id
+      email
+      role
+    }
   }
 }
     `;
@@ -306,22 +299,14 @@ export function useByeQuery(options?: Omit<Urql.UseQueryArgs<ByeQueryVariables>,
   return Urql.useQuery<ByeQuery, ByeQueryVariables>({ query: ByeDocument, ...options });
 };
 export const MeDocument = gql`
-    query Me($accessToken: String!) {
-  me(accessToken: $accessToken) {
-    errors {
-      field
-      message
-    }
-    user {
-      email
-      id
-      role
-      tokenVersion
-    }
+    query Me {
+  me {
+    id
+    role
   }
 }
     `;
 
-export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
+export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
 };

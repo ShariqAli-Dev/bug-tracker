@@ -4,6 +4,10 @@ mutation Register($options: UserInput!) {
       field
       message
     }
-    accessToken
+    user {
+      id
+      email
+      role
+    }
   }
 }
