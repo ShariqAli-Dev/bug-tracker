@@ -210,11 +210,11 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UserInput,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = (await Users.findOne({
+    const user = await Users.findOne({
       where: { email: options.email },
-    })) as any;
+    });
 
     if (!user) {
       return {
@@ -226,9 +226,11 @@ export class UserResolver {
     if (!valid) {
       return { errors: [{ field: "password", message: "incorrect password" }] };
     }
-    sendRefreshToken(res, buildRefreshToken(user));
+
+    req.session.userId = user.id;
+
     return {
-      accessToken: buildAccessToken(user),
+      user,
     };
   }
 }
