@@ -2,6 +2,7 @@ require("dotenv").config();
 
 export const __prod__ = process.env.NODE_ENV === "production";
 export const __PGPassword__ = process.env.PG_PASSWORD;
+export const __cookieName__ = process.env.COOKIE_NAME || "bt qid";
 export const __db__ = process.env.DB_NAME;
 export const __redisSecret__ = process.env.REDIS_SECRET || "keyboard cat";
 export const __accessTokenSecret__ =

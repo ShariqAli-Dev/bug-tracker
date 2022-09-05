@@ -1,12 +1,17 @@
 import "reflect-metadata";
-import { __prod__, __redisSecret__, __refreshTokenSecret__ } from "./constants";
+import {
+  __cookieName__,
+  __prod__,
+  __redisSecret__,
+  __refreshTokenSecret__,
+} from "./constants";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import cors from "cors";
 import { UserResolver } from "./resolvers/user";
-import cookieParser from "cookie-parser";
+// import cookieParser from "cookie-parser";
 import { verify } from "jsonwebtoken";
 import { Users } from "./entities/Users";
 import { buildAccessToken, buildRefreshToken } from "./utils/buildToken";
@@ -28,7 +33,7 @@ const main = async () => {
   redisClient.connect().catch(console.error);
 
   app.use(
-    cookieParser(),
+    // cookieParser(),
     cors({
       origin: ["https://studio.apollographql.com", "http://localhost:3000"],
       credentials: true,
@@ -36,7 +41,7 @@ const main = async () => {
   );
   app.use(
     session({
-      name: "qid",
+      name: __cookieName__,
       store: new RedisStore({
         client: redisClient,
         disableTouch: true,

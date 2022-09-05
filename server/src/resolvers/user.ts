@@ -55,30 +55,21 @@ class UserResponse {
 
   @Field(() => Users, { nullable: true })
   user?: Users;
-
-  @Field(() => String, { nullable: true })
-  accessToken?: string;
 }
 
 @Resolver()
 export class UserResolver {
   @Query(() => UserResponse, { nullable: true })
-  async me(@Arg("accessToken", () => String) accessToken: string) {
-    if (!accessToken) {
-      return {
-        errors: [
-          {
-            field: "invalid token",
-            message: `token of ${accessToken} is invalid`,
-          },
-        ],
-      };
+  async me(@Ctx() { req }: MyContext) {
+    // you are not logged in
+    if (!req.session.userId) {
+      return null;
     }
-    const decoded = jwt.verify(accessToken, __accessTokenSecret__) as {
-      id: number;
-    };
-    const user = await Users.findOne({ where: { id: decoded.id } });
-    return { user };
+
+    const user = await Users.findOne({
+      where: { id: req.session.userId },
+    });
+    return user;
   }
 
   @Query(() => String)
@@ -159,7 +150,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UserInput,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     if (options.password.length <= 2) {
       return {
@@ -201,9 +192,13 @@ export class UserResolver {
         };
       }
     }
-    sendRefreshToken(res, buildRefreshToken(user));
+    // store user id session
+    // this will set a cookie on the user
+    // keep them logged in
+    req.session.userId = user.id;
+
     return {
-      accessToken: buildAccessToken(user),
+      user,
     };
   }
 
