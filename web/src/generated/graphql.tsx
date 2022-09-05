@@ -196,7 +196,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', accessToken?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string, tokenVersion: number, createdAt: any, updatedAt: any } | null } };
 
 export type RegisterMutationVariables = Exact<{
   options: UserInput;
@@ -266,7 +266,14 @@ export const LoginDocument = gql`
       field
       message
     }
-    accessToken
+    user {
+      id
+      email
+      role
+      tokenVersion
+      createdAt
+      updatedAt
+    }
   }
 }
     `;

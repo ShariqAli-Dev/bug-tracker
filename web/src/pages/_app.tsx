@@ -31,68 +31,72 @@ function BugTracker({ Component, pageProps }: AppProps) {
     */
 
   useEffect(() => {
-    alert("i am runnng");
-    const path = router.pathname;
-    if (
-      path === "/" ||
-      path === "/demo" ||
-      path === "/register" ||
-      path === "/forgot-password"
-    ) {
-      setLoading(false);
-    }
+    setLoading(false);
+  }, []);
 
-    // if accessToken doesn't exist, get it
-    else if (!accessToken) {
-      fetch("http://localhost:4000/refresh-token", {
-        method: "POST",
-        credentials: "include",
-      })
-        .then(async (data) => {
-          const { accessToken } = await data.json();
-          setAccessToken(accessToken);
-          setLoading(false);
-        })
-        .catch((err) => {
-          router.push("/");
-          logout();
-        });
-    } else {
-      // alert("token exists");
-      try {
-        alert("decoding is in process");
-        const decoded: any = jwt.verify(
-          accessToken,
-          process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET as string
-        );
-        const date = parseInt(
-          new Date()
-            .getTime()
-            .toString()
-            .substring(0, decoded.exp.toString().length)
-        );
-        if (date - decoded.exp <= 120) {
-          // result is in seconds
-          fetch("http://localhost:4000/refresh-token", {
-            method: "POST",
-            credentials: "include",
-          }).then(async (data) => {
-            const { accessToken } = await data.json();
-            setAccessToken(accessToken);
-            setLoading(false);
-          });
-          setLoading(false);
-        } else {
-          setLoading(false);
-        }
-      } catch {
-        alert("token expired");
-        setLoading(false);
-        router.push("/");
-        logout();
-      }
-    }
-  }, [router.pathname]);
+  // useEffect(() => {
+  //   // alert("i am runnng");
+  //   const path = router.pathname;
+  //   if (
+  //     path === "/" ||
+  //     path === "/demo" ||
+  //     path === "/register" ||
+  //     path === "/forgot-password"
+  //   ) {
+  //     setLoading(false);
+  //   }
+
+  //   // if accessToken doesn't exist, get it
+  //   else if (!accessToken) {
+  //     fetch("http://localhost:4000/refresh-token", {
+  //       method: "POST",
+  //       credentials: "include",
+  //     })
+  //       .then(async (data) => {
+  //         const { accessToken } = await data.json();
+  //         setAccessToken(accessToken);
+  //         setLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         router.push("/");
+  //         logout();
+  //       });
+  //   } else {
+  //     // alert("token exists");
+  //     try {
+  //       // alert("decoding is in process");
+  //       const decoded: any = jwt.verify(
+  //         accessToken,
+  //         process.env.NEXT_PUBLIC_ACCESS_TOKEN_SECRET as string
+  //       );
+  //       const date = parseInt(
+  //         new Date()
+  //           .getTime()
+  //           .toString()
+  //           .substring(0, decoded.exp.toString().length)
+  //       );
+  //       if (date - decoded.exp <= 120) {
+  //         // result is in seconds
+  //         fetch("http://localhost:4000/refresh-token", {
+  //           method: "POST",
+  //           credentials: "include",
+  //         }).then(async (data) => {
+  //           const { accessToken } = await data.json();
+  //           setAccessToken(accessToken);
+  //           setLoading(false);
+  //         });
+  //         setLoading(false);
+  //       } else {
+  //         setLoading(false);
+  //       }
+  //     } catch {
+  //       // alert("token expired");
+  //       setLoading(false);
+  //       router.push("/");
+  //       logout();
+  //     }
+  //   }
+  // }, [router.pathname]);
 
   if (loading) {
     return <div>loading...</div>;

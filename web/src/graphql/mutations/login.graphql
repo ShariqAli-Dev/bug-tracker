@@ -4,6 +4,13 @@ mutation Login($options: UserInput!) {
       field
       message
     }
-    accessToken
+    user {
+      id
+      email
+      role
+      tokenVersion
+      createdAt
+      updatedAt
+    }
   }
 }
