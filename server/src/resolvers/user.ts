@@ -18,14 +18,9 @@ import {
   __passwordResetTokenSecret__,
 } from "../constants";
 import argon2 from "argon2";
-import {
-  buildAccessToken,
-  buildPasswordResetToken,
-  buildRefreshToken,
-} from "../utils/buildToken";
+
 import jwt from "jsonwebtoken";
 import { isAuth } from "../middleware/isAuth";
-import { sendRefreshToken } from "../utils/sendToken";
 import { sendMail } from "../utils/sendMail";
 import { myDataSource } from "../data-source";
 
@@ -125,14 +120,14 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   async forgotPassword(@Arg("email") email: string) {
-    const user = await Users.findOne({ where: { email } });
-    if (!user) return true;
-    const token = buildPasswordResetToken(email, user.id);
+    // const user = await Users.findOne({ where: { email } });
+    // if (!user) return true;
+    // const token = buildPasswordResetToken(email, user.id);
 
-    await sendMail(
-      email,
-      `<a href='http://localhost:3000/forgot-password/${token}'>reset password</a>`
-    );
+    // await sendMail(
+    //   email,
+    //   `<a href='http://localhost:3000/forgot-password/${token}'>reset password</a>`
+    // );
 
     return true;
   }
