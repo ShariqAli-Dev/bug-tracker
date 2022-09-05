@@ -14,11 +14,19 @@ import { sendRefreshToken } from "./utils/sendToken";
 import { myDataSource } from "./data-source";
 import { ReviewResolver } from "./resolvers/review";
 import { ProjectResolver } from "./resolvers/project";
+import session from "express-session";
+import connectRedis from "connect-redis";
+import { createClient } from "redis";
 
 const main = async () => {
   await myDataSource.initialize();
 
   const app = express();
+
+  const RedisStore = connectRedis(session);
+  const redisClient = createClient({ legacyMode: true });
+  redisClient.connect().catch(console.error);
+
   app.use(
     cookieParser(),
     cors({
@@ -26,6 +34,16 @@ const main = async () => {
       credentials: true,
     })
   );
+  app.use(
+    session({
+      name: "qid",
+      store: new RedisStore({ client: redisClient }),
+      saveUninitialized: false,
+      secret: "keyboard cat",
+      resave: false,
+    })
+  );
+
   app.post("/refresh-token", async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
 
