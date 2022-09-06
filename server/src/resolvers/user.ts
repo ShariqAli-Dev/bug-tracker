@@ -79,7 +79,7 @@ export class UserResolver {
   async changePassword(
     @Arg("token") token: string,
     @Arg("newPassword") newPassword: string,
-    @Ctx() { redis }: MyContext
+    @Ctx() { req, redis }: MyContext
   ): Promise<UserResponse> {
     if (newPassword.length <= 2) {
       return {
@@ -117,10 +117,17 @@ export class UserResolver {
       };
     }
 
-    user.password = await argon2.hash(newPassword);
-    Users.update({ id: parseInt(userId) }, { password: newPassword });
+    await Users.update(
+      { id: parseInt(userId) },
+      { password: await argon2.hash(newPassword) }
+    );
 
+    // log in user after change password
+    req.session.userId = user.id;
     return { user };
+
+    // https://www.youtube.com/watch?v=I6ypD7qv3Z8&t=22964s&ab_channel=BenAwad --> 4:57:57. argon 2 error
+    // TypeError: pchstr must contain a $ as first char #221
   }
 
   @Mutation(() => Boolean)
@@ -228,7 +235,12 @@ export class UserResolver {
         errors: [{ field: "email", message: "that email doesn't exist" }],
       };
     }
-
+    console.log(
+      "supposedly hashed password",
+      user.password,
+      "inputted: ",
+      options.password
+    );
     const valid = await argon2.verify(user.password, options.password);
     if (!valid) {
       return { errors: [{ field: "password", message: "incorrect password" }] };
