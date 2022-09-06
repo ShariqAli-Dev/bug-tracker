@@ -8,6 +8,8 @@ import "../styles/globals.css";
 import theme from "../theme";
 
 function BugTracker({ Component, pageProps }: AppProps) {
+  // https://www.youtube.com/watch?v=I6ypD7qv3Z8&t=22964s&ab_channel=BenAwad --> 3:50:00 SSR
+
   const [loading, setLoading] = useState(true);
   const { accessToken, setAccessToken, logout } = useUserStore((state) => ({
     accessToken: state.accessToken,
