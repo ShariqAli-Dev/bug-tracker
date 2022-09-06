@@ -12,25 +12,23 @@ import { HelloResolver } from "./resolvers/hello";
 import cors from "cors";
 import { UserResolver } from "./resolvers/user";
 // import cookieParser from "cookie-parser";
-import { verify } from "jsonwebtoken";
-import { Users } from "./entities/Users";
-
-import { sendRefreshToken } from "./utils/sendToken";
+// import { verify } from "jsonwebtoken";
+// import { Users } from "./entities/Users";
+// import { sendRefreshToken } from "./utils/sendToken";
 import { myDataSource } from "./data-source";
 import { ReviewResolver } from "./resolvers/review";
 import { ProjectResolver } from "./resolvers/project";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import { createClient } from "redis";
-
+import Redis from "ioredis";
 const main = async () => {
   await myDataSource.initialize();
 
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = createClient({ legacyMode: true });
-  redisClient.connect().catch(console.error);
+  const redis = new Redis();
+  redis.connect().catch(console.error);
 
   app.use(
     // cookieParser(),
@@ -43,7 +41,7 @@ const main = async () => {
     session({
       name: __cookieName__,
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
         disableTouch: true,
       }),
       cookie: {
@@ -97,7 +95,7 @@ const main = async () => {
       resolvers: [HelloResolver, UserResolver, ReviewResolver, ProjectResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }) => ({ req, res, redis: redis }),
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({

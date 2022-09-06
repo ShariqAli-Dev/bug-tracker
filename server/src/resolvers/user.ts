@@ -17,13 +17,14 @@ import {
   __accessTokenSecret__,
   __passwordResetTokenSecret__,
   __cookieName__,
+  FORGET_PASSWORD_PREFIX,
 } from "../constants";
 import argon2 from "argon2";
-
 import jwt from "jsonwebtoken";
 import { isAuth } from "../middleware/isAuth";
 import { sendMail } from "../utils/sendMail";
 import { myDataSource } from "../data-source";
+import { v4 } from "uuid";
 
 @ObjectType()
 class FieldError {
@@ -119,16 +120,28 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async forgotPassword(@Arg("email") email: string) {
-    // const user = await Users.findOne({ where: { email } });
-    // if (!user) return true;
-    // const token = buildPasswordResetToken(email, user.id);
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() { redis }: MyContext
+  ) {
+    const user = await Users.findOne({ where: { email } });
+    if (!user) {
+      return true;
+    }
 
-    // await sendMail(
-    //   email,
-    //   `<a href='http://localhost:3000/forgot-password/${token}'>reset password</a>`
-    // );
+    const token = v4();
 
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "EX",
+      1000 * 60 * 60 * 24 * 3 // 3 days
+    );
+
+    await sendMail(
+      email,
+      `<a href='http://localhost:3000/forgot-password/${token}'>reset password</a>`
+    );
     return true;
   }
 
