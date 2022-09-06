@@ -25,6 +25,7 @@ import { isAuth } from "../middleware/isAuth";
 import { sendMail } from "../utils/sendMail";
 import { myDataSource } from "../data-source";
 import { v4 } from "uuid";
+import { RedisClient } from "redis";
 
 @ObjectType()
 class FieldError {
@@ -77,7 +78,8 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
-    @Arg("newPassword") newPassword: string
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { redis }: MyContext
   ): Promise<UserResponse> {
     if (newPassword.length <= 2) {
       return {
@@ -89,32 +91,34 @@ export class UserResolver {
         ],
       };
     }
-    const decoded = jwt.verify(token, __passwordResetTokenSecret__) as {
-      email: string;
-      userId: number;
-    };
-    if (!decoded) {
+
+    const userId = await redis.get(FORGET_PASSWORD_PREFIX + token);
+    if (!userId) {
       return {
-        errors: [{ field: "token", message: "token expired" }],
+        errors: [
+          {
+            field: "token",
+            message: "token expired",
+          },
+        ],
       };
     }
 
-    const user = await Users.findOne({
-      where: { id: decoded.userId },
-    });
+    const user = await Users.findOne({ where: { id: parseInt(userId) } });
 
     if (!user) {
       return {
         errors: [
           {
             field: "token",
-            message: "user no lognger exists",
+            message: "user no longer exists",
           },
         ],
       };
     }
+
     user.password = await argon2.hash(newPassword);
-    Users.update({ id: decoded.userId }, { password: newPassword });
+    Users.update({ id: parseInt(userId) }, { password: newPassword });
 
     return { user };
   }

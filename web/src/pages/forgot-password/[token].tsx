@@ -60,7 +60,7 @@ const ChangePassword: NextPage<ChangePasswordProps> = ({ token }) => {
             onSubmit={async (values, { setErrors }) => {
               const response = await changePassword({
                 newPassword: values.newPassword,
-                token: token,
+                token,
               });
 
               if (response.data?.changePassword.errors) {

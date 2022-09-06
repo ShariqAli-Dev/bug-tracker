@@ -31,7 +31,6 @@ const main = async () => {
   redis.connect().catch(console.error);
 
   app.use(
-    // cookieParser(),
     cors({
       origin: ["https://studio.apollographql.com", "http://localhost:3000"],
       credentials: true,
@@ -56,46 +55,12 @@ const main = async () => {
     })
   );
 
-  // app.post("/refresh-token", async (req, res) => {
-  //   const refreshToken = req.cookies.refreshToken;
-
-  //   if (!refreshToken) {
-  //     return res.send({ ok: false, accessToken: "" });
-  //   }
-
-  //   let payload = null;
-
-  //   try {
-  //     payload = verify(refreshToken, __refreshTokenSecret__) as Users;
-  //   } catch (err) {
-  //     return res.send({ ok: false, accessToken: "" });
-  //   }
-
-  //   const user = Users.findOne({
-  //     where: { id: payload.id },
-  //   }) as unknown as Users;
-
-  //   if (!user) {
-  //     return res.send({ ok: false, accessToken: "" });
-  //   }
-
-  //   if (user.tokenVersion !== payload.tokenVersion) {
-  //     return res.send({ ok: false, accessToken: "" });
-  //   }
-
-  //   sendRefreshToken(res, buildRefreshToken(user));
-  //   return res.send({
-  //     ok: true,
-  //     accessToken: buildAccessToken(user),
-  //   });
-  // });
-
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [HelloResolver, UserResolver, ReviewResolver, ProjectResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ req, res, redis: redis }),
+    context: ({ req, res }) => ({ req, res, redis }),
   });
   await apolloServer.start();
   apolloServer.applyMiddleware({
@@ -111,3 +76,36 @@ const main = async () => {
 main().catch((err) => {
   console.log(err.message);
 });
+// app.post("/refresh-token", async (req, res) => {
+//   const refreshToken = req.cookies.refreshToken;
+
+//   if (!refreshToken) {
+//     return res.send({ ok: false, accessToken: "" });
+//   }
+
+//   let payload = null;
+
+//   try {
+//     payload = verify(refreshToken, __refreshTokenSecret__) as Users;
+//   } catch (err) {
+//     return res.send({ ok: false, accessToken: "" });
+//   }
+
+//   const user = Users.findOne({
+//     where: { id: payload.id },
+//   }) as unknown as Users;
+
+//   if (!user) {
+//     return res.send({ ok: false, accessToken: "" });
+//   }
+
+//   if (user.tokenVersion !== payload.tokenVersion) {
+//     return res.send({ ok: false, accessToken: "" });
+//   }
+
+//   sendRefreshToken(res, buildRefreshToken(user));
+//   return res.send({
+//     ok: true,
+//     accessToken: buildAccessToken(user),
+//   });
+// });
