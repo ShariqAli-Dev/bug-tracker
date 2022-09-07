@@ -1,5 +1,5 @@
-import { Notification } from "src/entities/Notification";
-import { MyContext } from "src/types";
+import { Notification } from "../entities/Notification";
+import { MyContext } from "../types";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 
 @Resolver()

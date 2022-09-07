@@ -1,26 +1,17 @@
-import "reflect-metadata";
-import {
-  __cookieName__,
-  __prod__,
-  __redisSecret__,
-  __refreshTokenSecret__,
-} from "./constants";
-import express from "express";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./resolvers/hello";
-import cors from "cors";
-import { UserResolver } from "./resolvers/user";
-// import cookieParser from "cookie-parser";
-// import { verify } from "jsonwebtoken";
-// import { Users } from "./entities/Users";
-// import { sendRefreshToken } from "./utils/sendToken";
-import { myDataSource } from "./data-source";
-import { ReviewResolver } from "./resolvers/review";
-import { ProjectResolver } from "./resolvers/project";
-import session from "express-session";
 import connectRedis from "connect-redis";
+import cors from "cors";
+import express from "express";
+import session from "express-session";
 import Redis from "ioredis";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { __cookieName__, __prod__, __redisSecret__ } from "./constants";
+import { myDataSource } from "./data-source";
+import { HelloResolver } from "./resolvers/hello";
+import { NotificationResolver } from "./resolvers/notification";
+import { ProjectResolver } from "./resolvers/project";
+import { UserResolver } from "./resolvers/user";
 const main = async () => {
   await myDataSource.initialize();
 
@@ -57,7 +48,12 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver, ReviewResolver, ProjectResolver],
+      resolvers: [
+        HelloResolver,
+        UserResolver,
+        ProjectResolver,
+        NotificationResolver,
+      ],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),
@@ -76,36 +72,3 @@ const main = async () => {
 main().catch((err) => {
   console.log(err.message);
 });
-// app.post("/refresh-token", async (req, res) => {
-//   const refreshToken = req.cookies.refreshToken;
-
-//   if (!refreshToken) {
-//     return res.send({ ok: false, accessToken: "" });
-//   }
-
-//   let payload = null;
-
-//   try {
-//     payload = verify(refreshToken, __refreshTokenSecret__) as Users;
-//   } catch (err) {
-//     return res.send({ ok: false, accessToken: "" });
-//   }
-
-//   const user = Users.findOne({
-//     where: { id: payload.id },
-//   }) as unknown as Users;
-
-//   if (!user) {
-//     return res.send({ ok: false, accessToken: "" });
-//   }
-
-//   if (user.tokenVersion !== payload.tokenVersion) {
-//     return res.send({ ok: false, accessToken: "" });
-//   }
-
-//   sendRefreshToken(res, buildRefreshToken(user));
-//   return res.send({
-//     ok: true,
-//     accessToken: buildAccessToken(user),
-//   });
-// });

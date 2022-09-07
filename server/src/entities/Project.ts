@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Ticket } from "./Ticket";
-import { User_Project } from "./User_Project";
+// import { User_Project } from "./User_Project";
 
 @ObjectType()
 @Entity()
