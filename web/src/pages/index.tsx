@@ -91,8 +91,7 @@ const Home: NextPage = () => {
                   });
                 }
               } else if (data?.login.user) {
-                // loginZ(data.login.accessToken);
-                // router.push("/dashboard");
+                router.push("/dashboard");
               }
             }}
           >

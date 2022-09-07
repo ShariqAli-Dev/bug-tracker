@@ -78,7 +78,7 @@ const ChangePassword: NextPage<ChangePasswordProps> = ({ token }) => {
                 }
               } else if (response.data?.changePassword.user) {
                 // worked
-                router.push("/");
+                router.push("/dashboard");
               }
             }}
           >
