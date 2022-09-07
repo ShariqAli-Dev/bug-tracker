@@ -15,75 +15,68 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { withUrqlClient } from "next-urql";
+import { useState } from "react";
 import {
+  MdArchive,
+  MdMarkAsUnread,
   MdNotificationsActive,
   MdNotificationsOff,
-  MdMarkAsUnread,
-  MdArchive,
 } from "react-icons/md";
-import { nanoid } from "nanoid";
-import { initialNotifications } from "../utils/dummyData";
+import {
+  useUpdateNotificationMutation,
+  useUserNotificationsQuery,
+} from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Notis = chakra(MdNotificationsActive);
 const NoNotis = chakra(MdNotificationsOff);
 const CArchive = chakra(MdArchive);
 const CUnread = chakra(MdMarkAsUnread);
 
+interface notificationHandlerType {
+  id: number;
+  read: boolean;
+}
+
 const Notifications = () => {
-  const [hasNotis, setHasNotis] = useState(false);
+  const [{ data }] = useUserNotificationsQuery();
+  const [, updateNotification] = useUpdateNotificationMutation();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [showArchived, setShowArchived] = useState(false);
-  const [notifications, setNotifications] = useState(initialNotifications);
+  const [showRead, setShowRead] = useState(false);
 
-  useEffect(() => {
-    // axios call that grabs notifications.
-    // if we get an array of unread notifications, setHasNotis to true
-    // if ther are no nofications, render unforunately we have no notifications
-    // sort the notifications by timestamp
-    setHasNotis(true);
-  }, []);
-
-  const archiveHandler = (id: number, archivedState: boolean) => {
-    setNotifications(
-      notifications.map((noti) => {
-        if (noti.id !== id) {
-          return noti;
-        } else {
-          return { ...noti, archived: !archivedState };
-        }
-      })
-    );
+  const notificationHandler = async (options: notificationHandlerType) => {
+    await updateNotification({ options });
   };
 
   return (
-    <>
-      <Box>
-        <Flex flexDirection="row" alignItems="center">
-          <Text
-            color="primary"
-            display={{ base: "none", md: "flex" }}
-            marginRight={3}
-          >
-            Notifications
-          </Text>
-          {hasNotis ? (
-            <Notis
-              color="secondary"
-              cursor="pointer"
-              size="30px"
-              onClick={onOpen}
-            />
-          ) : (
-            <NoNotis
-              color="secondary"
-              cursor="pointer"
-              size="30px"
-              onClick={onOpen}
-            />
-          )}
-        </Flex>
-      </Box>
+    <Box>
+      <Flex flexDirection="row" alignItems="center">
+        <Text
+          color="primary"
+          display={{ base: "none", md: "flex" }}
+          marginRight={3}
+        >
+          Notifications
+        </Text>
+
+        {data?.userNotifications[0] ? (
+          <Notis
+            color="secondary"
+            cursor="pointer"
+            size="30px"
+            onClick={onOpen}
+          />
+        ) : (
+          <NoNotis
+            color="secondary"
+            cursor="pointer"
+            size="30px"
+            onClick={onOpen}
+          />
+        )}
+      </Flex>
 
       <Modal
         onClose={onClose}
@@ -99,69 +92,68 @@ const Notifications = () => {
           <ModalBody>
             <Flex justifyContent="space-between">
               <Button
-                color={showArchived ? "primary" : "tertiary"}
-                backgroundColor={showArchived ? "tertiary" : "primary"}
-                border={showArchived ? "2px" : 0}
-                borderColor={showArchived ? "primary" : ""}
-                onClick={() => setShowArchived(false)}
+                color={showRead ? "primary" : "tertiary"}
+                backgroundColor={showRead ? "tertiary" : "primary"}
+                border={showRead ? "2px" : 0}
+                borderColor={showRead ? "primary" : ""}
+                onClick={() => setShowRead(false)}
               >
-                New
+                New Messages
               </Button>
               <Button
-                color={showArchived ? "tertiary" : "primary"}
-                backgroundColor={showArchived ? "primary" : "tertiary"}
-                border={showArchived ? 0 : "2px"}
-                borderColor={showArchived ? "" : "primary"}
-                onClick={() => setShowArchived(true)}
+                color={showRead ? "tertiary" : "primary"}
+                backgroundColor={showRead ? "primary" : "tertiary"}
+                border={showRead ? 0 : "2px"}
+                borderColor={showRead ? "" : "primary"}
+                onClick={() => setShowRead(true)}
               >
-                Archived
+                Viewed Messages
               </Button>
             </Flex>
 
-            {hasNotis ? (
-              <div>
-                {notifications
-                  .filter(
-                    (notification) => notification.archived == showArchived
-                  )
-                  .map((notification) => {
-                    return (
-                      <Box p="1rem" key={nanoid()} w="full">
-                        <Flex flexDirection="row" alignItems="center">
-                          <Text w="85%">{notification.message}</Text>
-                          <Text marginRight="1rem">{notification.date}</Text>
-                          {showArchived ? (
-                            <CUnread
-                              color="secondary"
-                              onClick={() =>
-                                archiveHandler(
-                                  notification.id,
-                                  notification.archived
-                                )
-                              }
-                              cursor="pointer"
-                              size="20px"
-                              margin="auto"
-                            />
-                          ) : (
-                            <CArchive
-                              color="secondary"
-                              onClick={() =>
-                                archiveHandler(
-                                  notification.id,
-                                  notification.archived
-                                )
-                              }
-                              cursor="pointer"
-                              size="20px"
-                              margin="auto"
-                            />
-                          )}
-                        </Flex>
-                      </Box>
-                    );
-                  })}
-              </div>
+            {data?.userNotifications[0] ? (
+              <Box>
+                {data.userNotifications
+                  .filter((noti) => noti.read == showRead)
+                  .map((noti) => (
+                    <Box key={noti.id} p="1rem" w="full">
+                      <Flex>
+                        <Text w="75%">{noti.message}</Text>
+                        <Text fontSize="md" marginRight="1rem">
+                          {noti.createdAt.slice(0, 10)}
+                        </Text>
+
+                        {showRead ? (
+                          <CUnread
+                            color="secondary"
+                            onClick={() =>
+                              notificationHandler({
+                                id: noti.id,
+                                read: noti.read,
+                              })
+                            }
+                            cursor="pointer"
+                            size="20px"
+                            margin="auto"
+                          />
+                        ) : (
+                          <CArchive
+                            color="secondary"
+                            onClick={() =>
+                              notificationHandler({
+                                id: noti.id,
+                                read: noti.read,
+                              })
+                            }
+                            cursor="pointer"
+                            size="20px"
+                            margin="auto"
+                          />
+                        )}
+                      </Flex>
+                    </Box>
+                  ))}
+              </Box>
             ) : (
               <Flex justifyContent="space-around">
                 <Alert
@@ -180,8 +172,8 @@ const Notifications = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Box>
   );
 };
 
-export default Notifications;
+export default withUrqlClient(createUrqlClient, { ssr: false })(Notifications);

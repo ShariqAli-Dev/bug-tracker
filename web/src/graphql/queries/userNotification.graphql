@@ -1,0 +1,9 @@
+query UserNotifications {
+  userNotifications {
+    id
+    message
+    read
+    createdAt
+    updatedAt
+  }
+}

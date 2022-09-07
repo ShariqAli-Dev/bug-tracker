@@ -30,6 +30,7 @@ export const createUrqlClient = (ssrExchange: any) => {
                 () => ({ me: null })
               );
             },
+
             login: (_result, args, cache, info) => {
               betterUpdateQuery<LoginMutation, MeQuery>(
                 cache,
