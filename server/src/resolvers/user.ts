@@ -1,5 +1,4 @@
-import { Users } from "../entities/Users";
-import { MyContext } from "../types";
+import argon2 from "argon2";
 import {
   Arg,
   Ctx,
@@ -12,20 +11,17 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import {
-  __initialRole__,
-  __accessTokenSecret__,
-  __passwordResetTokenSecret__,
-  __cookieName__,
-  FORGET_PASSWORD_PREFIX,
-} from "../constants";
-import argon2 from "argon2";
-import jwt from "jsonwebtoken";
-import { isAuth } from "../middleware/isAuth";
-import { sendMail } from "../utils/sendMail";
-import { myDataSource } from "../data-source";
 import { v4 } from "uuid";
-import { RedisClient } from "redis";
+import {
+  FORGET_PASSWORD_PREFIX,
+  __cookieName__,
+  __initialRole__,
+} from "../constants";
+import { myDataSource } from "../data-source";
+import { Users } from "../entities/Users";
+import { isAuth } from "../middleware/isAuth";
+import { MyContext } from "../types";
+import { sendMail } from "../utils/sendMail";
 
 @ObjectType()
 class FieldError {
@@ -91,8 +87,8 @@ export class UserResolver {
         ],
       };
     }
-
-    const userId = await redis.get(FORGET_PASSWORD_PREFIX + token);
+    const key = FORGET_PASSWORD_PREFIX + token;
+    const userId = await redis.get(key);
     if (!userId) {
       return {
         errors: [
@@ -116,18 +112,14 @@ export class UserResolver {
         ],
       };
     }
-
-    await Users.update(
-      { id: parseInt(userId) },
-      { password: await argon2.hash(newPassword) }
-    );
+    const hashedPassword = await argon2.hash(newPassword);
+    user.password = hashedPassword;
+    await Users.update({ id: parseInt(userId) }, { password: hashedPassword });
+    await redis.del(key);
 
     // log in user after change password
     req.session.userId = user.id;
     return { user };
-
-    // https://www.youtube.com/watch?v=I6ypD7qv3Z8&t=22964s&ab_channel=BenAwad --> 4:57:57. argon 2 error
-    // TypeError: pchstr must contain a $ as first char #221
   }
 
   @Mutation(() => Boolean)
