@@ -1,5 +1,6 @@
 import { cacheExchange } from "@urql/exchange-graphcache";
-import { dedupExchange, fetchExchange } from "urql";
+import Router from "next/router";
+import { dedupExchange, errorExchange, fetchExchange } from "urql";
 import {
   LoginMutation,
   LogoutMutation,
@@ -68,6 +69,13 @@ export const createUrqlClient = (ssrExchange: any) => {
               );
             },
           },
+        },
+      }),
+      errorExchange({
+        onError(err) {
+          if (err.message.includes("not authenticated")) {
+            Router.replace("/");
+          }
         },
       }),
       ssrExchange,
