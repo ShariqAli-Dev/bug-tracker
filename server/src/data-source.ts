@@ -7,7 +7,7 @@ import { Notification } from "./entities/Notification";
 import { Project } from "./entities/Project";
 import { Ticket } from "./entities/Ticket";
 import { Users } from "./entities/Users";
-// import { User_Project } from "./entities/User_Project";
+import { User_Project } from "./entities/User_Project";
 
 export const myDataSource = new DataSource({
   type: "postgres",
@@ -24,7 +24,7 @@ export const myDataSource = new DataSource({
     Project,
     Notification,
     Ticket,
-    // User_Project,
+    User_Project,
     Users,
   ],
   migrations: [],
