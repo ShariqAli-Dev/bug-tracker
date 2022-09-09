@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { FaUserAlt } from "react-icons/fa";
+import { useLogoutMutation } from "../generated/graphql";
 import useProjectsStore from "../store/projects";
 import useTicketsStore from "../store/tickets";
 import useUserStore from "../store/user";
@@ -17,12 +18,14 @@ const UserAvatar = chakra(FaUserAlt);
 
 const UserActions = () => {
   const router = useRouter();
-  const logout = useUserStore((state) => state.logout);
+  const [{ fetching }, logout] = useLogoutMutation();
+  const resetUser = useUserStore((state) => state.reset);
   const resetTickets = useTicketsStore((state) => state.reset);
   const resetProjects = useProjectsStore((state) => state.reset);
 
   const logoutUser = () => {
-    logout();
+    logout({});
+    resetUser();
     resetTickets();
     resetProjects();
     router.push("/");
@@ -45,8 +48,9 @@ const UserActions = () => {
       <MenuList minWidth="240px" color="primary">
         <MenuItem onClick={() => router.push("profile")}>Profile</MenuItem>
         <MenuItem onClick={() => router.push("settings")}>Settings</MenuItem>
-
-        <MenuItem onClick={logoutUser}>Log Out</MenuItem>
+        <MenuItem disabled={fetching} onClick={logoutUser}>
+          Log Out
+        </MenuItem>
       </MenuList>
     </Menu>
   );

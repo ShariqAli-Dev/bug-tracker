@@ -9,8 +9,8 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Notification } from "./Notification";
-import { Review } from "./Review";
-import { User_Project } from "./User_Project";
+// import { Review } from "./Review";
+// import { User_Project } from "./User_Project";
 
 @ObjectType()
 @Entity()
@@ -33,9 +33,6 @@ export class Users extends BaseEntity {
 
   @Column()
   password!: string;
-
-  @OneToMany(() => Review, (review) => review.creator)
-  reviews: Review[];
 
   @OneToMany(() => Notification, (notification) => notification.user)
   notifications: Notification[];

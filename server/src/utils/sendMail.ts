@@ -6,6 +6,7 @@ export async function sendMail(to: string, html: string) {
   // Only needed if you don't have a real mail account for testing
 
   // create reusable transporter object using the default SMTP transport
+
   let transporter = nodemailer.createTransport({
     host: "smtp.ethereal.email",
     port: 587,
@@ -22,7 +23,7 @@ export async function sendMail(to: string, html: string) {
     to: to, // list of receivers
     subject: "Hello ✔", // Subject line
     text: "Hello world?", // plain text body
-    html: html, // html body
+    html, // html body
   });
 
   console.log("Message sent: %s", info.messageId);

@@ -22,7 +22,7 @@ export class Notification extends BaseEntity {
   message!: string;
 
   @Field()
-  @Column({ type: "boolean" })
+  @Column({ type: "boolean", default: false })
   read!: boolean;
 
   @ManyToOne(() => Users, (user) => user.notifications)

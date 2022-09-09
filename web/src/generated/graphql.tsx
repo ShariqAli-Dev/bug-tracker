@@ -25,16 +25,17 @@ export type FieldError = {
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  createNotification: Notification;
   createProject: Project;
-  createReview: Review;
+  deleteNotification: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
-  deleteReview: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
+  logout: Scalars['Boolean'];
   register: UserResponse;
   revokeRefreshTokenForUser: Scalars['Boolean'];
+  updateNotification?: Maybe<Notification>;
   updateProject?: Maybe<Project>;
-  updateReview?: Maybe<Review>;
 };
 
 
@@ -44,24 +45,22 @@ export type MutationChangePasswordArgs = {
 };
 
 
+export type MutationCreateNotificationArgs = {
+  message: Scalars['String'];
+};
+
+
 export type MutationCreateProjectArgs = {
   options: ProjectInput;
 };
 
 
-export type MutationCreateReviewArgs = {
-  rating: Scalars['Float'];
-  review: Scalars['String'];
-  userId: Scalars['Float'];
-};
-
-
-export type MutationDeleteProjectArgs = {
+export type MutationDeleteNotificationArgs = {
   id: Scalars['Float'];
 };
 
 
-export type MutationDeleteReviewArgs = {
+export type MutationDeleteProjectArgs = {
   id: Scalars['Float'];
 };
 
@@ -86,15 +85,22 @@ export type MutationRevokeRefreshTokenForUserArgs = {
 };
 
 
+export type MutationUpdateNotificationArgs = {
+  options: UpdateNotificationInput;
+};
+
+
 export type MutationUpdateProjectArgs = {
   options: ProjectInput;
 };
 
-
-export type MutationUpdateReviewArgs = {
+export type Notification = {
+  __typename?: 'Notification';
+  createdAt: Scalars['DateTime'];
   id: Scalars['Float'];
-  rating: Scalars['Float'];
-  review: Scalars['String'];
+  message: Scalars['String'];
+  read: Scalars['Boolean'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type Project = {
@@ -116,20 +122,16 @@ export type Query = {
   __typename?: 'Query';
   bye: Scalars['String'];
   hello: Scalars['String'];
-  me?: Maybe<UserResponse>;
-  post?: Maybe<Review>;
-  posts: Array<Review>;
+  me?: Maybe<Users>;
+  notification?: Maybe<Notification>;
+  notifications: Array<Notification>;
   project?: Maybe<Project>;
   projects: Array<Project>;
+  userNotifications: Array<Notification>;
 };
 
 
-export type QueryMeArgs = {
-  accessToken: Scalars['String'];
-};
-
-
-export type QueryPostArgs = {
+export type QueryNotificationArgs = {
   id: Scalars['Float'];
 };
 
@@ -138,13 +140,9 @@ export type QueryProjectArgs = {
   id: Scalars['Float'];
 };
 
-export type Review = {
-  __typename?: 'Review';
-  createdAt: Scalars['DateTime'];
+export type UpdateNotificationInput = {
   id: Scalars['Float'];
-  rating: Scalars['Float'];
-  review: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  read: Scalars['Boolean'];
 };
 
 export type UserInput = {
@@ -154,7 +152,6 @@ export type UserInput = {
 
 export type UserResponse = {
   __typename?: 'UserResponse';
-  accessToken?: Maybe<Scalars['String']>;
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<Users>;
 };
@@ -177,6 +174,13 @@ export type ChangePasswordMutationVariables = Exact<{
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
 
+export type CreateNotificationMutationVariables = Exact<{
+  message: Scalars['String'];
+}>;
+
+
+export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } };
+
 export type CreateProjectMutationVariables = Exact<{
   options: ProjectInput;
 }>;
@@ -196,26 +200,41 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', accessToken?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
 export type RegisterMutationVariables = Exact<{
   options: UserInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', accessToken?: string | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
+
+export type UpdateNotificationMutationVariables = Exact<{
+  options: UpdateNotificationInput;
+}>;
+
+
+export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } | null };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ByeQuery = { __typename?: 'Query', bye: string };
 
-export type MeQueryVariables = Exact<{
-  accessToken: Scalars['String'];
-}>;
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', email: string, id: number, role: string, tokenVersion: number } | null } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Users', id: number, role: string } | null };
+
+export type UserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserNotificationsQuery = { __typename?: 'Query', userNotifications: Array<{ __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any }> };
 
 
 export const ChangePasswordDocument = gql`
@@ -236,6 +255,21 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateNotificationDocument = gql`
+    mutation CreateNotification($message: String!) {
+  createNotification(message: $message) {
+    id
+    message
+    read
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useCreateNotificationMutation() {
+  return Urql.useMutation<CreateNotificationMutation, CreateNotificationMutationVariables>(CreateNotificationDocument);
 };
 export const CreateProjectDocument = gql`
     mutation CreateProject($options: ProjectInput!) {
@@ -266,13 +300,26 @@ export const LoginDocument = gql`
       field
       message
     }
-    accessToken
+    user {
+      id
+      email
+      role
+    }
   }
 }
     `;
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
+
+export function useLogoutMutation() {
+  return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
 export const RegisterDocument = gql`
     mutation Register($options: UserInput!) {
@@ -281,13 +328,32 @@ export const RegisterDocument = gql`
       field
       message
     }
-    accessToken
+    user {
+      id
+      email
+      role
+    }
   }
 }
     `;
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const UpdateNotificationDocument = gql`
+    mutation UpdateNotification($options: UpdateNotificationInput!) {
+  updateNotification(options: $options) {
+    id
+    message
+    read
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useUpdateNotificationMutation() {
+  return Urql.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument);
 };
 export const ByeDocument = gql`
     query Bye {
@@ -299,22 +365,29 @@ export function useByeQuery(options?: Omit<Urql.UseQueryArgs<ByeQueryVariables>,
   return Urql.useQuery<ByeQuery, ByeQueryVariables>({ query: ByeDocument, ...options });
 };
 export const MeDocument = gql`
-    query Me($accessToken: String!) {
-  me(accessToken: $accessToken) {
-    errors {
-      field
-      message
-    }
-    user {
-      email
-      id
-      role
-      tokenVersion
-    }
+    query Me {
+  me {
+    id
+    role
   }
 }
     `;
 
-export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
+export function useMeQuery(options?: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'>) {
   return Urql.useQuery<MeQuery, MeQueryVariables>({ query: MeDocument, ...options });
+};
+export const UserNotificationsDocument = gql`
+    query UserNotifications {
+  userNotifications {
+    id
+    message
+    read
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+export function useUserNotificationsQuery(options?: Omit<Urql.UseQueryArgs<UserNotificationsQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserNotificationsQuery, UserNotificationsQueryVariables>({ query: UserNotificationsDocument, ...options });
 };

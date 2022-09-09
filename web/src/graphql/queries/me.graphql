@@ -1,14 +1,6 @@
-query Me($accessToken: String!) {
-  me(accessToken: $accessToken) {
-    errors {
-      field
-      message
-    }
-    user {
-      email
-      id
-      role
-      tokenVersion
-    }
+query Me {
+  me {
+    id
+    role
   }
 }

@@ -5,10 +5,9 @@ import { __db__, __PGPassword__ } from "./constants";
 import { Comment } from "./entities/Comment";
 import { Notification } from "./entities/Notification";
 import { Project } from "./entities/Project";
-import { Review } from "./entities/Review";
 import { Ticket } from "./entities/Ticket";
 import { Users } from "./entities/Users";
-import { User_Project } from "./entities/User_Project";
+// import { User_Project } from "./entities/User_Project";
 
 export const myDataSource = new DataSource({
   type: "postgres",
@@ -23,7 +22,7 @@ export const myDataSource = new DataSource({
     Comment,
     Notification,
     Project,
-    Review,
+    Notification,
     Ticket,
     // User_Project,
     Users,

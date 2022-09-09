@@ -1,5 +1,4 @@
-import { Users } from "../entities/Users";
-import { MyContext } from "../types";
+import argon2 from "argon2";
 import {
   Arg,
   Ctx,
@@ -12,22 +11,17 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { v4 } from "uuid";
 import {
+  FORGET_PASSWORD_PREFIX,
+  __cookieName__,
   __initialRole__,
-  __accessTokenSecret__,
-  __passwordResetTokenSecret__,
 } from "../constants";
-import argon2 from "argon2";
-import {
-  buildAccessToken,
-  buildPasswordResetToken,
-  buildRefreshToken,
-} from "../utils/buildToken";
-import jwt from "jsonwebtoken";
-import { isAuth } from "../middleware/isAuth";
-import { sendRefreshToken } from "../utils/sendToken";
-import { sendMail } from "../utils/sendMail";
 import { myDataSource } from "../data-source";
+import { Users } from "../entities/Users";
+import { isAuth } from "../middleware/isAuth";
+import { MyContext } from "../types";
+import { sendMail } from "../utils/sendMail";
 
 @ObjectType()
 class FieldError {
@@ -55,30 +49,20 @@ class UserResponse {
 
   @Field(() => Users, { nullable: true })
   user?: Users;
-
-  @Field(() => String, { nullable: true })
-  accessToken?: string;
 }
 
 @Resolver()
 export class UserResolver {
-  @Query(() => UserResponse, { nullable: true })
-  async me(@Arg("accessToken", () => String) accessToken: string) {
-    if (!accessToken) {
-      return {
-        errors: [
-          {
-            field: "invalid token",
-            message: `token of ${accessToken} is invalid`,
-          },
-        ],
-      };
+  @Query(() => Users, { nullable: true })
+  async me(@Ctx() { req }: MyContext) {
+    // you are not logged in
+    if (!req.session.userId) {
+      return null;
     }
-    const decoded = jwt.verify(accessToken, __accessTokenSecret__) as {
-      id: number;
-    };
-    const user = await Users.findOne({ where: { id: decoded.id } });
-    return { user };
+
+    return Users.findOne({
+      where: { id: req.session.userId },
+    });
   }
 
   @Query(() => String)
@@ -90,7 +74,8 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
-    @Arg("newPassword") newPassword: string
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { req, redis }: MyContext
   ): Promise<UserResponse> {
     if (newPassword.length <= 2) {
       return {
@@ -102,47 +87,64 @@ export class UserResolver {
         ],
       };
     }
-    const decoded = jwt.verify(token, __passwordResetTokenSecret__) as {
-      email: string;
-      userId: number;
-    };
-    if (!decoded) {
+    const key = FORGET_PASSWORD_PREFIX + token;
+    const userId = await redis.get(key);
+    if (!userId) {
       return {
-        errors: [{ field: "token", message: "token expired" }],
+        errors: [
+          {
+            field: "token",
+            message: "token expired",
+          },
+        ],
       };
     }
 
-    const user = await Users.findOne({
-      where: { id: decoded.userId },
-    });
+    const user = await Users.findOne({ where: { id: parseInt(userId) } });
 
     if (!user) {
       return {
         errors: [
           {
             field: "token",
-            message: "user no lognger exists",
+            message: "user no longer exists",
           },
         ],
       };
     }
-    user.password = await argon2.hash(newPassword);
-    Users.update({ id: decoded.userId }, { password: newPassword });
+    const hashedPassword = await argon2.hash(newPassword);
+    user.password = hashedPassword;
+    await Users.update({ id: parseInt(userId) }, { password: hashedPassword });
+    await redis.del(key);
 
+    // log in user after change password
+    req.session.userId = user.id;
     return { user };
   }
 
   @Mutation(() => Boolean)
-  async forgotPassword(@Arg("email") email: string) {
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() { redis }: MyContext
+  ) {
     const user = await Users.findOne({ where: { email } });
-    if (!user) return true;
-    const token = buildPasswordResetToken(email, user.id);
+    if (!user) {
+      return true;
+    }
+
+    const token = v4();
+
+    await redis.set(
+      FORGET_PASSWORD_PREFIX + token,
+      user.id,
+      "EX",
+      1000 * 60 * 60 * 24 * 3 // 3 days
+    );
 
     await sendMail(
       email,
       `<a href='http://localhost:3000/forgot-password/${token}'>reset password</a>`
     );
-
     return true;
   }
 
@@ -159,7 +161,7 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UserInput,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     if (options.password.length <= 2) {
       return {
@@ -201,34 +203,61 @@ export class UserResolver {
         };
       }
     }
-    sendRefreshToken(res, buildRefreshToken(user));
+    // store user id session
+    // this will set a cookie on the user
+    // keep them logged in
+    req.session.userId = user.id;
+
     return {
-      accessToken: buildAccessToken(user),
+      user,
     };
   }
 
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UserInput,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = (await Users.findOne({
+    const user = await Users.findOne({
       where: { email: options.email },
-    })) as any;
+    });
 
     if (!user) {
       return {
         errors: [{ field: "email", message: "that email doesn't exist" }],
       };
     }
-
+    console.log(
+      "supposedly hashed password",
+      user.password,
+      "inputted: ",
+      options.password
+    );
     const valid = await argon2.verify(user.password, options.password);
     if (!valid) {
       return { errors: [{ field: "password", message: "incorrect password" }] };
     }
-    sendRefreshToken(res, buildRefreshToken(user));
+
+    req.session.userId = user.id;
+
     return {
-      accessToken: buildAccessToken(user),
+      user,
     };
+  }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { req, res }: MyContext) {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        res.clearCookie(__cookieName__);
+        if (err) {
+          console.log(err);
+          resolve(false);
+          return;
+        }
+
+        resolve(true);
+      })
+    );
   }
 }

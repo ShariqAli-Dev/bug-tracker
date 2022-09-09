@@ -32,7 +32,7 @@ const CFaUserAlt = chakra(FaUserAlt);
 const ChangePassword: NextPage<ChangePasswordProps> = ({ token }) => {
   const [, changePassword] = useChangePasswordMutation();
   const router = useRouter();
-  const [tokenError, setTokenError] = useState("");
+  const [error, setError] = useState("");
   return (
     <Flex
       flexDirection="column"
@@ -60,7 +60,7 @@ const ChangePassword: NextPage<ChangePasswordProps> = ({ token }) => {
             onSubmit={async (values, { setErrors }) => {
               const response = await changePassword({
                 newPassword: values.newPassword,
-                token: token,
+                token,
               });
 
               if (response.data?.changePassword.errors) {
@@ -68,17 +68,17 @@ const ChangePassword: NextPage<ChangePasswordProps> = ({ token }) => {
                   response.data.changePassword.errors
                 );
                 if ("token" in errorMap) {
-                  setTokenError(errorMap.token);
+                  setError(errorMap.token);
                 } else {
                   setErrors(errorMap);
-                  setTokenError(
+                  setError(
                     `${response.data.changePassword.errors[0].field} 
                     ${response.data.changePassword.errors[0].message}`
                   );
                 }
               } else if (response.data?.changePassword.user) {
                 // worked
-                router.push("/");
+                router.push("/dashboard");
               }
             }}
           >
@@ -116,7 +116,7 @@ const ChangePassword: NextPage<ChangePasswordProps> = ({ token }) => {
                   >
                     Set New Password
                   </Button>
-                  {tokenError && <Box color="red">{tokenError}</Box>}
+                  {error && <Box color="red">{error}</Box>}
                   <FormControl>
                     <FormHelperText>
                       <Flex

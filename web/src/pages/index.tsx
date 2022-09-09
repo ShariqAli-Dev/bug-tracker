@@ -16,13 +16,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
 import useUserStore from "../store/user";
 import { useLoginMutation } from "../generated/graphql";
-import { getAccessToken } from "../accessTokens";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
@@ -42,11 +41,7 @@ const Home: NextPage = () => {
   const loginZ = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
-  useEffect(() => {
-    if (!getAccessToken()) {
-      router.push("/");
-    }
-  }, []);
+
   return (
     <Flex
       flexDirection="column"
@@ -79,7 +74,6 @@ const Home: NextPage = () => {
             initialValues={{ email: "", password: "" }}
             onSubmit={async (values) => {
               const { data } = await login({ options: values });
-
               if (data?.login.errors) {
                 if (!toast.isActive("login-error")) {
                   toast({
@@ -96,15 +90,7 @@ const Home: NextPage = () => {
                     position: "top",
                   });
                 }
-              } else if (data?.login.accessToken) {
-                // worked
-                // loginZ({
-                //   id: data.login.user.id,
-                //   email: data.login.user.email,
-                //   role: data.login.user.role,
-                //   token: data.login.token as string,
-                // });
-                loginZ(data.login.accessToken);
+              } else if (data?.login.user) {
                 router.push("/dashboard");
               }
             }}
