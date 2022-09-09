@@ -1,5 +1,14 @@
 require("dotenv").config();
-
+export const ROLES = {
+  ADMIN: "admin",
+  PROJECT_MANAGER: "project manager",
+  SUBMITTER: "submitter",
+  DEVELOPER: "developer",
+  DEMO_ADMIN: "admin",
+  DEMO_PROJECT_MANAGER: "project manager",
+  DEMO_SUBMITTER: "submitter",
+  DEMO_DEVELOPER: "developer",
+};
 export const FORGET_PASSWORD_PREFIX = "forget-password:";
 export const __prod__ = process.env.NODE_ENV === "production";
 export const __PGPassword__ = process.env.PG_PASSWORD;
