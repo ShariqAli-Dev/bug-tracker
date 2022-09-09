@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Ticket } from "./Ticket";
-// import { User_Project } from "./User_Project";
+import { User_Project } from "./User_Project";
 
 @ObjectType()
 @Entity()
@@ -29,8 +29,8 @@ export class Project extends BaseEntity {
   @OneToMany(() => Ticket, (ticket) => ticket.project)
   tickets: Ticket[];
 
-  // @OneToMany(() => User_Project, (user_project) => user_project.project)
-  // user_project: User_Project[];
+  @OneToMany(() => User_Project, (user_project) => user_project.project)
+  user_project: User_Project[];
 
   @Field()
   @CreateDateColumn()
