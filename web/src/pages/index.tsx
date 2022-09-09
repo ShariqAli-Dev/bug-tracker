@@ -38,7 +38,6 @@ const Home: NextPage = () => {
   const [, login] = useLoginMutation();
   const router = useRouter();
   const toast = useToast();
-  const loginZ = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -91,7 +90,11 @@ const Home: NextPage = () => {
                   });
                 }
               } else if (data?.login.user) {
-                router.push("/dashboard");
+                if (typeof router.query.next === "string") {
+                  router.push(router.query.next);
+                } else {
+                  router.push("/");
+                }
               }
             }}
           >
