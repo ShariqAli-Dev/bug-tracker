@@ -1,16 +1,10 @@
-import { __accessTokenSecret__ } from "../constants";
 import { MyContext } from "../types";
 import { MiddlewareFn } from "type-graphql";
+import { ROLES } from "../constants";
 
 export const isAdmin: MiddlewareFn<MyContext> = async ({ context }, next) => {
-  if (
-    context.req.session.role !== "product manager" ||
-    // context.req.session.role !== "demo product manager" ||
-    context.req.session.role !== "product manager" ||
-    context.req.session.role !== "product manager"
-  ) {
-    throw new Error("not an admin or manager");
+  if (context.req.session.role !== ROLES.ADMIN) {
+    throw new Error("incorrect role");
   }
-
   return next();
 };
