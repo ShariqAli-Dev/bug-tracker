@@ -1,5 +1,14 @@
 import { Project } from "../entities/Project";
-import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Field,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
+import { isAuth } from "src/middleware/isAuth";
 
 @InputType()
 class ProjectInput {
@@ -26,6 +35,8 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
+  @UseMiddleware(isAuth)
+  // add middleware so only admin or
   async createProject(@Arg("options") options: ProjectInput): Promise<Project> {
     const { name, description } = options;
     if (!name || !description) {
