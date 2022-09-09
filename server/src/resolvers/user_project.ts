@@ -1,7 +1,14 @@
 import { User_Project } from "src/entities/User_Project";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
-import { Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 
 @Resolver()
 export class UserProjectResolver {
@@ -12,7 +19,15 @@ export class UserProjectResolver {
   }
 
   @Mutation(() => Boolean)
-  async vote() {
+  @UseMiddleware(isAuth) // another middleware so only admin and project manager can create
+  async assignUser(
+    @Arg("projectId") projectId: number,
+    @Ctx() { req }: MyContext
+  ) {
+    await User_Project.insert({
+      projectId,
+      userId: req.session.userId,
+    });
     return true;
   }
 }
