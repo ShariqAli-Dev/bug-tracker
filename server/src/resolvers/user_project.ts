@@ -19,7 +19,7 @@ export class UserProjectResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth) // another middleware so only admin and project manager can create
+  @UseMiddleware(isAuth) // another middleware so only admin and project manager can create a project or un assign users from projects
   async assignUser(
     @Arg("projectId") projectId: number,
     @Ctx() { req }: MyContext
@@ -28,6 +28,17 @@ export class UserProjectResolver {
       projectId,
       userId: req.session.userId,
     });
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async unassignUser(
+    @Arg("projectId") projectId: number,
+    @Ctx() { req }: MyContext
+  ) {
+    await User_Project.delete({ projectId, userId: req.session.userId });
+
     return true;
   }
 }
