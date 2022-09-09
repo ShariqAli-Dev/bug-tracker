@@ -42,7 +42,7 @@ const DashHeader = () => {
         <Flex justifyContent="space-around" alignItems="center" padding="1rem">
           <BurgerMenu />
           <QueryForm />
-          <Notifications />
+          <Notifications pageProps={{}} />
           <UserActions />
         </Flex>
       </Box>
