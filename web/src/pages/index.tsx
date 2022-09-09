@@ -20,7 +20,6 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
-import useUserStore from "../store/user";
 import { useLoginMutation } from "../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
@@ -93,7 +92,8 @@ const Home: NextPage = () => {
                 if (typeof router.query.next === "string") {
                   router.push(router.query.next);
                 } else {
-                  router.push("/");
+                  // worked
+                  router.push("/dashboard");
                 }
               }
             }}
