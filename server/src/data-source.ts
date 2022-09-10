@@ -8,6 +8,7 @@ import { Project } from "./entities/Project";
 import { Ticket } from "./entities/Ticket";
 import { Users } from "./entities/Users";
 import { User_Project } from "./entities/User_Project";
+import path from "path";
 
 export const myDataSource = new DataSource({
   type: "postgres",
@@ -18,15 +19,7 @@ export const myDataSource = new DataSource({
   database: DB_NAME + "2",
   synchronize: true,
   logging: true,
-  entities: [
-    Comment,
-    Notification,
-    Project,
-    Notification,
-    Ticket,
-    User_Project,
-    Users,
-  ],
-  migrations: [],
+  entities: [Comment, Notification, Project, Ticket, User_Project, Users],
+  migrations: [path.join(__dirname, "./migrations/*")],
   subscribers: [],
 });

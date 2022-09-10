@@ -14,6 +14,7 @@ import { ProjectResolver } from "./resolvers/project";
 import { UserResolver } from "./resolvers/user";
 const main = async () => {
   await myDataSource.initialize();
+  await myDataSource.runMigrations();
 
   const app = express();
 

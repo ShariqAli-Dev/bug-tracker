@@ -17,6 +17,9 @@ export class Notification extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ type: "int" })
+  userId: number;
+
   @Field()
   @Column()
   message!: string;
@@ -27,9 +30,6 @@ export class Notification extends BaseEntity {
 
   @ManyToOne(() => Users, (user) => user.notifications)
   user: Users;
-
-  @Column({ type: "int" })
-  userId: number;
 
   @Field()
   @CreateDateColumn()

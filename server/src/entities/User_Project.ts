@@ -7,11 +7,11 @@ import { Users } from "./Users";
 @Entity()
 export class User_Project extends BaseEntity {
   @Field()
-  @PrimaryColumn()
+  @PrimaryColumn({ type: "int" })
   projectId: number;
 
   @Field()
-  @PrimaryColumn()
+  @PrimaryColumn({ type: "int" })
   userId: number;
 
   @Field(() => Project)
