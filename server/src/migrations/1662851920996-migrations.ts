@@ -12,8 +12,7 @@ export class migrations1662851920996 implements MigrationInterface {
       insert into users (email, "role", "tokenVersion", "password") values ('aducker6@nba.com', 'submitter', 19, 'p=1$ngaJiYvB4fyVHrHHTnBrUg$6JemzEfjQvZeP/');
       insert into users (email, "role", "tokenVersion", "password") values ('nlowing7@gov.uk', 'developer', 46, 'p=1$ngaJiYvB4fyVHrHHTnBrUg$6JemzEfjQvZeP/');
       insert into users (email, "role", "tokenVersion", "password") values ('aclubb8@techcrunch.com', 'developer', 19, '$argon2id$v=19$m=4096');
-      insert into users (email, "role", "tokenVersion", "password") values ('nfellnee9@netlog.com', 'admin', 5, 'p=1$ngaJiYvB4fyVHrHHTnBrUg$6JemzEfjQvZeP/4VDl69fsTl6K63RgyOlAnQOnvot30);');
-      `
+      insert into users (email, "role", "tokenVersion", "password") values ('nfellnee9@netlog.com', 'admin', 5, 'p=1$ngaJiYvB4fyVHrHHTnBrUg$6JemzEfjQvZeP/4VDl69fsTl6K63RgyOlAnQOnvot30);');`
     );
   }
 
