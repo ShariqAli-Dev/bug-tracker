@@ -242,7 +242,6 @@ const MyProjectsTable = () => {
       >
         <ModalOverlay />
         <ModalContent>
-          {" "}
           <ModalHeader>Create Project</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={8}>

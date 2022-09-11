@@ -337,16 +337,9 @@ export type UserProjectsQuery = {
   __typename?: "Query";
   UserProjects: Array<{
     __typename?: "User_Project";
-    userId: number;
     projectId: number;
-    project: {
-      __typename?: "Project";
-      id: number;
-      name: string;
-      description: string;
-      createdAt: any;
-      updatedAt: any;
-    };
+    userId: number;
+    project: { __typename?: "Project"; name: string };
   }>;
 };
 
@@ -542,15 +535,11 @@ export function useUserNotificationsQuery(
 export const UserProjectsDocument = gql`
   query UserProjects {
     UserProjects {
-      project {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      userId
       projectId
+      userId
+      project {
+        name
+      }
     }
   }
 `;

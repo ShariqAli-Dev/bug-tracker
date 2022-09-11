@@ -4,9 +4,13 @@ import Notifications from "./Notifications";
 import UserActions from "./UserActions";
 import BurgerMenu from "./BurgerMenu";
 import useUserStore from "../store/user";
+import { useMeQuery } from "../generated/graphql";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const DashHeader = () => {
   const role = useUserStore((state) => state.role);
+  const [{ data }] = useMeQuery();
   return (
     <Flex
       backgroundColor="white"
@@ -25,7 +29,7 @@ const DashHeader = () => {
           padding=".5rem"
         >
           <Text marginRight={1} fontSize={{ base: "md", md: "lg" }}>
-            Logged in as:{" "}
+            Logged in as: {data?.me?.role}
             <span
               style={{
                 textDecoration: "underline",
@@ -50,4 +54,4 @@ const DashHeader = () => {
   );
 };
 
-export default DashHeader;
+export default withUrqlClient(createUrqlClient, { ssr: false })(DashHeader);
