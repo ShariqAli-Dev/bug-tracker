@@ -1,13 +1,9 @@
 query UserProjects {
   UserProjects {
-    project {
-      id
-      name
-      description
-      createdAt
-      updatedAt
-    }
-    userId
     projectId
+    userId
+    project {
+      name
+    }
   }
 }
