@@ -1,5 +1,5 @@
 import { Ticket } from "../entities/Ticket";
-import { Arg, Field, InputType, Query, Resolver } from "type-graphql";
+import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
 
 @InputType()
 class userTickets {
@@ -43,7 +43,7 @@ export class TicketResolver {
     return await Ticket.find({ where: { projectId: options.projectId } });
   }
 
-  @Query(() => Ticket)
+  @Mutation(() => Ticket)
   async createTicket(
     @Arg("options") options: createTicketInput
   ): Promise<Ticket> {
