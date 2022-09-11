@@ -16,20 +16,22 @@ import {
   Box,
   Button,
   useDisclosure,
+  Spinner,
 } from "@chakra-ui/react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { nanoid } from "nanoid";
 import useProjectsStore from "../store/projects";
 import ProjectModel from "./ProjectModal";
-
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 const MyProjectsTable = () => {
-  const data = useProjectsStore((state) => state.projects);
+  const initialData = useProjectsStore((state) => state.projects);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = useRef(null);
   const finalRef = useRef(null);
@@ -48,8 +50,8 @@ const MyProjectsTable = () => {
             accessor: "description",
           },
           {
-            Header: "Contributors",
-            accessor: "contributors",
+            Header: "",
+            accessor: "details",
           },
         ],
       },
@@ -74,7 +76,7 @@ const MyProjectsTable = () => {
   } = useTable(
     {
       columns,
-      data,
+      data: initialData,
       initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
@@ -82,6 +84,23 @@ const MyProjectsTable = () => {
 
   return (
     <>
+      <Spinner
+        thickness="4px"
+        speed="0.65s"
+        emptyColor="gray.200"
+        color="primary.500"
+        size="xl"
+      />
+      <div>
+        <Button
+          onClick={async () => {
+            console.log("clicked");
+          }}
+        >
+          get my projects
+        </Button>
+      </div>
+
       <TableContainer whiteSpace="normal">
         <Flex
           justifyContent="space-between"
@@ -146,6 +165,7 @@ const MyProjectsTable = () => {
                         borderColor="primary"
                       >
                         {cell.render("Cell")}
+                        <div>Details</div>
                       </Td>
                     );
                   })}
@@ -226,4 +246,6 @@ const MyProjectsTable = () => {
   );
 };
 
-export default MyProjectsTable;
+export default withUrqlClient(createUrqlClient, { ssr: false })(
+  MyProjectsTable
+);

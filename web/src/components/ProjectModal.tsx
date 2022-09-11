@@ -57,8 +57,8 @@ const ProjectModal = (props: ProjectModalProps) => {
             }}
             onSubmit={async (options) => {
               try {
-                await createProject({ options });
-                // update state
+                const { data } = await createProject({ options });
+                console.log(data?.createProject);
                 if (!toast.isActive("newProjectSuccess")) {
                   toast({
                     id: "newProjectSuccess",

@@ -71,7 +71,6 @@ const Register: NextPage = () => {
             initialValues={{ email: "", password: "" }}
             onSubmit={async (values) => {
               const { data } = await register({ options: values });
-
               if (data?.register.errors) {
                 // send a toast alert
                 if (!toast.isActive("register-error")) {
@@ -91,6 +90,7 @@ const Register: NextPage = () => {
                 }
               } else if (data?.register.user) {
                 // worked
+
                 router.push("/dashboard");
               }
             }}

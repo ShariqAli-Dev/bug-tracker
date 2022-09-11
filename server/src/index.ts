@@ -12,6 +12,7 @@ import { HelloResolver } from "./resolvers/hello";
 import { NotificationResolver } from "./resolvers/notification";
 import { ProjectResolver } from "./resolvers/project";
 import { UserResolver } from "./resolvers/user";
+import { UserProjectResolver } from "./resolvers/user_project";
 const main = async () => {
   await myDataSource.initialize();
   await myDataSource.runMigrations();
@@ -54,6 +55,8 @@ const main = async () => {
         UserResolver,
         ProjectResolver,
         NotificationResolver,
+        UserProjectResolver,
+        UserProjectResolver,
       ],
       validate: false,
     }),
