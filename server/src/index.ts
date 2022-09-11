@@ -8,6 +8,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { COOKIE_NAME, __prod__, REDIS_SECRET } from "./constants";
 import { myDataSource } from "./data-source";
+import { CommentResolver } from "./resolvers/comment";
 import { HelloResolver } from "./resolvers/hello";
 import { NotificationResolver } from "./resolvers/notification";
 import { ProjectResolver } from "./resolvers/project";
@@ -57,6 +58,7 @@ const main = async () => {
         NotificationResolver,
         UserProjectResolver,
         UserProjectResolver,
+        CommentResolver,
       ],
       validate: false,
     }),

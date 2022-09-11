@@ -21,6 +21,11 @@ class createComment {
 @Resolver()
 export class CommentResolver {
   @Query(() => [Comment])
+  async comments(): Promise<Comment[]> {
+    return await Comment.find();
+  }
+
+  @Query(() => [Comment])
   async userComments(@Ctx() { req }: MyContext): Promise<Comment[]> {
     return await Comment.find({ where: { userId: req.session.userId } });
   }
