@@ -57,10 +57,6 @@ export class NotificationResolver {
     @Arg("message") message: string,
     @Ctx() { req }: MyContext
   ): Promise<Notification> {
-    if (!req.session.userId) {
-      throw new Error("not authenticated");
-    }
-
     return await Notification.create({
       message,
       userId: req.session.userId,
