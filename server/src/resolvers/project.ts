@@ -1,6 +1,7 @@
 import { Project } from "../entities/Project";
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Mutation,
@@ -9,6 +10,8 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { isAuth } from "../middleware/isAuth";
+import { User_Project } from "../entities/User_Project";
+import { MyContext } from "../types";
 
 @InputType()
 class ProjectInput {
@@ -37,16 +40,25 @@ export class ProjectResolver {
   @Mutation(() => Project)
   @UseMiddleware(isAuth)
   // add middleware so only admin or
-  async createProject(@Arg("options") options: ProjectInput): Promise<Project> {
+  async createProject(
+    @Arg("options") options: ProjectInput,
+    @Ctx() { req }: MyContext
+  ): Promise<Project> {
     const { name, description } = options;
     if (!name || !description) {
       throw new Error("invalid input");
     }
-
-    return await Project.create({
+    const createdProject = await Project.create({
       description,
       name,
     }).save();
+
+    await User_Project.create({
+      userId: req.session.userId,
+      projectId: createdProject.id,
+    }).save();
+
+    return createdProject;
   }
 
   @Mutation(() => Project, { nullable: true })

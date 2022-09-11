@@ -1,30 +1,38 @@
-import { useMemo, useRef } from "react";
-import { useTable, usePagination } from "react-table";
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Flex,
-  IconButton,
-  Text,
-  Tooltip,
-  TableContainer,
-  chakra,
   Box,
   Button,
+  chakra,
+  Flex,
+  IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tooltip,
+  Tr,
   useDisclosure,
-  Spinner,
+  useToast,
 } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import { nanoid } from "nanoid";
+import { withUrqlClient } from "next-urql";
+import { useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
-import { nanoid } from "nanoid";
+import { usePagination, useTable } from "react-table";
+import { useCreateProjectMutation } from "../generated/graphql";
 import useProjectsStore from "../store/projects";
-import ProjectModel from "./ProjectModal";
-import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { InputField } from "./InputField";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
@@ -32,10 +40,17 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 const MyProjectsTable = () => {
   const initialData = useProjectsStore((state) => state.projects);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const initialRef = useRef(null);
-  const finalRef = useRef(null);
+  const toast = useToast();
 
+  const initialRef = useRef(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const finalRef = useRef(null);
+  const [team, setTeam] = useState([
+    { name: "shariq", selected: false },
+    { name: "john", selected: false },
+  ]);
+
+  const [, createProject] = useCreateProjectMutation();
   const columns = useMemo(
     () => [
       {
@@ -84,23 +99,6 @@ const MyProjectsTable = () => {
 
   return (
     <>
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="primary.500"
-        size="xl"
-      />
-      <div>
-        <Button
-          onClick={async () => {
-            console.log("clicked");
-          }}
-        >
-          get my projects
-        </Button>
-      </div>
-
       <TableContainer whiteSpace="normal">
         <Flex
           justifyContent="space-between"
@@ -233,15 +231,131 @@ const MyProjectsTable = () => {
           />
         </Tooltip>
       </Flex>
-
-      <ProjectModel
-        pageProps={{
-          finalRef: finalRef,
-          initialRef: initialRef,
-          isOpen: isOpen,
-          onClose: onClose,
-        }}
-      />
+      <Modal
+        initialFocusRef={initialRef}
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+        closeOnOverlayClick={false}
+        size={{ base: "xs", sm: "sm", md: "lg" }}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          {" "}
+          <ModalHeader>Create Project</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={8}>
+            <Formik
+              initialValues={{
+                name: "",
+                description: "",
+              }}
+              onSubmit={async (options) => {
+                try {
+                  const { data } = await createProject({ options });
+                  console.log(data?.createProject);
+                  if (!toast.isActive("newProjectSuccess")) {
+                    toast({
+                      id: "newProjectSuccess",
+                      title: "Project Sucess",
+                      description: "We succesfully created the project",
+                      status: "success",
+                      duration: 3000,
+                      isClosable: true,
+                      variant: "subtle",
+                      containerStyle: {
+                        color: "primary",
+                      },
+                      position: "top",
+                    });
+                  }
+                } catch {
+                  if (!toast.isActive("newProjectError")) {
+                    toast({
+                      id: "newProjectError",
+                      title: "Project Error",
+                      description:
+                        "Unfortunately, we  could not create the project",
+                      status: "error",
+                      duration: 3000,
+                      isClosable: true,
+                      variant: "subtle",
+                      containerStyle: {
+                        color: "primary",
+                      },
+                      position: "top",
+                    });
+                  }
+                }
+              }}
+            >
+              {({ values, handleChange, isSubmitting }) => (
+                <Form>
+                  {/* Project Name */}
+                  <Box pb={2}>
+                    <InputField
+                      onChange={handleChange}
+                      value={values.name}
+                      name="name"
+                      label="name"
+                      required
+                    />
+                  </Box>
+                  {/* Project Description */}
+                  <Box pb={2}>
+                    <InputField
+                      onChange={handleChange}
+                      value={values.description}
+                      name="description"
+                      label="description"
+                      textarea
+                      required
+                    />
+                  </Box>
+                  {/* Add Team Members */}
+                  <Box
+                    overflowY="auto"
+                    height="150px"
+                    scrollBehavior="auto"
+                    p={4}
+                    borderColor="light-blue"
+                    borderWidth={0.1}
+                    borderRadius={"xl"}
+                  >
+                    {team.map((p, pdx) => {
+                      return (
+                        <Text
+                          fontSize={"1rem"}
+                          onClick={() => {
+                            team[pdx].selected = !team[pdx].selected;
+                            setTeam([...team]);
+                          }}
+                          backgroundColor={p.selected ? "primary" : "white"}
+                          color={p.selected ? "tertiary" : "secondary"}
+                          key={p.name}
+                        >
+                          {p.name}
+                        </Text>
+                      );
+                    })}
+                  </Box>
+                  <Box
+                    width="full"
+                    display="flex"
+                    justifyContent="space-around"
+                  >
+                    <Button type="submit" isLoading={isSubmitting}>
+                      Send notification
+                    </Button>
+                    <Button onClick={onClose}>Cancel</Button>
+                  </Box>
+                </Form>
+              )}
+            </Formik>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };
