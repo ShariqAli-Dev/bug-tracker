@@ -12,6 +12,7 @@ import { CommentResolver } from "./resolvers/comment";
 import { HelloResolver } from "./resolvers/hello";
 import { NotificationResolver } from "./resolvers/notification";
 import { ProjectResolver } from "./resolvers/project";
+import { TicketResolver } from "./resolvers/ticket";
 import { UserResolver } from "./resolvers/user";
 import { UserProjectResolver } from "./resolvers/user_project";
 const main = async () => {
@@ -59,6 +60,7 @@ const main = async () => {
         UserProjectResolver,
         UserProjectResolver,
         CommentResolver,
+        TicketResolver,
       ],
       validate: false,
     }),
