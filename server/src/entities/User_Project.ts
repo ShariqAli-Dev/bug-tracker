@@ -1,25 +1,24 @@
 import { Field, ObjectType } from "type-graphql";
-import { BaseEntity, Entity, PrimaryColumn } from "typeorm";
-// import { BaseEntity, Entity, ManyToOne, PrimaryColumn } from "typeorm";
-// import { Project } from "./Project";
-// import { Users } from "./Users";
+import { BaseEntity, Entity, PrimaryColumn, ManyToOne } from "typeorm";
+import { Project } from "./Project";
+import { Users } from "./Users";
 
 @ObjectType()
 @Entity()
 export class User_Project extends BaseEntity {
   @Field()
-  @PrimaryColumn()
+  @PrimaryColumn({ type: "int" })
   projectId: number;
 
   @Field()
-  @PrimaryColumn()
+  @PrimaryColumn({ type: "int" })
   userId: number;
 
-  // @Field(() => Project)
-  // @ManyToOne(() => Project, (project) => project.user_project)
-  // project: Project;
+  @Field(() => Project)
+  @ManyToOne(() => Project, (project) => project.user_project)
+  project: Project;
 
-  // @Field(() => Users)
-  // @ManyToOne(() => Users, (user) => user.user_project)
-  // user: Users;
+  @Field(() => Users)
+  @ManyToOne(() => Users, (user) => user.user_project)
+  user: Users;
 }

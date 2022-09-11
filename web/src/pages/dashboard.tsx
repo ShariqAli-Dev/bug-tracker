@@ -29,7 +29,7 @@ const Dashboard: NextPage = () => {
       {/* Components */}
       <Flex w="full" flexDirection="column" overflowY="auto">
         {/* DashHeader Component */}
-        <DashHeader />
+        <DashHeader pageProps={{}} />
         {/* Contents */} {/* <DaGrid/> */}
         <Flex
           flexDirection="column"
@@ -37,7 +37,7 @@ const Dashboard: NextPage = () => {
           alignItems="center"
           h="full"
         >
-          <MyProjectsTable />
+          <MyProjectsTable pageProps={{}} />
           <Flex
             flexDirection={{ base: "column", md: "row" }}
             height="30%"

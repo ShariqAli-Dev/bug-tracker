@@ -20,7 +20,6 @@ import React, { useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
-import useUserStore from "../store/user";
 import { useLoginMutation } from "../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
@@ -38,7 +37,6 @@ const Home: NextPage = () => {
   const [, login] = useLoginMutation();
   const router = useRouter();
   const toast = useToast();
-  const loginZ = useUserStore((state) => state.login);
 
   const handleShowPassword = () => setShowPassword(!showPassword);
 
@@ -91,7 +89,12 @@ const Home: NextPage = () => {
                   });
                 }
               } else if (data?.login.user) {
-                router.push("/dashboard");
+                if (typeof router.query.next === "string") {
+                  router.push(router.query.next);
+                } else {
+                  // worked
+                  router.push("/dashboard");
+                }
               }
             }}
           >

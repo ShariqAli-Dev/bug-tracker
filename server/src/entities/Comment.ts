@@ -18,11 +18,11 @@ export class Comment extends BaseEntity {
   id!: number;
 
   @Field()
-  @Column()
+  @Column({ type: "int" })
   ticketId!: number;
 
   @Field()
-  @Column()
+  @Column({ type: "int" })
   commentorId!: number;
 
   @Field()

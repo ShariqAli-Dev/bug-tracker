@@ -3,5 +3,7 @@ mutation CreateProject($options: ProjectInput!) {
     id
     name
     description
+    createdAt
+    updatedAt
   }
 }

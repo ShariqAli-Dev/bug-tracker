@@ -14,8 +14,8 @@ import {
 import { v4 } from "uuid";
 import {
   FORGET_PASSWORD_PREFIX,
-  __cookieName__,
-  __initialRole__,
+  COOKIE_NAME,
+  INITIAL_ROLE,
 } from "../constants";
 import { myDataSource } from "../data-source";
 import { Users } from "../entities/Users";
@@ -119,6 +119,7 @@ export class UserResolver {
 
     // log in user after change password
     req.session.userId = user.id;
+    req.session.role = user.role;
     return { user };
   }
 
@@ -186,7 +187,7 @@ export class UserResolver {
           id: 200,
           email: options.email,
           password: hashedPassword,
-          role: __initialRole__,
+          role: INITIAL_ROLE,
         })
         .returning("*")
         .execute();
@@ -207,7 +208,7 @@ export class UserResolver {
     // this will set a cookie on the user
     // keep them logged in
     req.session.userId = user.id;
-
+    req.session.role = user.role;
     return {
       user,
     };
@@ -239,6 +240,7 @@ export class UserResolver {
     }
 
     req.session.userId = user.id;
+    req.session.role = user.role;
 
     return {
       user,
@@ -249,7 +251,7 @@ export class UserResolver {
   async logout(@Ctx() { req, res }: MyContext) {
     return new Promise((resolve) =>
       req.session.destroy((err) => {
-        res.clearCookie(__cookieName__);
+        res.clearCookie(COOKIE_NAME);
         if (err) {
           console.log(err);
           resolve(false);

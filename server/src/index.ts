@@ -6,14 +6,16 @@ import session from "express-session";
 import Redis from "ioredis";
 import "reflect-metadata";
 import { buildSchema } from "type-graphql";
-import { __cookieName__, __prod__, __redisSecret__ } from "./constants";
+import { COOKIE_NAME, __prod__, REDIS_SECRET } from "./constants";
 import { myDataSource } from "./data-source";
 import { HelloResolver } from "./resolvers/hello";
 import { NotificationResolver } from "./resolvers/notification";
 import { ProjectResolver } from "./resolvers/project";
 import { UserResolver } from "./resolvers/user";
+import { UserProjectResolver } from "./resolvers/user_project";
 const main = async () => {
   await myDataSource.initialize();
+  await myDataSource.runMigrations();
 
   const app = express();
 
@@ -29,7 +31,7 @@ const main = async () => {
   );
   app.use(
     session({
-      name: __cookieName__,
+      name: COOKIE_NAME,
       store: new RedisStore({
         client: redis,
         disableTouch: true,
@@ -41,7 +43,7 @@ const main = async () => {
         secure: __prod__, // cookie only works in https
       },
       saveUninitialized: false,
-      secret: __redisSecret__,
+      secret: REDIS_SECRET,
       resave: false,
     })
   );
@@ -53,6 +55,8 @@ const main = async () => {
         UserResolver,
         ProjectResolver,
         NotificationResolver,
+        UserProjectResolver,
+        UserProjectResolver,
       ],
       validate: false,
     }),
