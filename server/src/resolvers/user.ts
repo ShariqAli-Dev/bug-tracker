@@ -241,12 +241,7 @@ export class UserResolver {
         errors: [{ field: "email", message: "that email doesn't exist" }],
       };
     }
-    console.log(
-      "supposedly hashed password",
-      user.password,
-      "inputted: ",
-      options.password
-    );
+
     const valid = await argon2.verify(user.password, options.password);
     if (!valid) {
       return { errors: [{ field: "password", message: "incorrect password" }] };

@@ -20,6 +20,6 @@ export const myDataSource = new DataSource({
   synchronize: true,
   logging: true,
   entities: [Comment, Notification, Project, Ticket, User_Project, Users],
-  // migrations: [path.join(__dirname, "./migrations/*")],
+  migrations: [path.join(__dirname, "./migrations/*")],
   subscribers: [],
 });
