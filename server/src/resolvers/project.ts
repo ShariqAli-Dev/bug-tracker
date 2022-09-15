@@ -14,15 +14,18 @@ import { User_Project } from "../entities/User_Project";
 import { MyContext } from "../types";
 
 @InputType()
-class ProjectInput {
-  @Field({ nullable: true })
-  id?: number;
-
+class CreateProjectInput {
   @Field()
   name!: string;
 
   @Field()
   description!: string;
+}
+
+@InputType()
+class UpdateProjectInput extends CreateProjectInput {
+  @Field({ nullable: true })
+  id!: number;
 }
 
 @Resolver()
@@ -41,7 +44,7 @@ export class ProjectResolver {
   @UseMiddleware(isAuth)
   // add middleware so only admin or
   async createProject(
-    @Arg("options") options: ProjectInput,
+    @Arg("options") options: CreateProjectInput,
     @Ctx() { req }: MyContext
   ): Promise<Project> {
     const { name, description } = options;
@@ -63,7 +66,7 @@ export class ProjectResolver {
 
   @Mutation(() => Project, { nullable: true })
   async updateProject(
-    @Arg("options") options: ProjectInput
+    @Arg("options") options: UpdateProjectInput
   ): Promise<Project | null> {
     const { id, name, description } = options;
     const project = await Project.findOne({ where: { id } });

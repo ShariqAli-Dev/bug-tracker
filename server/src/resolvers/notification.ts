@@ -24,19 +24,19 @@ class UpdateNotificationInput {
 @Resolver()
 export class NotificationResolver {
   @Query(() => [Notification])
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async notifications(): Promise<Notification[]> {
     return await Notification.find();
   }
 
   @Query(() => Notification, { nullable: true })
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async notification(@Arg("id") id: number): Promise<Notification | null> {
     return await Notification.findOne({ where: { id } });
   }
 
   @Query(() => [Notification] || [])
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async userNotifications(
     @Ctx() { req }: MyContext
   ): Promise<Notification[] | []> {
@@ -52,7 +52,7 @@ export class NotificationResolver {
   }
 
   @Mutation(() => Notification)
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async createNotification(
     @Arg("message") message: string,
     @Ctx() { req }: MyContext
@@ -64,7 +64,7 @@ export class NotificationResolver {
   }
 
   @Mutation(() => Notification, { nullable: true })
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async updateNotification(
     @Arg("options")
     options: UpdateNotificationInput
@@ -84,7 +84,7 @@ export class NotificationResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async deleteNotification(
     @Arg("id") id: number,
     @Ctx() { req }: MyContext
