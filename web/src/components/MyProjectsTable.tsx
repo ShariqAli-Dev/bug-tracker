@@ -29,7 +29,11 @@ import { useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { useCreateProjectMutation } from "../generated/graphql";
+import {
+  useCreateProjectMutation,
+  User_Project,
+  useUserProjectsQuery,
+} from "../generated/graphql";
 import useProjectsStore from "../store/projects";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { InputField } from "./InputField";
@@ -41,7 +45,8 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 const MyProjectsTable = () => {
   const initialData = useProjectsStore((state) => state.projects);
   const toast = useToast();
-
+  const [{ data, fetching, error }] = useUserProjectsQuery();
+  console.log(data?.UserProjects);
   const initialRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
@@ -58,11 +63,11 @@ const MyProjectsTable = () => {
         columns: [
           {
             Header: "Project",
-            accessor: "name",
+            accessor: "project.name",
           },
           {
             Header: "Description",
-            accessor: "description",
+            accessor: "project.description",
           },
           {
             Header: "",
@@ -91,7 +96,7 @@ const MyProjectsTable = () => {
   } = useTable(
     {
       columns,
-      data: initialData,
+      data: data?.UserProjects as any,
       initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
@@ -99,7 +104,7 @@ const MyProjectsTable = () => {
 
   return (
     <>
-      <TableContainer whiteSpace="normal">
+      <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
         <Flex
           justifyContent="space-between"
           alignItems="center"
