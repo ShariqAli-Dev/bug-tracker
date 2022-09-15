@@ -9,15 +9,29 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { myDataSource } from "../data-source";
 
 @Resolver()
 export class UserProjectResolver {
   @Query(() => [User_Project])
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth)
   async UserProjects(@Ctx() { req }: MyContext): Promise<User_Project[]> {
-    return await User_Project.find({
-      where: { userId: req.session.userId },
-    });
+    // return await User_Project.find({
+    //   where: { userId: req.session.userId },
+    // });
+    const projects = await myDataSource.query(`
+    select up.*,
+    json_build_object(
+      'id', p.id,
+      'name', p.name,
+      'description', p.description,
+      'createdAt', p."createdAt",
+      'updatedAt', p."updatedAt"
+    ) project
+    from user_project up
+    inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
+    `);
+    return projects;
   }
 
   @Mutation(() => Boolean)

@@ -3,7 +3,9 @@ query UserProjects {
     projectId
     userId
     project {
+      id
       name
+      description
     }
   }
 }
