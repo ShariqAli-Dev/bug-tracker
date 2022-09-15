@@ -34,7 +34,6 @@ import {
   User_Project,
   useUserProjectsQuery,
 } from "../generated/graphql";
-import useProjectsStore from "../store/projects";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { InputField } from "./InputField";
 const ArrowRight = chakra(AiOutlineArrowRight);
@@ -43,7 +42,6 @@ const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 const MyProjectsTable = () => {
-  const initialData = useProjectsStore((state) => state.projects);
   const toast = useToast();
   const [{ data, fetching, error }] = useUserProjectsQuery();
   console.log(data?.UserProjects);
