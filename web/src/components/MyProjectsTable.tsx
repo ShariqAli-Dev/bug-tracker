@@ -4,12 +4,6 @@ import {
   chakra,
   Flex,
   IconButton,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
@@ -20,21 +14,16 @@ import {
   Tooltip,
   Tr,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
 import { nanoid } from "nanoid";
 import { withUrqlClient } from "next-urql";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import {
-  useCreateProjectMutation,
-  useUserProjectsQuery,
-} from "../generated/graphql";
+import { useUserProjectsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { InputField } from "./InputField";
+import ProjectModal from "./ProjectModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
@@ -42,16 +31,11 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 const MyProjectsTable = () => {
   const [tableData, setTableData] = useState([]);
-  const toast = useToast();
   const [{ data, fetching }] = useUserProjectsQuery();
-  const initialRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
-  const [team, setTeam] = useState([
-    { name: "shariq", selected: false },
-    { name: "john", selected: false },
-  ]);
-  const [, createProject] = useCreateProjectMutation();
+  const initialRef = useRef(null);
+
   const columns = useMemo(
     () => [
       {
@@ -243,130 +227,13 @@ const MyProjectsTable = () => {
           </Flex>
         </>
       )}
-      <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
+      <ProjectModal
+        pageProps={{}}
         isOpen={isOpen}
         onClose={onClose}
-        closeOnOverlayClick={false}
-        size={{ base: "xs", sm: "sm", md: "lg" }}
-        isCentered
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create Project</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={8}>
-            <Formik
-              initialValues={{
-                name: "",
-                description: "",
-              }}
-              onSubmit={async (options) => {
-                try {
-                  const { data } = await createProject({ options });
-                  console.log(data?.createProject);
-                  if (!toast.isActive("newProjectSuccess")) {
-                    toast({
-                      id: "newProjectSuccess",
-                      title: "Project Sucess",
-                      description: "We succesfully created the project",
-                      status: "success",
-                      duration: 3000,
-                      isClosable: true,
-                      variant: "subtle",
-                      containerStyle: {
-                        color: "primary",
-                      },
-                      position: "top",
-                    });
-                  }
-                } catch {
-                  if (!toast.isActive("newProjectError")) {
-                    toast({
-                      id: "newProjectError",
-                      title: "Project Error",
-                      description:
-                        "Unfortunately, we  could not create the project",
-                      status: "error",
-                      duration: 3000,
-                      isClosable: true,
-                      variant: "subtle",
-                      containerStyle: {
-                        color: "primary",
-                      },
-                      position: "top",
-                    });
-                  }
-                }
-              }}
-            >
-              {({ values, handleChange, isSubmitting }) => (
-                <Form>
-                  {/* Project Name */}
-                  <Box pb={2}>
-                    <InputField
-                      onChange={handleChange}
-                      value={values.name}
-                      name="name"
-                      label="name"
-                      required
-                    />
-                  </Box>
-                  {/* Project Description */}
-                  <Box pb={2}>
-                    <InputField
-                      onChange={handleChange}
-                      value={values.description}
-                      name="description"
-                      label="description"
-                      textarea
-                      required
-                    />
-                  </Box>
-                  {/* Add Team Members */}
-                  <Box
-                    overflowY="auto"
-                    height="150px"
-                    scrollBehavior="auto"
-                    p={4}
-                    borderColor="light-blue"
-                    borderWidth={0.1}
-                    borderRadius={"xl"}
-                  >
-                    {team.map((p, pdx) => {
-                      return (
-                        <Text
-                          fontSize={"1rem"}
-                          onClick={() => {
-                            team[pdx].selected = !team[pdx].selected;
-                            setTeam([...team]);
-                          }}
-                          backgroundColor={p.selected ? "primary" : "white"}
-                          color={p.selected ? "tertiary" : "secondary"}
-                          key={p.name}
-                        >
-                          {p.name}
-                        </Text>
-                      );
-                    })}
-                  </Box>
-                  <Box
-                    width="full"
-                    display="flex"
-                    justifyContent="space-around"
-                  >
-                    <Button type="submit" isLoading={isSubmitting}>
-                      Send notification
-                    </Button>
-                    <Button onClick={onClose}>Cancel</Button>
-                  </Box>
-                </Form>
-              )}
-            </Formik>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+        finalRef={finalRef}
+        initialRef={initialRef}
+      />
     </>
   );
 };
