@@ -3,13 +3,11 @@ import QueryForm from "./QueryForm";
 import Notifications from "./Notifications";
 import UserActions from "./UserActions";
 import BurgerMenu from "./BurgerMenu";
-import useUserStore from "../store/user";
 import { useMeQuery } from "../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const DashHeader = () => {
-  const role = useUserStore((state) => state.role);
   const [{ data }] = useMeQuery();
   return (
     <Flex
@@ -35,7 +33,7 @@ const DashHeader = () => {
                 textDecoration: "underline",
               }}
             >
-              {role.toUpperCase()}
+              {data?.me?.role.toUpperCase()}
             </span>
           </Text>
         </Flex>

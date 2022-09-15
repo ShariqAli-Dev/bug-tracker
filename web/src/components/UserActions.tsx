@@ -10,24 +10,15 @@ import {
 import { useRouter } from "next/router";
 import { FaUserAlt } from "react-icons/fa";
 import { useLogoutMutation } from "../generated/graphql";
-import useProjectsStore from "../store/projects";
-import useTicketsStore from "../store/tickets";
-import useUserStore from "../store/user";
 
 const UserAvatar = chakra(FaUserAlt);
 
 const UserActions = () => {
   const router = useRouter();
   const [{ fetching }, logout] = useLogoutMutation();
-  const resetUser = useUserStore((state) => state.reset);
-  const resetTickets = useTicketsStore((state) => state.reset);
-  const resetProjects = useProjectsStore((state) => state.reset);
 
   const logoutUser = () => {
     logout({});
-    resetUser();
-    resetTickets();
-    resetProjects();
     router.push("/");
   };
 

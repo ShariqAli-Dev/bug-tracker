@@ -10,7 +10,6 @@ import {
 import { NextPage } from "next";
 import Link from "next/link";
 import { FaBug } from "react-icons/fa";
-import useUserStore from "../store/user";
 
 const avatars = [
   {
@@ -32,8 +31,6 @@ const avatars = [
 ];
 
 const Demo: NextPage = () => {
-  const demoLogin = useUserStore((state) => state.demoLogin);
-
   return (
     <Flex
       flexDirection="column"
@@ -68,7 +65,7 @@ const Demo: NextPage = () => {
         >
           {avatars.map(({ role, url }) => {
             return (
-              <Box key={role} onClick={() => demoLogin(role)}>
+              <Box key={role} onClick={() => {}}>
                 <Link href="dashboard">
                   <Box cursor="pointer">
                     <Flex
