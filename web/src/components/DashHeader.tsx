@@ -27,7 +27,7 @@ const DashHeader = () => {
           padding=".5rem"
         >
           <Text marginRight={1} fontSize={{ base: "md", md: "lg" }}>
-            Logged in as: {data?.me?.role}
+            Logged in as:{" "}
             <span
               style={{
                 textDecoration: "underline",

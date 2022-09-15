@@ -157,7 +157,7 @@ const MyProjectsTable = () => {
                             borderColor="primary"
                           >
                             {cell.render("Cell")}
-                            <div>Details</div>
+                            {!cell.column.Header && <Box>Details</Box>}
                           </Td>
                         );
                       })}

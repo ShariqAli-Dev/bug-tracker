@@ -60,8 +60,7 @@ const ProjectModal = ({
             }}
             onSubmit={async (options) => {
               try {
-                const { data } = await createProject({ options });
-                console.log(data?.createProject);
+                await createProject({ options });
                 if (!toast.isActive("newProjectSuccess")) {
                   toast({
                     id: "newProjectSuccess",

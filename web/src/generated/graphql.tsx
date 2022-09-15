@@ -27,6 +27,11 @@ export type Comment = {
   userId: Scalars['Float'];
 };
 
+export type CreateProjectInput = {
+  description: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
@@ -76,7 +81,7 @@ export type MutationCreateNotificationArgs = {
 
 
 export type MutationCreateProjectArgs = {
-  options: ProjectInput;
+  options: CreateProjectInput;
 };
 
 
@@ -126,7 +131,7 @@ export type MutationUpdateNotificationArgs = {
 
 
 export type MutationUpdateProjectArgs = {
-  options: ProjectInput;
+  options: UpdateProjectInput;
 };
 
 export type Notification = {
@@ -145,12 +150,6 @@ export type Project = {
   id: Scalars['Float'];
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
-};
-
-export type ProjectInput = {
-  description: Scalars['String'];
-  id?: InputMaybe<Scalars['Float']>;
-  name: Scalars['String'];
 };
 
 export type Query = {
@@ -201,6 +200,12 @@ export type Ticket = {
 export type UpdateNotificationInput = {
   id: Scalars['Float'];
   read: Scalars['Boolean'];
+};
+
+export type UpdateProjectInput = {
+  description: Scalars['String'];
+  id?: InputMaybe<Scalars['Float']>;
+  name: Scalars['String'];
 };
 
 export type UserInput = {
@@ -268,7 +273,7 @@ export type CreateNotificationMutationVariables = Exact<{
 export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } };
 
 export type CreateProjectMutationVariables = Exact<{
-  options: ProjectInput;
+  options: CreateProjectInput;
 }>;
 
 
@@ -363,7 +368,7 @@ export function useCreateNotificationMutation() {
   return Urql.useMutation<CreateNotificationMutation, CreateNotificationMutationVariables>(CreateNotificationDocument);
 };
 export const CreateProjectDocument = gql`
-    mutation CreateProject($options: ProjectInput!) {
+    mutation CreateProject($options: CreateProjectInput!) {
   createProject(options: $options) {
     id
     name
