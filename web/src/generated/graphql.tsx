@@ -30,6 +30,8 @@ export type Comment = {
 export type CreateProjectInput = {
   description: Scalars['String'];
   name: Scalars['String'];
+  priority: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type FieldError = {
@@ -149,7 +151,32 @@ export type Project = {
   description: Scalars['String'];
   id: Scalars['Float'];
   name: Scalars['String'];
+  priority: Scalars['String'];
+  status: Scalars['String'];
+  type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type ProjectByPriority = {
+  __typename?: 'ProjectByPriority';
+  high: Scalars['String'];
+  immediate: Scalars['String'];
+  low: Scalars['String'];
+  medium: Scalars['String'];
+};
+
+export type ProjectByStatus = {
+  __typename?: 'ProjectByStatus';
+  in_progress: Scalars['String'];
+  new: Scalars['String'];
+  resolved: Scalars['String'];
+};
+
+export type ProjectByType = {
+  __typename?: 'ProjectByType';
+  bug: Scalars['String'];
+  feature: Scalars['String'];
+  issue: Scalars['String'];
 };
 
 export type Query = {
@@ -162,6 +189,9 @@ export type Query = {
   notification?: Maybe<Notification>;
   notifications: Array<Notification>;
   project?: Maybe<Project>;
+  projectByPriority: Array<ProjectByPriority>;
+  projectByStatus: Array<ProjectByStatus>;
+  projectByType: Array<ProjectByType>;
   projects: Array<Project>;
   tickets: Array<Ticket>;
   userComments: Array<Comment>;
@@ -206,6 +236,8 @@ export type UpdateProjectInput = {
   description: Scalars['String'];
   id?: InputMaybe<Scalars['Float']>;
   name: Scalars['String'];
+  priority: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UserInput = {
@@ -277,7 +309,7 @@ export type CreateProjectMutationVariables = Exact<{
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', id: number, name: string, description: string, createdAt: any, updatedAt: any } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', id: number, name: string, description: string, priority: string, type: string, status: string, createdAt: any, updatedAt: any } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -373,6 +405,9 @@ export const CreateProjectDocument = gql`
     id
     name
     description
+    priority
+    type
+    status
     createdAt
     updatedAt
   }
