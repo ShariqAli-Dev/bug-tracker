@@ -9,6 +9,7 @@ export const ROLES = {
   DEMO_SUBMITTER: "submitter",
   DEMO_DEVELOPER: "developer",
 };
+
 export const INITIAL_ROLE = ROLES.DEVELOPER;
 
 export const FORGET_PASSWORD_PREFIX = "forget-password:";
