@@ -6,10 +6,8 @@ import {
   Mutation,
   Query,
   Resolver,
-  UseMiddleware,
 } from "type-graphql";
 import { Notification } from "../entities/Notification";
-import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
 
 @InputType()

@@ -49,7 +49,7 @@ const Dashboard: NextPage = () => {
               height={{ base: "full", md: "90%" }}
               width={{ base: "60%", md: "27%" }}
             >
-              <TicketsByType />
+              <TicketsByType pageProps={{}} />
             </Box>
             <Box
               height={{ base: "full", md: "90%" }}
