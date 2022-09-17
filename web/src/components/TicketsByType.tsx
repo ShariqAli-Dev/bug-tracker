@@ -9,12 +9,12 @@ ChartJs.register(Tooltip, Title, ArcElement, Legend);
 
 const TicketsByType = () => {
   const [{ data: queryData, fetching }] = useProjectByTypeQuery();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>({});
   console.log(queryData);
 
   useEffect(() => {
     if (!fetching) {
-      setData(queryData?.projectByType[0]);
+      setData(queryData?.projectByType[0] as any);
     } else {
       return;
     }
