@@ -14,6 +14,7 @@ import { isAuth } from "../middleware/isAuth";
 import { User_Project } from "../entities/User_Project";
 import { MyContext } from "../types";
 import { myDataSource } from "../data-source";
+import { CHART_STATUS } from "../constants";
 
 @ObjectType()
 class ProjectByPriority {
@@ -61,6 +62,12 @@ class CreateProjectInput {
 
   @Field()
   description!: string;
+
+  @Field()
+  type!: string;
+
+  @Field()
+  priority!: string;
 }
 
 @InputType()
@@ -84,8 +91,8 @@ export class ProjectResolver {
   @Query(() => [ProjectByPriority])
   async projectByPriority(): Promise<ProjectByPriority[]> {
     return await myDataSource.query(`
-    select 
-      count(*) 
+    select
+      count(*)
         filter (where "p".priority = 'low') as low,
       count(*)
         filter (where "p".priority = 'medium') as medium,
@@ -93,51 +100,55 @@ export class ProjectResolver {
         filter (where "p".priority = 'high') as high,
       count(*)
         filter (where "p".priority = 'immediate') as "immediate"
-    from project "p" 
+    from project "p"
     `);
   }
 
   @Query(() => [ProjectByType])
   async projectByType(): Promise<ProjectByType[]> {
     return await myDataSource.query(`
-    select 
-      count(*) 
+    select
+      count(*)
         filter (where "p".type = 'issue') as issue,
       count(*)
         filter (where "p".type = 'bug') as bug,
       count(*)
         filter (where "p".type = 'feature') as feature
-    from project "p" 
+    from project "p"
     `);
   }
 
   @Query(() => [ProjectByStatus])
   async projectByStatus(): Promise<ProjectByStatus[]> {
     return await myDataSource.query(`
-    select 
-      count(*) 
+    select
+      count(*)
         filter (where "p".status = 'new') as new,
       count(*)
         filter (where "p".status = 'in_progress') as in_progress,
       count(*)
         filter (where "p".status = 'resolved') as resolved
-    from project "p" 
+    from project "p"
     `);
   }
 
+  @Mutation(() => Project)
   @UseMiddleware(isAuth)
   // add middleware so only admin or
   async createProject(
     @Arg("options") options: CreateProjectInput,
     @Ctx() { req }: MyContext
   ): Promise<Project> {
-    const { name, description } = options;
-    if (!name || !description) {
+    const { name, description, type, priority } = options;
+    if (!name || !description || !type || !priority) {
       throw new Error("invalid input");
     }
     const createdProject = await Project.create({
       description,
       name,
+      type,
+      priority,
+      status: CHART_STATUS.NEW,
     }).save();
 
     await User_Project.create({
