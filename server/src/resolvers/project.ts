@@ -5,6 +5,7 @@ import {
   Field,
   InputType,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
@@ -12,6 +13,22 @@ import {
 import { isAuth } from "../middleware/isAuth";
 import { User_Project } from "../entities/User_Project";
 import { MyContext } from "../types";
+import { myDataSource } from "../data-source";
+
+@ObjectType()
+class PriorityType {
+  @Field()
+  low: string;
+
+  @Field()
+  medium: string;
+
+  @Field()
+  high: string;
+
+  @Field()
+  immediate: string;
+}
 
 @InputType()
 class CreateProjectInput {
@@ -40,7 +57,21 @@ export class ProjectResolver {
     return await Project.findOne({ where: { id } });
   }
 
-  @Mutation(() => Project)
+  @Query(() => [PriorityType])
+  async projectByPriority(): Promise<PriorityType[]> {
+    return await myDataSource.query(`
+    select 
+      count(*) 
+        filter (where "p".priority = 'low') as low,
+      count(*)
+        filter (where "p".priority = 'medium') as medium,
+      count(*)
+        filter (where "p".priority = 'high') as high,
+      count(*)
+        filter (where "p".priority = 'immediate') as "immediate"
+    from project "p" 
+    `);
+  }
   @UseMiddleware(isAuth)
   // add middleware so only admin or
   async createProject(
