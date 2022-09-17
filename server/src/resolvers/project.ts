@@ -42,6 +42,18 @@ class ProjectByType {
   feature: string;
 }
 
+@ObjectType()
+class ProjectByStatus {
+  @Field()
+  new: string;
+
+  @Field()
+  in_progress: string;
+
+  @Field()
+  resolved: string;
+}
+
 @InputType()
 class CreateProjectInput {
   @Field()
@@ -95,6 +107,20 @@ export class ProjectResolver {
         filter (where "p".type = 'bug') as bug,
       count(*)
         filter (where "p".type = 'feature') as feature
+    from project "p" 
+    `);
+  }
+
+  @Query(() => [ProjectByStatus])
+  async projectByStatus(): Promise<ProjectByStatus[]> {
+    return await myDataSource.query(`
+    select 
+      count(*) 
+        filter (where "p".status = 'new') as new,
+      count(*)
+        filter (where "p".status = 'in_progress') as in_progress,
+      count(*)
+        filter (where "p".status = 'resolved') as resolved
     from project "p" 
     `);
   }
