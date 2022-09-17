@@ -16,7 +16,7 @@ import { MyContext } from "../types";
 import { myDataSource } from "../data-source";
 
 @ObjectType()
-class PriorityType {
+class ProjectByPriority {
   @Field()
   low: string;
 
@@ -28,6 +28,18 @@ class PriorityType {
 
   @Field()
   immediate: string;
+}
+
+@ObjectType()
+class ProjectByType {
+  @Field()
+  issue: string;
+
+  @Field()
+  bug: string;
+
+  @Field()
+  feature: string;
 }
 
 @InputType()
@@ -57,8 +69,8 @@ export class ProjectResolver {
     return await Project.findOne({ where: { id } });
   }
 
-  @Query(() => [PriorityType])
-  async projectByPriority(): Promise<PriorityType[]> {
+  @Query(() => [ProjectByPriority])
+  async projectByPriority(): Promise<ProjectByPriority[]> {
     return await myDataSource.query(`
     select 
       count(*) 
@@ -72,6 +84,21 @@ export class ProjectResolver {
     from project "p" 
     `);
   }
+
+  @Query(() => [ProjectByType])
+  async projectByType(): Promise<ProjectByType[]> {
+    return await myDataSource.query(`
+    select 
+      count(*) 
+        filter (where "p".type = 'issue') as issue,
+      count(*)
+        filter (where "p".type = 'bug') as bug,
+      count(*)
+        filter (where "p".type = 'feature') as feature
+    from project "p" 
+    `);
+  }
+
   @UseMiddleware(isAuth)
   // add middleware so only admin or
   async createProject(
