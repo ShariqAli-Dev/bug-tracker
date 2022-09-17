@@ -89,7 +89,9 @@ export class ProjectResolver {
   }
 
   @Query(() => [ProjectByPriority])
-  async projectByPriority(): Promise<ProjectByPriority[]> {
+  async projectByPriority(
+    @Ctx() { req }: MyContext
+  ): Promise<ProjectByPriority[]> {
     return await myDataSource.query(`
     select
       count(*)
@@ -100,12 +102,13 @@ export class ProjectResolver {
         filter (where "p".priority = 'high') as high,
       count(*)
         filter (where "p".priority = 'immediate') as "immediate"
-    from project "p"
+    from 
+      user_project up inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
     `);
   }
 
   @Query(() => [ProjectByType])
-  async projectByType(): Promise<ProjectByType[]> {
+  async projectByType(@Ctx() { req }: MyContext): Promise<ProjectByType[]> {
     return await myDataSource.query(`
     select
       count(*)
@@ -114,12 +117,13 @@ export class ProjectResolver {
         filter (where "p".type = 'bug') as bug,
       count(*)
         filter (where "p".type = 'feature') as feature
-    from project "p"
+    from 
+      user_project up inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
     `);
   }
 
   @Query(() => [ProjectByStatus])
-  async projectByStatus(): Promise<ProjectByStatus[]> {
+  async projectByStatus(@Ctx() { req }: MyContext): Promise<ProjectByStatus[]> {
     return await myDataSource.query(`
     select
       count(*)
@@ -128,7 +132,8 @@ export class ProjectResolver {
         filter (where "p".status = 'in_progress') as in_progress,
       count(*)
         filter (where "p".status = 'resolved') as resolved
-    from project "p"
+    from 
+      user_project up inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
     `);
   }
 
