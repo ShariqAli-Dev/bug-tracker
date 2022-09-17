@@ -10,6 +10,25 @@ export const ROLES = {
   DEMO_DEVELOPER: "developer",
 };
 
+export const CHART_TYPES = {
+  ISSUE: "issue",
+  BUG: "bug",
+  FEATURE: "feature",
+};
+
+export const CHART_PRIORITIES = {
+  LOW: "low",
+  MEDIUM: "medium",
+  HIGH: "high",
+  IMMEDIATE: "immediate",
+};
+
+export const CHART_STATUS = {
+  NEW: "new",
+  IN_PROGRESS: "in_progress",
+  RESOLVED: "resolved",
+};
+
 export const INITIAL_ROLE = ROLES.DEVELOPER;
 
 export const FORGET_PASSWORD_PREFIX = "forget-password:";
