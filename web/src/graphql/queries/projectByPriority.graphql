@@ -1,0 +1,8 @@
+query ProjectByPriority {
+  projectByPriority {
+    low
+    medium
+    high
+    immediate
+  }
+}
