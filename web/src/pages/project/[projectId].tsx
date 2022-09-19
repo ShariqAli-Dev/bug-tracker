@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Center, Divider, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
@@ -82,20 +82,29 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               width="80%"
               margin="auto"
             >
-              <Box width="45%">
+              <Box width="50%">
                 <label>Project Name</label>
                 <Text marginLeft={5}>{data?.project?.name}</Text>
               </Box>
-              <Box width="45%">
+              <Box width="50%">
                 <label>Project Description</label>
                 <Text marginLeft={5}>{data?.project?.description}</Text>
               </Box>
             </Flex>
           </Box>
           {/* Bottom Duplex */}
-          <Flex>
-            <Box></Box>
-            <Box></Box>
+          <Flex justifyContent="space-around">
+            <Box width="50%">
+              <SectionHeader title="Assigned Personnel">
+                <Text>Current users on this project</Text>
+              </SectionHeader>
+            </Box>
+
+            <Box width="50%">
+              <SectionHeader title="Tickets for this Project">
+                <Text>Condensed Ticket Details</Text>
+              </SectionHeader>
+            </Box>
           </Flex>
         </Box>
       </Flex>
