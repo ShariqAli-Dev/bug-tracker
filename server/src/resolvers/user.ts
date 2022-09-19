@@ -5,7 +5,6 @@ import {
   Field,
   FieldResolver,
   InputType,
-  Int,
   Mutation,
   ObjectType,
   Query,
@@ -35,12 +34,18 @@ class FieldError {
 }
 
 @InputType()
-class UserInput {
+class UserLogin {
   @Field()
   email: string;
 
   @Field()
   password: string;
+}
+
+@InputType()
+class UserRegister extends UserLogin {
+  @Field()
+  name: string;
 }
 
 // can return from mutations
@@ -162,21 +167,12 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => Boolean)
-  async revokeRefreshTokenForUser(@Arg("id", () => Int) id: number) {
-    const user = await Users.findOne({ where: { id } });
-    if (user) {
-      Users.update({ id }, { tokenVersion: user.tokenVersion + 1 });
-    }
-
-    return true;
-  }
-
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UserInput,
+    @Arg("options") options: UserRegister,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
+    console.log(options);
     if (options.password.length <= 2) {
       return {
         errors: [
@@ -187,11 +183,20 @@ export class UserResolver {
         ],
       };
     }
+    if (options.name.length <= 2) {
+      return {
+        errors: [
+          {
+            field: "name",
+            message: "length must be greater than 2",
+          },
+        ],
+      };
+    }
 
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
-      // UserInput.create({}).save()
       const result = await myDataSource
         .createQueryBuilder()
         .insert()
@@ -199,6 +204,7 @@ export class UserResolver {
         .values({
           id: 200,
           email: options.email,
+          name: options.name,
           password: hashedPassword,
           role: INITIAL_ROLE,
         })
@@ -229,7 +235,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UserInput,
+    @Arg("options") options: UserLogin,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await Users.findOne({

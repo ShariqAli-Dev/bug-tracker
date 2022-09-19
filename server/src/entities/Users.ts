@@ -28,8 +28,8 @@ export class Users extends BaseEntity {
   role!: string;
 
   @Field()
-  @Column({ type: "int", default: 0 })
-  tokenVersion!: number;
+  @Column()
+  name!: string;
 
   @Column()
   password!: string;

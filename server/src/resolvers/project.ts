@@ -15,6 +15,7 @@ import { User_Project } from "../entities/User_Project";
 import { MyContext } from "../types";
 import { myDataSource } from "../data-source";
 import { CHART_STATUS } from "../constants";
+import { Users } from "../entities/Users";
 
 @ObjectType()
 class ProjectByPriority {
@@ -53,6 +54,18 @@ class ProjectByStatus {
 
   @Field()
   resolved: string;
+}
+
+@ObjectType()
+class AssignedPersonnel {
+  @Field()
+  projectId: number;
+
+  @Field()
+  userId: number;
+
+  @Field()
+  user: Users;
 }
 
 @InputType()
@@ -134,6 +147,20 @@ export class ProjectResolver {
         filter (where "p".status = 'resolved') as resolved
     from 
       user_project up inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
+    `);
+  }
+
+  @Query(() => [AssignedPersonnel])
+  async assignedPersonnel(@Arg("projectId") projectId: number) {
+    return await myDataSource.query(`
+    select up.*,
+    json_build_object(
+      'id', u.id,
+      'role', u.role,
+      'email', u.email
+    ) "user"
+    from user_project up
+    inner join users u on u.id = up."userId" where up."projectId" = ${projectId}
     `);
   }
 
