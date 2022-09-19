@@ -99,7 +99,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               <SectionHeader title="Assigned Personnel">
                 <Text>Current users on this project</Text>
               </SectionHeader>
-              <AssignedPersonnel pageProps={{}} />
+              <AssignedPersonnel pageProps={{}} projectId={data?.project?.id} />
             </Box>
 
             <Box width="50%">

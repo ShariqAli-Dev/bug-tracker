@@ -1,0 +1,10 @@
+query AssignedPersonnel($projectId: Float!) {
+  assignedPersonnel(projectId: $projectId) {
+    user {
+      id
+      email
+      role
+      name
+    }
+  }
+}

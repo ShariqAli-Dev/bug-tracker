@@ -199,6 +199,7 @@ export type Query = {
   userComments: Array<Comment>;
   userNotifications: Array<Notification>;
   userTickets: Array<Ticket>;
+  users: Array<Users>;
 };
 
 
@@ -356,6 +357,13 @@ export type UpdateNotificationMutationVariables = Exact<{
 
 
 export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } | null };
+
+export type AssignedPersonnelQueryVariables = Exact<{
+  projectId: Scalars['Float'];
+}>;
+
+
+export type AssignedPersonnelQuery = { __typename?: 'Query', assignedPersonnel: Array<{ __typename?: 'AssignedPersonnel', user: { __typename?: 'Users', id: number, email: string, role: string, name: string } }> };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -526,6 +534,22 @@ export const UpdateNotificationDocument = gql`
 
 export function useUpdateNotificationMutation() {
   return Urql.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument);
+};
+export const AssignedPersonnelDocument = gql`
+    query AssignedPersonnel($projectId: Float!) {
+  assignedPersonnel(projectId: $projectId) {
+    user {
+      id
+      email
+      role
+      name
+    }
+  }
+}
+    `;
+
+export function useAssignedPersonnelQuery(options: Omit<Urql.UseQueryArgs<AssignedPersonnelQueryVariables>, 'query'>) {
+  return Urql.useQuery<AssignedPersonnelQuery, AssignedPersonnelQueryVariables>({ query: AssignedPersonnelDocument, ...options });
 };
 export const ByeDocument = gql`
     query Bye {

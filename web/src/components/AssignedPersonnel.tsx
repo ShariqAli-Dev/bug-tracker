@@ -10,12 +10,12 @@ import {
 import { nanoid } from "nanoid";
 import { withUrqlClient } from "next-urql";
 import { useMemo, useState } from "react";
-
 import { usePagination, useTable } from "react-table";
+import { useAssignedPersonnelQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
-const Hypothesis = () => {
-  const [tableData, setTableData] = useState([{}]);
+const AssignedPersonnel = ({ projectId }: { projectId: number }) => {
+  const [{ data }] = useAssignedPersonnelQuery({ variables: { projectId } });
 
   const columns = useMemo(
     () => [
@@ -24,15 +24,15 @@ const Hypothesis = () => {
         columns: [
           {
             Header: "User Name",
-            accessor: "project.name",
+            accessor: "user.name",
           },
           {
             Header: "Email",
-            accessor: "project.description",
+            accessor: "user.email",
           },
           {
             Header: "Role",
-            accessor: "details",
+            accessor: "user.role",
           },
         ],
       },
@@ -56,13 +56,11 @@ const Hypothesis = () => {
   } = useTable(
     {
       columns,
-      data: tableData,
+      data: data?.assignedPersonnel as any,
       initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
   );
-
-  console.log({ page }, "hypothesis");
 
   return (
     <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
@@ -116,4 +114,4 @@ const Hypothesis = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Hypothesis);
+export default withUrqlClient(createUrqlClient)(AssignedPersonnel);
