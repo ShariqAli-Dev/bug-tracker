@@ -16,6 +16,13 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AssignedPersonnel = {
+  __typename?: 'AssignedPersonnel';
+  projectId: Scalars['Float'];
+  user: Users;
+  userId: Scalars['Float'];
+};
+
 export type Comment = {
   __typename?: 'Comment';
   createdAt: Scalars['DateTime'];
@@ -54,7 +61,6 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   register: UserResponse;
-  revokeRefreshTokenForUser: Scalars['Boolean'];
   unassignUser: Scalars['Boolean'];
   updateNotification?: Maybe<Notification>;
   updateProject?: Maybe<Project>;
@@ -114,11 +120,6 @@ export type MutationLoginArgs = {
 
 export type MutationRegisterArgs = {
   options: UserInput;
-};
-
-
-export type MutationRevokeRefreshTokenForUserArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -182,6 +183,7 @@ export type ProjectByType = {
 export type Query = {
   __typename?: 'Query';
   UserProjects: Array<User_Project>;
+  assignedPersonnel: Array<AssignedPersonnel>;
   bye: Scalars['String'];
   comments: Array<Comment>;
   hello: Scalars['String'];
@@ -197,6 +199,11 @@ export type Query = {
   userComments: Array<Comment>;
   userNotifications: Array<Notification>;
   userTickets: Array<Ticket>;
+};
+
+
+export type QueryAssignedPersonnelArgs = {
+  projectId: Scalars['Float'];
 };
 
 
@@ -242,6 +249,7 @@ export type UpdateProjectInput = {
 
 export type UserInput = {
   email: Scalars['String'];
+  name: Scalars['String'];
   password: Scalars['String'];
 };
 
@@ -264,8 +272,8 @@ export type Users = {
   createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['Float'];
+  name: Scalars['String'];
   role: Scalars['String'];
-  tokenVersion: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
 

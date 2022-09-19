@@ -90,8 +90,6 @@ const MyProjectsTable = () => {
     }
   }, [data, fetching]);
 
-  console.log(page);
-
   return (
     <>
       {!fetching && (

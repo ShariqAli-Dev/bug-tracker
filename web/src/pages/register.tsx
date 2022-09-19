@@ -68,7 +68,7 @@ const Register: NextPage = () => {
         {/* FORM  */}
         <Box minW={{ base: "90%", md: "458px" }}>
           <Formik
-            initialValues={{ email: "", password: "" }}
+            initialValues={{ email: "", password: "", name: "" }}
             onSubmit={async (values) => {
               const { data } = await register({ options: values });
               if (data?.register.errors) {
@@ -98,6 +98,24 @@ const Register: NextPage = () => {
             {({ values, handleChange, isSubmitting }) => (
               <Form>
                 <Stack spacing={4} p="1rem">
+                  {/* NAME */}
+                  <FormControl>
+                    <InputGroup color="#7A7A7A">
+                      <InputLeftElement pointerEvents="none">
+                        <CFaUserAlt />
+                      </InputLeftElement>
+                      <Input
+                        type="name"
+                        placeholder="Name"
+                        id="name"
+                        name="name"
+                        onChange={handleChange}
+                        value={values.name}
+                        autoComplete="name"
+                        required
+                      />
+                    </InputGroup>
+                  </FormControl>
                   {/* EMAIL */}
                   <FormControl>
                     <InputGroup color="#7A7A7A">
