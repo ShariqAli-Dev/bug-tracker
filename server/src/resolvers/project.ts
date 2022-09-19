@@ -157,7 +157,8 @@ export class ProjectResolver {
     json_build_object(
       'id', u.id,
       'role', u.role,
-      'email', u.email
+      'email', u.email,
+      'name', u.name
     ) "user"
     from user_project up
     inner join users u on u.id = up."userId" where up."projectId" = ${projectId}

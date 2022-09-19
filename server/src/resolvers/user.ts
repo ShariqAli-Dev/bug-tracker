@@ -71,6 +71,11 @@ export class UserResolver {
     return "";
   }
 
+  @Query(() => [Users])
+  async users() {
+    return await Users.find();
+  }
+
   @Query(() => Users, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
     // you are not logged in
@@ -172,7 +177,6 @@ export class UserResolver {
     @Arg("options") options: UserRegister,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    console.log(options);
     if (options.password.length <= 2) {
       return {
         errors: [
