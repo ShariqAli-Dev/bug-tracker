@@ -1,8 +1,9 @@
-import { Box, Center, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import { ReactNode } from "react";
+import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
 import { useProjectQuery } from "../../generated/graphql";
@@ -98,6 +99,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               <SectionHeader title="Assigned Personnel">
                 <Text>Current users on this project</Text>
               </SectionHeader>
+              <AssignedPersonnel pageProps={{}} />
             </Box>
 
             <Box width="50%">

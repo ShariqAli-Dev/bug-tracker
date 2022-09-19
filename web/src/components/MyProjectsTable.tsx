@@ -90,6 +90,8 @@ const MyProjectsTable = () => {
     }
   }, [data, fetching]);
 
+  console.log(page);
+
   return (
     <>
       {!fetching && (
@@ -249,6 +251,4 @@ const MyProjectsTable = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(
-  MyProjectsTable
-);
+export default withUrqlClient(createUrqlClient)(MyProjectsTable);
