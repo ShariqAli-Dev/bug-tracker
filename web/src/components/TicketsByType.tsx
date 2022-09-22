@@ -1,24 +1,12 @@
-import { Box, Button } from "@chakra-ui/react";
-import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from "chart.js";
+import { ArcElement, Chart as ChartJs, Legend, Title, Tooltip } from "chart.js";
 import { withUrqlClient } from "next-urql";
-import { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { useProjectByTypeQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 ChartJs.register(Tooltip, Title, ArcElement, Legend);
 
 const TicketsByType = () => {
-  const [{ data: queryData, fetching }] = useProjectByTypeQuery();
-  const [data, setData] = useState<any>({});
-  console.log(queryData);
-
-  useEffect(() => {
-    if (!fetching) {
-      setData(queryData?.projectByType[0] as any);
-    } else {
-      return;
-    }
-  }, [queryData, fetching]);
+  const [{ data }] = useProjectByTypeQuery();
 
   return (
     <Pie
@@ -39,7 +27,11 @@ const TicketsByType = () => {
       data={{
         datasets: [
           {
-            data: [data.issue, data.bug, data.feature],
+            data: [
+              data?.projectByType[0].issue,
+              data?.projectByType[0].bug,
+              data?.projectByType[0].feature,
+            ],
             backgroundColor: ["#B2B2B2", "#666666", "#999999"],
           },
         ],

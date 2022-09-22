@@ -5,7 +5,6 @@ import {
   Field,
   FieldResolver,
   InputType,
-  Int,
   Mutation,
   ObjectType,
   Query,
@@ -35,12 +34,18 @@ class FieldError {
 }
 
 @InputType()
-class UserInput {
+class UserLogin {
   @Field()
   email: string;
 
   @Field()
   password: string;
+}
+
+@InputType()
+class UserRegister extends UserLogin {
+  @Field()
+  name: string;
 }
 
 // can return from mutations
@@ -55,15 +60,20 @@ class UserResponse {
 
 @Resolver(Users)
 export class UserResolver {
-  @FieldResolver(() => String)
-  email(@Root() user: Users, @Ctx() { req }: MyContext) {
-    // this is the current user and it's okay to show them their own email
-    if (req.session.userId === user.id) {
-      return user.email;
-    }
+  // @FieldResolver(() => String)
+  // email(@Root() user: Users, @Ctx() { req }: MyContext) {
+  //   // this is the current user and it's okay to show them their own email
+  //   if (req.session.userId === user.id) {
+  //     return user.email;
+  //   }
 
-    // current user wants to see someone else's email
-    return "";
+  //   // current user wants to see someone else's email
+  //   return "";
+  // }
+
+  @Query(() => [Users])
+  async users() {
+    return await Users.find();
   }
 
   @Query(() => Users, { nullable: true })
@@ -162,19 +172,9 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => Boolean)
-  async revokeRefreshTokenForUser(@Arg("id", () => Int) id: number) {
-    const user = await Users.findOne({ where: { id } });
-    if (user) {
-      Users.update({ id }, { tokenVersion: user.tokenVersion + 1 });
-    }
-
-    return true;
-  }
-
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UserInput,
+    @Arg("options") options: UserRegister,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     if (options.password.length <= 2) {
@@ -187,11 +187,20 @@ export class UserResolver {
         ],
       };
     }
+    if (options.name.length <= 2) {
+      return {
+        errors: [
+          {
+            field: "name",
+            message: "length must be greater than 2",
+          },
+        ],
+      };
+    }
 
     const hashedPassword = await argon2.hash(options.password);
     let user;
     try {
-      // UserInput.create({}).save()
       const result = await myDataSource
         .createQueryBuilder()
         .insert()
@@ -199,6 +208,7 @@ export class UserResolver {
         .values({
           id: 200,
           email: options.email,
+          name: options.name,
           password: hashedPassword,
           role: INITIAL_ROLE,
         })
@@ -229,7 +239,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UserInput,
+    @Arg("options") options: UserLogin,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await Users.findOne({

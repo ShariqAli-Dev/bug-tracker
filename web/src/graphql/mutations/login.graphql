@@ -1,4 +1,4 @@
-mutation Login($options: UserInput!) {
+mutation Login($options: UserLogin!) {
   login(options: $options) {
     errors {
       field
@@ -8,6 +8,9 @@ mutation Login($options: UserInput!) {
       id
       email
       role
+      name
+      createdAt
+      updatedAt
     }
   }
 }

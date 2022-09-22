@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import { withUrqlClient } from "next-urql";
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
@@ -157,7 +158,17 @@ const MyProjectsTable = () => {
                             borderColor="primary"
                           >
                             {cell.render("Cell")}
-                            {!cell.column.Header && <Box>Details</Box>}
+                            {!cell.column.Header && (
+                              <Link href={`/project/${parseInt(row.id) + 1}`}>
+                                <Text
+                                  textDecoration="underline"
+                                  cursor="pointer"
+                                  textAlign="center"
+                                >
+                                  Details
+                                </Text>
+                              </Link>
+                            )}
                           </Td>
                         );
                       })}
@@ -238,6 +249,4 @@ const MyProjectsTable = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(
-  MyProjectsTable
-);
+export default withUrqlClient(createUrqlClient)(MyProjectsTable);
