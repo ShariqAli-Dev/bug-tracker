@@ -60,16 +60,16 @@ class UserResponse {
 
 @Resolver(Users)
 export class UserResolver {
-  @FieldResolver(() => String)
-  email(@Root() user: Users, @Ctx() { req }: MyContext) {
-    // this is the current user and it's okay to show them their own email
-    if (req.session.userId === user.id) {
-      return user.email;
-    }
+  // @FieldResolver(() => String)
+  // email(@Root() user: Users, @Ctx() { req }: MyContext) {
+  //   // this is the current user and it's okay to show them their own email
+  //   if (req.session.userId === user.id) {
+  //     return user.email;
+  //   }
 
-    // current user wants to see someone else's email
-    return "";
-  }
+  //   // current user wants to see someone else's email
+  //   return "";
+  // }
 
   @Query(() => [Users])
   async users() {
