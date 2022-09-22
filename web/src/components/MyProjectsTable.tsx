@@ -159,7 +159,7 @@ const MyProjectsTable = () => {
                           >
                             {cell.render("Cell")}
                             {!cell.column.Header && (
-                              <Link href={`/project/${row.id}`}>
+                              <Link href={`/project/${parseInt(row.id) + 1}`}>
                                 <Text
                                   textDecoration="underline"
                                   cursor="pointer"

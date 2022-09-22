@@ -32,9 +32,10 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   const [{ data: projectQuery }] = useProjectQuery({
     variables: { projectId },
   });
-  const [{ data: assignedPersonnelQuery }] = useAssignedPersonnelQuery({
-    variables: { projectId },
-  });
+  const [{ data: personnelQuery, fetching: personnelFetch }] =
+    useAssignedPersonnelQuery({
+      variables: { projectId },
+    });
 
   return (
     <Flex
@@ -122,9 +123,11 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               <SectionHeader title="Assigned Personnel">
                 <Text>Current users on this project</Text>
               </SectionHeader>
-              <AssignedPersonnel
-                data={assignedPersonnelQuery?.assignedPersonnel as any}
-              />
+              {!personnelFetch && (
+                <AssignedPersonnel
+                  data={personnelQuery?.assignedPersonnel as any}
+                />
+              )}
             </Box>
 
             <Box
