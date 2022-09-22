@@ -1,23 +1,9 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  chakra,
-  Tooltip,
-  IconButton,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import { ReactNode } from "react";
+import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
 import {
@@ -25,15 +11,6 @@ import {
   useProjectQuery,
 } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
-import { usePagination, useTable } from "react-table";
-import { useMemo } from "react";
-import { nanoid } from "nanoid";
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
-import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
-const ArrowRight = chakra(AiOutlineArrowRight);
-const ArrowLeft = chakra(AiOutlineArrowLeft);
-const ChevronRight = chakra(BsChevronDoubleRight);
-const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 interface SectionHeaderProps {
   title: string;
@@ -58,51 +35,6 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   const [{ data: assignedPersonnelQuery }] = useAssignedPersonnelQuery({
     variables: { projectId },
   });
-  const columns = useMemo(
-    () => [
-      {
-        Header: "Assigned personnel",
-        columns: [
-          {
-            Header: "User Name",
-            accessor: "user.name",
-          },
-          {
-            Header: "Email",
-            accessor: "user.email",
-          },
-          {
-            Header: "Role",
-            accessor: "user.role",
-          },
-        ],
-      },
-    ],
-    []
-  );
-
-  const {
-    // getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    // pageOptions,`
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    state: { pageIndex },
-  } = useTable(
-    {
-      columns,
-      data: assignedPersonnelQuery?.assignedPersonnel as any,
-      initialState: { pageIndex: 0, pageSize: 5 },
-    },
-    usePagination
-  );
 
   return (
     <Flex
@@ -172,118 +104,19 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           </Box>
           {/* Bottom Duplex */}
           <Flex justifyContent="space-around">
-            <Box width="50%">
+            <Box
+              width="45%"
+              display="flex"
+              justifyContent="center"
+              flexDirection="column"
+              alignItems="center"
+            >
               <SectionHeader title="Assigned Personnel">
                 <Text>Current users on this project</Text>
               </SectionHeader>
-              <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
-                <Table
-                  {...getTableBodyProps()}
-                  size={{ base: "sm", lg: "md" }}
-                  border="2px"
-                  borderColor="primary"
-                >
-                  <Thead border="2px" borderColor="primary">
-                    {headerGroups.map((headerGroup) => (
-                      <Tr {...headerGroup.getHeaderGroupProps()} key={nanoid()}>
-                        {headerGroup.headers
-                          .filter(
-                            (header) => header.Header !== "Assigned personnel"
-                          )
-                          .map((column) => (
-                            <Th
-                              {...column.getHeaderProps()}
-                              key={nanoid()}
-                              border="2px"
-                              borderColor="primary"
-                            >
-                              {column.render("Header")}
-                            </Th>
-                          ))}
-                      </Tr>
-                    ))}
-                  </Thead>
-                  <Tbody {...getTableBodyProps()}>
-                    {page.map((row) => {
-                      prepareRow(row);
-                      return (
-                        <Tr {...row.getRowProps()} key={nanoid()}>
-                          {row.cells.map((cell) => {
-                            return (
-                              <Td
-                                {...cell.getCellProps()}
-                                key={nanoid()}
-                                border="2px"
-                                borderColor="primary"
-                              >
-                                {cell.render("Cell")}
-                              </Td>
-                            );
-                          })}
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-              <Flex justifyContent="center" alignItems="center">
-                {/* Chevron Left */}
-                <Tooltip label="First Page">
-                  <IconButton
-                    color="primary"
-                    aria-label="Chevron Left"
-                    onClick={() => gotoPage(0)}
-                    isDisabled={!canPreviousPage}
-                    icon={<ChevronLeft size="20px" />}
-                  />
-                </Tooltip>
-                {/* Arrow Left */}
-                <Tooltip label="Previous Page">
-                  <IconButton
-                    color="primary"
-                    aria-label="Arrow Left"
-                    onClick={previousPage}
-                    isDisabled={!canPreviousPage}
-                    icon={<ArrowLeft size="20px" />}
-                  />
-                </Tooltip>
-
-                {/* Page Tracker */}
-                <Text
-                  fontWeight="bold"
-                  color="tertiary"
-                  backgroundColor="primary"
-                  border="2px"
-                  borderRadius="20px"
-                  padding=".5rem"
-                  margin="1rem"
-                  width="45px"
-                  textAlign="center"
-                >
-                  {pageIndex + 1}
-                </Text>
-
-                {/* Chevron Right */}
-                <Tooltip label="Next Page">
-                  <IconButton
-                    color="primary"
-                    aria-label="Arrow Right"
-                    onClick={nextPage}
-                    isDisabled={!canNextPage}
-                    icon={<ArrowRight size="20px" />}
-                  />
-                </Tooltip>
-                {/* Arrow Right */}
-                <Tooltip label="Last Page">
-                  <IconButton
-                    color="primary"
-                    aria-label="Chevron Right"
-                    onClick={() => gotoPage(pageCount - 1)}
-                    isDisabled={!canNextPage}
-                    icon={<ChevronRight size="20px" />}
-                  />
-                </Tooltip>
-              </Flex>
+              <AssignedPersonnel
+                data={assignedPersonnelQuery?.assignedPersonnel as any}
+              />
             </Box>
 
             <Box width="50%">
