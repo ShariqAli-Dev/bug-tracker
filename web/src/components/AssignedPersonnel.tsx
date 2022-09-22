@@ -63,11 +63,12 @@ const AssignedPersonnel = (props: any) => {
   } = useTable(
     {
       columns,
-      data: props.data,
+      data: props.data as any,
       initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
   );
+
   return (
     <>
       <TableContainer whiteSpace="normal" style={{ width: "90%" }}>

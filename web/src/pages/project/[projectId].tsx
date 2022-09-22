@@ -71,9 +71,11 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           marginBottom={8}
           marginLeft={4}
           marginRight={4}
+          // background="red"
+          height="80%"
         >
           {/* Top Part */}
-          <Box>
+          <Box height="25%">
             <SectionHeader
               title={`Details for Project #${projectQuery?.project?.id}`}
             >
@@ -89,27 +91,33 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             <Flex
               justifyContent="space-between"
               alignItems="center"
-              width="80%"
+              width={{ base: "95%", sm: "80%" }}
               margin="auto"
+              height="100%"
             >
-              <Box width="50%">
-                <label>Project Name</label>
+              <Box width="50%" marginLeft={{ base: 5, sm: "auto" }}>
+                <Text>Project Name</Text>
+
                 <Text marginLeft={5}>{projectQuery?.project?.name}</Text>
               </Box>
               <Box width="50%">
-                <label>Project Description</label>
+                <Text>Project Description</Text>
                 <Text marginLeft={5}>{projectQuery?.project?.description}</Text>
               </Box>
             </Flex>
           </Box>
           {/* Bottom Duplex */}
-          <Flex justifyContent="space-around">
+          <Flex
+            justifyContent="space-around"
+            flexDirection={{ base: "column", md: "row" }}
+            height="75%"
+          >
             <Box
-              width="45%"
+              width={{ base: "90%", sm: "45%" }}
               display="flex"
-              justifyContent="center"
               flexDirection="column"
               alignItems="center"
+              margin="auto"
             >
               <SectionHeader title="Assigned Personnel">
                 <Text>Current users on this project</Text>
@@ -119,7 +127,13 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               />
             </Box>
 
-            <Box width="50%">
+            <Box
+              width={{ base: "90%", sm: "45%" }}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              margin="auto"
+            >
               <SectionHeader title="Tickets for this Project">
                 <Text>Condensed Ticket Details</Text>
               </SectionHeader>
