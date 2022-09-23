@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
@@ -6,6 +6,7 @@ import { ReactNode } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
+import ProjectTickets from "../../components/ProjectTickets";
 import {
   useAssignedPersonnelQuery,
   useProjectQuery,
@@ -13,17 +14,23 @@ import {
 import { createUrqlClient } from "../../utils/createUrqlClient";
 
 interface SectionHeaderProps {
-  title: string;
+  title?: string;
   children: ReactNode;
 }
 
 const SectionHeader = ({ title, children }: SectionHeaderProps) => {
   return (
     <Box margin="auto" width="90%" backgroundColor="primary" color="tertiary">
-      <Heading as="h4" size="lg">
-        {title}
-      </Heading>
-      <Box>{children}</Box>
+      {title ? (
+        <>
+          <Heading as="h4" size="lg">
+            {title}
+          </Heading>
+          <Box>{children}</Box>
+        </>
+      ) : (
+        <Box>{children}</Box>
+      )}
     </Box>
   );
 };
@@ -32,6 +39,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   const [{ data: projectQuery }] = useProjectQuery({
     variables: { projectId },
   });
+
   const [{ data: personnelQuery, fetching: personnelFetch }] =
     useAssignedPersonnelQuery({
       variables: { projectId },
@@ -76,10 +84,9 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           height="80%"
         >
           {/* Top Part */}
-          <Box height="25%">
-            <SectionHeader
-              title={`Details for Project #${projectQuery?.project?.id}`}
-            >
+          <Box>
+            <SectionHeader title={`Project: ${projectQuery?.project?.name}`}>
+              <Text>{projectQuery?.project?.description}</Text>
               <Link href="/dashboard">
                 <a>Back to Dashboard</a>
               </Link>
@@ -88,24 +95,6 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
                 <a>Edit</a>
               </Link>
             </SectionHeader>
-
-            <Flex
-              justifyContent="space-between"
-              alignItems="center"
-              width={{ base: "95%", sm: "80%" }}
-              margin="auto"
-              height="100%"
-            >
-              <Box width="50%" marginLeft={{ base: 5, sm: "auto" }}>
-                <Text>Project Name</Text>
-
-                <Text marginLeft={5}>{projectQuery?.project?.name}</Text>
-              </Box>
-              <Box width="50%">
-                <Text>Project Description</Text>
-                <Text marginLeft={5}>{projectQuery?.project?.description}</Text>
-              </Box>
-            </Flex>
           </Box>
           {/* Bottom Duplex */}
           <Flex
@@ -120,8 +109,29 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               alignItems="center"
               margin="auto"
             >
-              <SectionHeader title="Assigned Personnel">
-                <Text>Current users on this project</Text>
+              <SectionHeader>
+                <>
+                  <Flex width="full" padding={2} justifyContent="space-between">
+                    <Heading>Team</Heading>
+                    <Button
+                      size="sm"
+                      color="tertiary"
+                      backgroundColor="primary"
+                      border="2px"
+                      margin={2}
+                      padding={1}
+                      _hover={{
+                        backgroundColor: "tertiary",
+                        color: "primary",
+                        border: "2px",
+                        borderColor: "primary",
+                      }}
+                    >
+                      Manage Team
+                    </Button>
+                  </Flex>
+                  <Text>Current users on this project</Text>
+                </>
               </SectionHeader>
               {!personnelFetch && (
                 <AssignedPersonnel
@@ -137,9 +147,31 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               alignItems="center"
               margin="auto"
             >
-              <SectionHeader title="Tickets for this Project">
-                <Text>Condensed Ticket Details</Text>
+              <SectionHeader>
+                <>
+                  <Flex width="full" padding={2} justifyContent="space-between">
+                    <Heading>Tickets</Heading>
+                    <Button
+                      size="sm"
+                      color="tertiary"
+                      backgroundColor="primary"
+                      border="2px"
+                      margin={2}
+                      padding={1}
+                      _hover={{
+                        backgroundColor: "tertiary",
+                        color: "primary",
+                        border: "2px",
+                        borderColor: "primary",
+                      }}
+                    >
+                      New Ticket
+                    </Button>
+                  </Flex>
+                  <Text>A condensed view of the tickets</Text>
+                </>
               </SectionHeader>
+              <ProjectTickets />
             </Box>
           </Flex>
         </Box>
