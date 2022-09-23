@@ -119,39 +119,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               />
             )}
 
-            <Box
-              width={{ base: "90%", sm: "45%" }}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              margin="auto"
-            >
-              <SectionHeader>
-                <>
-                  <Flex width="full" padding={2} justifyContent="space-between">
-                    <Heading>Tickets</Heading>
-                    <Button
-                      size="sm"
-                      color="tertiary"
-                      backgroundColor="primary"
-                      border="2px"
-                      margin={2}
-                      padding={1}
-                      _hover={{
-                        backgroundColor: "tertiary",
-                        color: "primary",
-                        border: "2px",
-                        borderColor: "primary",
-                      }}
-                    >
-                      New Ticket
-                    </Button>
-                  </Flex>
-                  <Text>A condensed view of the tickets</Text>
-                </>
-              </SectionHeader>
-              <ProjectTickets />
-            </Box>
+            <ProjectTickets />
           </Flex>
         </Box>
       </Flex>

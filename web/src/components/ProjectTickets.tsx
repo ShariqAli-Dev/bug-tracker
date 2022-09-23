@@ -1,6 +1,9 @@
 import {
+  Box,
+  Button,
   chakra,
   Flex,
+  Heading,
   IconButton,
   Table,
   TableContainer,
@@ -18,6 +21,7 @@ import { useMemo, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
+import { SectionHeader } from "../pages/project/[projectId]";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
@@ -71,7 +75,37 @@ const ProjectTickets = (props: any) => {
   );
 
   return (
-    <>
+    <Box
+      width={{ base: "90%", sm: "45%" }}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      margin="auto"
+    >
+      <SectionHeader>
+        <>
+          <Flex width="full" padding={2} justifyContent="space-between">
+            <Heading>Tickets</Heading>
+            <Button
+              size="sm"
+              color="tertiary"
+              backgroundColor="primary"
+              border="2px"
+              margin={2}
+              padding={1}
+              _hover={{
+                backgroundColor: "tertiary",
+                color: "primary",
+                border: "2px",
+                borderColor: "primary",
+              }}
+            >
+              New Ticket
+            </Button>
+          </Flex>
+          <Text>A condensed view of the tickets</Text>
+        </>
+      </SectionHeader>
       <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
         <Table
           {...getTableBodyProps()}
@@ -189,7 +223,7 @@ const ProjectTickets = (props: any) => {
           />
         </Tooltip>
       </Flex>
-    </>
+    </Box>
   );
 };
 
