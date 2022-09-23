@@ -1,6 +1,8 @@
 import {
+  Button,
   chakra,
   Flex,
+  Heading,
   IconButton,
   Table,
   TableContainer,
@@ -11,6 +13,7 @@ import {
   Thead,
   Tooltip,
   Tr,
+  Box,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import { useMemo } from "react";
@@ -21,6 +24,7 @@ const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
+import { SectionHeader } from "../pages/project/[projectId]";
 
 const AssignedPersonnel = (props: any) => {
   const columns = useMemo(
@@ -45,7 +49,6 @@ const AssignedPersonnel = (props: any) => {
     ],
     []
   );
-
   const {
     // getTableProps,
     getTableBodyProps,
@@ -70,7 +73,35 @@ const AssignedPersonnel = (props: any) => {
   );
 
   return (
-    <>
+    <Box
+      width={{ base: "90%", sm: "45%" }}
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      margin="auto"
+    >
+      <SectionHeader>
+        <Flex width="full" padding={2} justifyContent="space-between">
+          <Heading>Team</Heading>
+          <Button
+            size="sm"
+            color="tertiary"
+            backgroundColor="primary"
+            border="2px"
+            margin={2}
+            padding={1}
+            _hover={{
+              backgroundColor: "tertiary",
+              color: "primary",
+              border: "2px",
+              borderColor: "primary",
+            }}
+          >
+            Manage Team
+          </Button>
+        </Flex>
+        <Text>Current users on this project</Text>
+      </SectionHeader>
       <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
         <Table
           {...getTableBodyProps()}
@@ -177,7 +208,7 @@ const AssignedPersonnel = (props: any) => {
           />
         </Tooltip>
       </Flex>
-    </>
+    </Box>
   );
 };
 

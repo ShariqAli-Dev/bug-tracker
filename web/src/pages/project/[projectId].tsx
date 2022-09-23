@@ -1,8 +1,15 @@
-import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Text,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
@@ -18,7 +25,7 @@ interface SectionHeaderProps {
   children: ReactNode;
 }
 
-const SectionHeader = ({ title, children }: SectionHeaderProps) => {
+export const SectionHeader = ({ title, children }: SectionHeaderProps) => {
   return (
     <Box margin="auto" width="90%" backgroundColor="primary" color="tertiary">
       {title ? (
@@ -44,6 +51,10 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
     useAssignedPersonnelQuery({
       variables: { projectId },
     });
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const finalRef = useRef(null);
+  const initialRef = useRef(null);
 
   return (
     <Flex
@@ -102,43 +113,11 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             flexDirection={{ base: "column", md: "row" }}
             height="75%"
           >
-            <Box
-              width={{ base: "90%", sm: "45%" }}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-              margin="auto"
-            >
-              <SectionHeader>
-                <>
-                  <Flex width="full" padding={2} justifyContent="space-between">
-                    <Heading>Team</Heading>
-                    <Button
-                      size="sm"
-                      color="tertiary"
-                      backgroundColor="primary"
-                      border="2px"
-                      margin={2}
-                      padding={1}
-                      _hover={{
-                        backgroundColor: "tertiary",
-                        color: "primary",
-                        border: "2px",
-                        borderColor: "primary",
-                      }}
-                    >
-                      Manage Team
-                    </Button>
-                  </Flex>
-                  <Text>Current users on this project</Text>
-                </>
-              </SectionHeader>
-              {!personnelFetch && (
-                <AssignedPersonnel
-                  data={personnelQuery?.assignedPersonnel as any}
-                />
-              )}
-            </Box>
+            {!personnelFetch && (
+              <AssignedPersonnel
+                data={personnelQuery?.assignedPersonnel as any}
+              />
+            )}
 
             <Box
               width={{ base: "90%", sm: "45%" }}

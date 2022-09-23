@@ -47,7 +47,6 @@ const ProjectTickets = (props: any) => {
     ],
     []
   );
-
   const {
     // getTableProps,
     getTableBodyProps,
