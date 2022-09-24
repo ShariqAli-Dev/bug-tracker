@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { Comment } from "./Comment";
 import { Project } from "./Project";
+import { User_Ticket } from "./User_Ticket";
 
 @ObjectType()
 @Entity()
@@ -52,6 +53,9 @@ export class Ticket extends BaseEntity {
 
   @OneToMany(() => Comment, (comment) => comment.ticket)
   comments: Comment[];
+
+  @OneToMany(() => User_Ticket, (user_ticket) => user_ticket.ticket)
+  user_ticket: User_Ticket[];
 
   @ManyToOne(() => Project, (project) => project.tickets)
   project: Project;
