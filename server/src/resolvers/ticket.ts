@@ -64,7 +64,6 @@ export class TicketResolver {
     @Arg("options") options: createTicketInput,
     @Arg("team", () => [teamMembers]) team: teamMembers[]
   ): Promise<Ticket> {
-    console.log("you got this far");
     const ticket = await Ticket.create({ ...options }).save();
 
     let queryString = "";
