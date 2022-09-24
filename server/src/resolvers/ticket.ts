@@ -1,13 +1,6 @@
+import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
 import { Ticket } from "../entities/Ticket";
-import {
-  Arg,
-  Field,
-  InputType,
-  Mutation,
-  ObjectType,
-  Query,
-  Resolver,
-} from "type-graphql";
+import { User_Ticket } from "../entities/User_Ticket";
 
 @InputType()
 class userTickets {
@@ -71,16 +64,22 @@ export class TicketResolver {
     @Arg("options") options: createTicketInput,
     @Arg("team", () => [teamMembers]) team: teamMembers[]
   ): Promise<Ticket> {
-    console.log({ options, team });
-    const ticket = await Ticket.create({
-      projectId: options.projectId,
-      creator: options.creator,
-      title: options.title,
-      description: options.description,
-      priority: options.priority,
-      type: options.type,
-      status: options.status,
-    }).save();
+    const ticket = await Ticket.create({ ...options }).save();
+
+    let queryString = "";
+    team.forEach((m, mdx) => {
+      queryString += `(${ticket.id}, ${m.id})`;
+      if (mdx !== team.length - 1) {
+        queryString += ",";
+      }
+    });
+
+    User_Ticket.query(`
+    insert into user_ticket
+      ("ticketId", "userId")
+    values
+      ${queryString}
+    `);
 
     return ticket;
   }
