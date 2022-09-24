@@ -36,10 +36,6 @@ const ProjectModal = ({
 }: ProjectModalProps) => {
   const toast = useToast();
   const [, createProject] = useCreateProjectMutation();
-  const [team, setTeam] = useState([
-    { name: "shariq", selected: false },
-    { name: "john", selected: false },
-  ]);
 
   return (
     <Modal
@@ -159,36 +155,9 @@ const ProjectModal = ({
                     </Select>
                   </FormControl>
                 </Box>
-                {/* Add Team Members */}
-                <Box
-                  overflowY="auto"
-                  height="150px"
-                  scrollBehavior="auto"
-                  p={4}
-                  borderColor="light-blue"
-                  borderWidth={0.1}
-                  borderRadius={"xl"}
-                >
-                  {team.map((p, pdx) => {
-                    return (
-                      <Text
-                        fontSize={"1rem"}
-                        onClick={() => {
-                          team[pdx].selected = !team[pdx].selected;
-                          setTeam([...team]);
-                        }}
-                        backgroundColor={p.selected ? "primary" : "white"}
-                        color={p.selected ? "tertiary" : "secondary"}
-                        key={p.name}
-                      >
-                        {p.name}
-                      </Text>
-                    );
-                  })}
-                </Box>
                 <Box width="full" display="flex" justifyContent="space-around">
                   <Button type="submit" isLoading={isSubmitting}>
-                    Send notification
+                    Create Project
                   </Button>
                   <Button onClick={onClose}>Cancel</Button>
                 </Box>

@@ -410,7 +410,7 @@ export type UserProjectsQuery = { __typename?: 'Query', UserProjects: Array<{ __
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number, email: string }> };
 
 
 export const ChangePasswordDocument = gql`
@@ -672,6 +672,7 @@ export const UsersDocument = gql`
   users {
     name
     id
+    email
   }
 }
     `;

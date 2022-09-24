@@ -1,15 +1,8 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
-import { ReactNode, useRef } from "react";
+import { ReactNode } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
@@ -51,10 +44,6 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
     useAssignedPersonnelQuery({
       variables: { projectId },
     });
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const finalRef = useRef(null);
-  const initialRef = useRef(null);
 
   return (
     <Flex

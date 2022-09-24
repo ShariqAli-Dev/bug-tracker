@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Modal,
@@ -15,17 +16,24 @@ import {
 } from "@chakra-ui/react";
 import { InputField } from "./InputField";
 
-import { Field, Form, Formik } from "formik";
-import { useState } from "react";
-import { useCreateProjectMutation } from "../generated/graphql";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
+import { useEffect, useState } from "react";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { useUsersQuery } from "../generated/graphql";
 
 interface TicketModalProps {
   isOpen: boolean;
   onClose: () => void;
   finalRef: any;
   initialRef: any;
+}
+
+interface TeamMember {
+  name: string;
+  id: number;
+  email: string;
+  selected: boolean;
 }
 
 const TicketModal = ({
@@ -35,11 +43,18 @@ const TicketModal = ({
   initialRef,
 }: TicketModalProps) => {
   const toast = useToast();
-  const [, createProject] = useCreateProjectMutation();
-  const [team, setTeam] = useState([
-    { name: "shariq", selected: false },
-    { name: "john", selected: false },
-  ]);
+  const [{ data, fetching }] = useUsersQuery();
+  const [team, setTeam] = useState<TeamMember[]>([]);
+  console.log({ data, team });
+
+  useEffect(() => {
+    if (!fetching) {
+      const teamData = data?.users.map((user) => {
+        return { ...user, selected: false };
+      });
+      setTeam(teamData as TeamMember[]);
+    }
+  }, [data, fetching]);
 
   return (
     <Modal
@@ -53,19 +68,22 @@ const TicketModal = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Project</ModalHeader>
+        <ModalHeader>Create Ticket</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={8}>
           <Formik
             initialValues={{
-              name: "",
+              title: "",
               description: "",
+              team: [],
               type: "issue",
               priority: "low",
+              status: "new",
             }}
             onSubmit={async (options) => {
               try {
-                await createProject({ options });
+                // do the api call to create the ticket
+                // loop theough team and do logic related to submitting
                 if (!toast.isActive("newProjectSuccess")) {
                   toast({
                     id: "newProjectSuccess",
@@ -103,92 +121,118 @@ const TicketModal = ({
           >
             {({ values, handleChange, isSubmitting }) => (
               <Form>
-                {/* Project Name */}
+                {/* Ticket Title */}
                 <Box pb={2}>
                   <InputField
                     onChange={handleChange}
-                    value={values.name}
-                    name="name"
-                    label="Name"
+                    value={values.title}
+                    name="title"
+                    label="Title"
                     required
                   />
                 </Box>
-                {/* Project Description */}
+                {/* Ticket Description */}
                 <Box pb={2}>
                   <InputField
                     onChange={handleChange}
                     value={values.description}
-                    name="description"
-                    label="Description"
+                    name="ticket"
+                    label="Ticket Description"
                     textarea
                     required
                   />
                 </Box>
-                {/* Priority */}
-                <Box pb={2}>
-                  <FormControl>
-                    <FormLabel>Priority</FormLabel>
-                    <Select
-                      value={values.priority}
-                      id="priority"
-                      name="priority"
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                      <option value="immediate">Immediate</option>
-                    </Select>
-                  </FormControl>
-                </Box>
-                {/* Type */}
-                <Box pb={2}>
-                  <FormControl>
-                    <FormLabel>Type</FormLabel>
-                    <Select
-                      value={values.type}
-                      id="type"
-                      name="type"
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="issue">Issue</option>
-                      <option value="bug">Bug</option>
-                      <option value="feature">Feature</option>
-                    </Select>
-                  </FormControl>
-                </Box>
                 {/* Add Team Members */}
-                <Box
-                  overflowY="auto"
-                  height="150px"
-                  scrollBehavior="auto"
-                  p={4}
-                  borderColor="light-blue"
-                  borderWidth={0.1}
-                  borderRadius={"xl"}
+                {!fetching && (
+                  <Box
+                    overflowY="auto"
+                    height="150px"
+                    scrollBehavior="auto"
+                    p={4}
+                    borderColor="light-blue"
+                    borderWidth={0.1}
+                    borderRadius={"xl"}
+                  >
+                    {team.map((p, pdx) => {
+                      return (
+                        <Text
+                          fontSize={"1rem"}
+                          onClick={() => {
+                            team[pdx].selected = !team[pdx].selected;
+                            setTeam([...team]);
+                          }}
+                          backgroundColor={p.selected ? "primary" : "white"}
+                          color={p.selected ? "tertiary" : "secondary"}
+                          key={p.email}
+                        >
+                          {p.name}: {p.email}
+                        </Text>
+                      );
+                    })}
+                  </Box>
+                )}
+                <Flex
+                  justifyContent="space-around"
+                  alignItems="center"
+                  marginTop={4}
                 >
-                  {team.map((p, pdx) => {
-                    return (
-                      <Text
-                        fontSize={"1rem"}
-                        onClick={() => {
-                          team[pdx].selected = !team[pdx].selected;
-                          setTeam([...team]);
-                        }}
-                        backgroundColor={p.selected ? "primary" : "white"}
-                        color={p.selected ? "tertiary" : "secondary"}
-                        key={p.name}
+                  {/* Type */}
+                  <Box pb={2}>
+                    <FormControl>
+                      <FormLabel>Type</FormLabel>
+                      <Select
+                        value={values.type}
+                        id="type"
+                        name="type"
+                        onChange={handleChange}
+                        required
                       >
-                        {p.name}
-                      </Text>
-                    );
-                  })}
-                </Box>
+                        <option value="issue">Issue</option>
+                        <option value="bug">Bug</option>
+                        <option value="feature">Feature</option>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  {/* Priority */}
+                  <Box pb={2}>
+                    <FormControl>
+                      <FormLabel>Priority</FormLabel>
+                      <Select
+                        value={values.priority}
+                        id="priority"
+                        name="priority"
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="immediate">Immediate</option>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  {/* Status */}
+                  <Box pb={2}>
+                    <FormControl>
+                      <FormLabel>Status</FormLabel>
+                      <Select
+                        value={values.status}
+                        id="status"
+                        name="Priority"
+                        onChange={handleChange}
+                        required
+                      >
+                        <option value="new">New</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                </Flex>
+
                 <Box width="full" display="flex" justifyContent="space-around">
                   <Button type="submit" isLoading={isSubmitting}>
-                    Send notification
+                    Create Ticket
                   </Button>
                   <Button onClick={onClose}>Cancel</Button>
                 </Box>
@@ -201,4 +245,4 @@ const TicketModal = ({
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(TicketModal);
+export default withUrqlClient(createUrqlClient, { ssr: false })(TicketModal);
