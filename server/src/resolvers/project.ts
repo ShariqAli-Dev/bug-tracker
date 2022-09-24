@@ -14,47 +14,7 @@ import { isAuth } from "../middleware/isAuth";
 import { User_Project } from "../entities/User_Project";
 import { MyContext } from "../types";
 import { myDataSource } from "../data-source";
-import { CHART_STATUS } from "../constants";
 import { Users } from "../entities/Users";
-
-@ObjectType()
-class ProjectByPriority {
-  @Field()
-  low: string;
-
-  @Field()
-  medium: string;
-
-  @Field()
-  high: string;
-
-  @Field()
-  immediate: string;
-}
-
-@ObjectType()
-class ProjectByType {
-  @Field()
-  issue: string;
-
-  @Field()
-  bug: string;
-
-  @Field()
-  feature: string;
-}
-
-@ObjectType()
-class ProjectByStatus {
-  @Field()
-  new: string;
-
-  @Field()
-  in_progress: string;
-
-  @Field()
-  resolved: string;
-}
 
 @ObjectType()
 class AssignedPersonnel {
@@ -75,12 +35,6 @@ class CreateProjectInput {
 
   @Field()
   description!: string;
-
-  @Field()
-  type!: string;
-
-  @Field()
-  priority!: string;
 }
 
 @InputType()
@@ -99,55 +53,6 @@ export class ProjectResolver {
   @Query(() => Project, { nullable: true })
   async project(@Arg("id") id: number): Promise<Project | null> {
     return await Project.findOne({ where: { id } });
-  }
-
-  @Query(() => [ProjectByPriority])
-  async projectByPriority(
-    @Ctx() { req }: MyContext
-  ): Promise<ProjectByPriority[]> {
-    return await myDataSource.query(`
-    select
-      count(*)
-        filter (where "p".priority = 'low') as low,
-      count(*)
-        filter (where "p".priority = 'medium') as medium,
-      count(*)
-        filter (where "p".priority = 'high') as high,
-      count(*)
-        filter (where "p".priority = 'immediate') as "immediate"
-    from 
-      user_project up inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
-    `);
-  }
-
-  @Query(() => [ProjectByType])
-  async projectByType(@Ctx() { req }: MyContext): Promise<ProjectByType[]> {
-    return await myDataSource.query(`
-    select
-      count(*)
-        filter (where "p".type = 'issue') as issue,
-      count(*)
-        filter (where "p".type = 'bug') as bug,
-      count(*)
-        filter (where "p".type = 'feature') as feature
-    from 
-      user_project up inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
-    `);
-  }
-
-  @Query(() => [ProjectByStatus])
-  async projectByStatus(@Ctx() { req }: MyContext): Promise<ProjectByStatus[]> {
-    return await myDataSource.query(`
-    select
-      count(*)
-        filter (where "p".status = 'new') as new,
-      count(*)
-        filter (where "p".status = 'in_progress') as in_progress,
-      count(*)
-        filter (where "p".status = 'resolved') as resolved
-    from 
-      user_project up inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
-    `);
   }
 
   @Query(() => [AssignedPersonnel])
@@ -172,16 +77,13 @@ export class ProjectResolver {
     @Arg("options") options: CreateProjectInput,
     @Ctx() { req }: MyContext
   ): Promise<Project> {
-    const { name, description, type, priority } = options;
-    if (!name || !description || !type || !priority) {
+    const { name, description } = options;
+    if (!name || !description) {
       throw new Error("invalid input");
     }
     const createdProject = await Project.create({
       description,
       name,
-      type,
-      priority,
-      status: CHART_STATUS.NEW,
     }).save();
 
     await User_Project.create({

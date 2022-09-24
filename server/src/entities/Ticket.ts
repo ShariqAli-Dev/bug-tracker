@@ -21,6 +21,14 @@ export class Ticket extends BaseEntity {
   id!: number;
 
   @Field()
+  @Column({ type: "int" })
+  projectId: number;
+
+  @Field()
+  @Column()
+  creator: string;
+
+  @Field()
   @Column()
   title: string;
 
@@ -30,11 +38,7 @@ export class Ticket extends BaseEntity {
 
   @Field()
   @Column()
-  submitter: string; // just their name
-
-  @Field()
-  @Column()
-  developer: string;
+  time: number; // hours
 
   @Field()
   @Column()
@@ -47,9 +51,6 @@ export class Ticket extends BaseEntity {
   @Field()
   @Column()
   status: string; // new in-progress resolved
-
-  @Column({ type: "int" })
-  projectId: number;
 
   @OneToMany(() => Comment, (comment) => comment.ticket)
   comments: Comment[];

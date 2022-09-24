@@ -10,16 +10,19 @@ class userTickets {
 @InputType()
 class createTicketInput extends userTickets {
   @Field()
+  projectId!: number;
+
+  @Field()
+  creator!: string;
+
+  @Field()
   title!: string;
 
   @Field()
   description!: string;
 
   @Field()
-  submitter!: string;
-
-  @Field()
-  developer!: string;
+  time!: number;
 
   @Field()
   priority!: string;
@@ -48,14 +51,13 @@ export class TicketResolver {
     @Arg("options") options: createTicketInput
   ): Promise<Ticket> {
     return await Ticket.create({
+      projectId: options.projectId,
       title: options.title,
       description: options.description,
-      submitter: options.submitter,
-      developer: options.developer,
+      time: options.time,
       priority: options.priority,
       type: options.type,
       status: options.status,
-      projectId: options.projectId,
     }).save();
   }
 }
