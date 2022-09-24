@@ -407,6 +407,11 @@ export type UserProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UserProjectsQuery = { __typename?: 'Query', UserProjects: Array<{ __typename?: 'User_Project', projectId: number, userId: number, project: { __typename?: 'Project', id: number, name: string, description: string } }> };
 
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number, email: string }> };
+
 
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($newPassword: String!, $token: String!) {
@@ -661,4 +666,17 @@ export const UserProjectsDocument = gql`
 
 export function useUserProjectsQuery(options?: Omit<Urql.UseQueryArgs<UserProjectsQueryVariables>, 'query'>) {
   return Urql.useQuery<UserProjectsQuery, UserProjectsQueryVariables>({ query: UserProjectsDocument, ...options });
+};
+export const UsersDocument = gql`
+    query Users {
+  users {
+    name
+    id
+    email
+  }
+}
+    `;
+
+export function useUsersQuery(options?: Omit<Urql.UseQueryArgs<UsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<UsersQuery, UsersQueryVariables>({ query: UsersDocument, ...options });
 };
