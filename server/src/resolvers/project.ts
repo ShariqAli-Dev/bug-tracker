@@ -71,7 +71,6 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Project)
-  @UseMiddleware(isAuth)
   // add middleware so only admin or
   async createProject(
     @Arg("options") options: CreateProjectInput,

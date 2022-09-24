@@ -1,24 +1,19 @@
 import {
   Box,
   Button,
-  FormControl,
-  FormLabel,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  Select,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import { InputField } from "./InputField";
 
-import { Field, Form, Formik } from "formik";
-import { useState } from "react";
-import { useCreateProjectMutation } from "../generated/graphql";
+import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
+import { useCreateProjectMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface ProjectModalProps {
@@ -56,8 +51,6 @@ const ProjectModal = ({
             initialValues={{
               name: "",
               description: "",
-              type: "issue",
-              priority: "low",
             }}
             onSubmit={async (options) => {
               try {
@@ -120,41 +113,7 @@ const ProjectModal = ({
                     required
                   />
                 </Box>
-                {/* Priority */}
-                <Box pb={2}>
-                  <FormControl>
-                    <FormLabel>Priority</FormLabel>
-                    <Select
-                      value={values.priority}
-                      id="priority"
-                      name="priority"
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                      <option value="immediate">Immediate</option>
-                    </Select>
-                  </FormControl>
-                </Box>
-                {/* Type */}
-                <Box pb={2}>
-                  <FormControl>
-                    <FormLabel>Type</FormLabel>
-                    <Select
-                      value={values.type}
-                      id="type"
-                      name="type"
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="issue">Issue</option>
-                      <option value="bug">Bug</option>
-                      <option value="feature">Feature</option>
-                    </Select>
-                  </FormControl>
-                </Box>
+
                 <Box width="full" display="flex" justifyContent="space-around">
                   <Button type="submit" isLoading={isSubmitting}>
                     Create Project
