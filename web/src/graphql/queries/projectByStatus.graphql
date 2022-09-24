@@ -1,7 +1,0 @@
-query ProjectByStatus {
-  projectByStatus {
-    new
-    in_progress
-    resolved
-  }
-}
