@@ -69,7 +69,7 @@ export class TicketResolver {
   @Mutation(() => Ticket)
   async createTicket(
     @Arg("options") options: createTicketInput,
-    @Arg("team", (type) => [teamMembers]) team: teamMembers[]
+    @Arg("team", () => [teamMembers]) team: teamMembers[]
   ): Promise<Ticket> {
     console.log({ options, team });
     const ticket = await Ticket.create({

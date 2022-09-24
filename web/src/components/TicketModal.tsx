@@ -85,14 +85,14 @@ const TicketModal = ({
               type: "issue",
               priority: "low",
               status: "new",
-              team,
             }}
             onSubmit={async (options) => {
               try {
-                await createTicket({ options });
-                console.log({ options });
-                // do the api call to create the ticket
-                // loop theough team and do logic related to submitting
+                await createTicket({
+                  options,
+                  team: team.filter((team) => team.selected),
+                });
+
                 if (!toast.isActive("newProjectSuccess")) {
                   toast({
                     id: "newProjectSuccess",
