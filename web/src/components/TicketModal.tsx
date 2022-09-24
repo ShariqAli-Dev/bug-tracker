@@ -85,6 +85,7 @@ const TicketModal = ({
               type: "issue",
               priority: "low",
               status: "new",
+              team,
             }}
             onSubmit={async (options) => {
               try {
