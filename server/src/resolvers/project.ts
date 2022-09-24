@@ -1,4 +1,3 @@
-import { Project } from "../entities/Project";
 import {
   Arg,
   Ctx,
@@ -8,13 +7,12 @@ import {
   ObjectType,
   Query,
   Resolver,
-  UseMiddleware,
 } from "type-graphql";
-import { isAuth } from "../middleware/isAuth";
+import { myDataSource } from "../data-source";
+import { Project } from "../entities/Project";
+import { Users } from "../entities/Users";
 import { User_Project } from "../entities/User_Project";
 import { MyContext } from "../types";
-import { myDataSource } from "../data-source";
-import { Users } from "../entities/Users";
 
 @ObjectType()
 class AssignedPersonnel {

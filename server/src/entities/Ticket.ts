@@ -38,10 +38,6 @@ export class Ticket extends BaseEntity {
 
   @Field()
   @Column()
-  time: number; // hours
-
-  @Field()
-  @Column()
   priority: string; // low medium high immediate
 
   @Field()

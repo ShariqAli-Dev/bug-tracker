@@ -93,6 +93,7 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateTicketArgs = {
   options: CreateTicketInput;
+  team: Array<TeamMembers>;
 };
 
 
@@ -200,7 +201,6 @@ export type Ticket = {
   priority: Scalars['String'];
   projectId: Scalars['Float'];
   status: Scalars['String'];
-  time: Scalars['Float'];
   title: Scalars['String'];
   type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -263,9 +263,15 @@ export type CreateTicketInput = {
   priority: Scalars['String'];
   projectId: Scalars['Float'];
   status: Scalars['String'];
-  time: Scalars['Float'];
   title: Scalars['String'];
   type: Scalars['String'];
+};
+
+export type TeamMembers = {
+  email: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  selected: Scalars['Boolean'];
 };
 
 export type UserTickets = {
@@ -293,6 +299,14 @@ export type CreateProjectMutationVariables = Exact<{
 
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', id: number, name: string, description: string, createdAt: any, updatedAt: any } };
+
+export type CreateTicketMutationVariables = Exact<{
+  team: Array<TeamMembers> | TeamMembers;
+  options: CreateTicketInput;
+}>;
+
+
+export type CreateTicketMutation = { __typename?: 'Mutation', createTicket: { __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -342,7 +356,7 @@ export type ByeQuery = { __typename?: 'Query', bye: string };
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Users', id: number, role: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Users', name: string, id: number, role: string } | null };
 
 export type ProjectQueryVariables = Exact<{
   projectId: Scalars['Float'];
@@ -415,6 +429,25 @@ export const CreateProjectDocument = gql`
 
 export function useCreateProjectMutation() {
   return Urql.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument);
+};
+export const CreateTicketDocument = gql`
+    mutation CreateTicket($team: [teamMembers!]!, $options: createTicketInput!) {
+  createTicket(team: $team, options: $options) {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    updatedAt
+  }
+}
+    `;
+
+export function useCreateTicketMutation() {
+  return Urql.useMutation<CreateTicketMutation, CreateTicketMutationVariables>(CreateTicketDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
@@ -519,6 +552,7 @@ export function useByeQuery(options?: Omit<Urql.UseQueryArgs<ByeQueryVariables>,
 export const MeDocument = gql`
     query Me {
   me {
+    name
     id
     role
   }

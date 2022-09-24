@@ -1,5 +1,13 @@
 import { Ticket } from "../entities/Ticket";
-import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Field,
+  InputType,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from "type-graphql";
 
 @InputType()
 class userTickets {
@@ -8,9 +16,24 @@ class userTickets {
 }
 
 @InputType()
+class teamMembers {
+  @Field()
+  email: string;
+
+  @Field()
+  id: number;
+
+  @Field()
+  name: string;
+
+  @Field()
+  selected: boolean;
+}
+
+@InputType()
 class createTicketInput extends userTickets {
   @Field()
-  projectId!: number;
+  projectId: number;
 
   @Field()
   creator!: string;
@@ -20,9 +43,6 @@ class createTicketInput extends userTickets {
 
   @Field()
   description!: string;
-
-  @Field()
-  time!: number;
 
   @Field()
   priority!: string;
@@ -48,16 +68,20 @@ export class TicketResolver {
 
   @Mutation(() => Ticket)
   async createTicket(
-    @Arg("options") options: createTicketInput
+    @Arg("options") options: createTicketInput,
+    @Arg("team", (type) => [teamMembers]) team: teamMembers[]
   ): Promise<Ticket> {
-    return await Ticket.create({
+    console.log({ options, team });
+    const ticket = await Ticket.create({
       projectId: options.projectId,
+      creator: options.creator,
       title: options.title,
       description: options.description,
-      time: options.time,
       priority: options.priority,
       type: options.type,
       status: options.status,
     }).save();
+
+    return ticket;
   }
 }
