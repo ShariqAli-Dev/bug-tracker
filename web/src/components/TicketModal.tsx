@@ -34,9 +34,9 @@ interface TicketModalProps {
 }
 
 interface TeamMember {
-  name: string;
-  id: number;
   email: string;
+  id: number;
+  name: string;
   selected: boolean;
 }
 
