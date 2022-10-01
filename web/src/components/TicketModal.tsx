@@ -93,10 +93,10 @@ const TicketModal = ({
             }}
             onSubmit={async (options) => {
               try {
-                const newTeam = team.filter((team) => team.selected);
+                const filteredTeam = team.filter((team) => team.selected);
                 await createTicket({
                   options,
-                  team: newTeam,
+                  team: filteredTeam,
                 });
 
                 if (!toast.isActive("newProjectSuccess")) {
@@ -168,24 +168,26 @@ const TicketModal = ({
                     borderWidth={0.1}
                     borderRadius={"xl"}
                   >
-                    {team.map((p, pdx) => {
-                      return (
-                        <Flex
-                          width="full"
-                          justifyContent={"space-between"}
-                          fontSize={"1rem"}
-                          onClick={() => {
-                            team[pdx].selected = !team[pdx].selected;
-                            setTeam([...team]);
-                          }}
-                          backgroundColor={p.selected ? "primary" : "white"}
-                          color={p.selected ? "tertiary" : "secondary"}
-                          key={p.email}
-                        >
-                          <Box>{p.name}:</Box> <Box>{p.email}</Box>
-                        </Flex>
-                      );
-                    })}
+                    {team
+                      .filter((m) => m.id !== meQuery?.me?.id)
+                      .map((p, pdx) => {
+                        return (
+                          <Flex
+                            width="full"
+                            justifyContent={"space-between"}
+                            fontSize={"1rem"}
+                            onClick={() => {
+                              team[pdx].selected = !team[pdx].selected;
+                              setTeam([...team]);
+                            }}
+                            backgroundColor={p.selected ? "primary" : "white"}
+                            color={p.selected ? "tertiary" : "secondary"}
+                            key={p.email}
+                          >
+                            <Box>{p.name}:</Box> <Box>{p.email}</Box>
+                          </Flex>
+                        );
+                      })}
                   </Box>
                 )}
                 <Flex
