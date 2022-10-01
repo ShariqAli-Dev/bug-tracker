@@ -8,7 +8,6 @@ import { Project } from "./entities/Project";
 import { Ticket } from "./entities/Ticket";
 import { Users } from "./entities/Users";
 import { User_Project } from "./entities/User_Project";
-import path from "path";
 import { User_Ticket } from "./entities/User_Ticket";
 
 export const myDataSource = new DataSource({

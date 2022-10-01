@@ -55,7 +55,12 @@ const TicketModal = ({
   useEffect(() => {
     if (!fetching) {
       const teamData = data?.users.map((user) => {
-        return { ...user, selected: false };
+        return {
+          email: user.email,
+          id: user.id,
+          name: user.name,
+          selected: false,
+        };
       });
       setTeam(teamData as TeamMember[]);
     }
@@ -88,9 +93,10 @@ const TicketModal = ({
             }}
             onSubmit={async (options) => {
               try {
+                const newTeam = team.filter((team) => team.selected);
                 await createTicket({
                   options,
-                  team: team.filter((team) => team.selected),
+                  team: newTeam,
                 });
 
                 if (!toast.isActive("newProjectSuccess")) {
