@@ -9,21 +9,6 @@ class userTickets {
 }
 
 @InputType()
-class teamMembers {
-  @Field()
-  email: string;
-
-  @Field()
-  id: number;
-
-  @Field()
-  name: string;
-
-  @Field()
-  selected: boolean;
-}
-
-@InputType()
 class createTicketInput extends userTickets {
   @Field()
   projectId: number;
@@ -45,6 +30,21 @@ class createTicketInput extends userTickets {
 
   @Field()
   status!: string;
+}
+
+@InputType()
+class teamMembers {
+  @Field()
+  email: string;
+
+  @Field()
+  id: number;
+
+  @Field()
+  name: string;
+
+  @Field()
+  selected: boolean;
 }
 
 @Resolver()
