@@ -157,11 +157,11 @@ export type Query = {
   notification?: Maybe<Notification>;
   notifications: Array<Notification>;
   project?: Maybe<Project>;
+  projectTickets: Array<Ticket>;
   projects: Array<Project>;
   tickets: Array<Ticket>;
   userComments: Array<Comment>;
   userNotifications: Array<Notification>;
-  userTickets: Array<Ticket>;
   users: Array<Users>;
 };
 
