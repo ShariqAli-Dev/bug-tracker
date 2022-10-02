@@ -7,7 +7,9 @@ import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
 import ProjectTickets from "../../components/ProjectTickets";
+import { AssignedPersonnel as AssignedPersonnelType } from "../../types";
 import {
+  Ticket,
   useAssignedPersonnelQuery,
   useProjectQuery,
   useProjectTicketsQuery,
@@ -106,12 +108,17 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           >
             {!personnelFetch && (
               <AssignedPersonnel
-                data={personnelQuery?.assignedPersonnel as any}
+                data={
+                  personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
+                }
               />
             )}
 
             {!ticketsFetch && (
-              <ProjectTickets data={ticketsQuery?.projectTickets as any} />
+              <ProjectTickets
+                data={ticketsQuery?.projectTickets}
+                assignedPersonnel={personnelQuery?.assignedPersonnel as any}
+              />
             )}
           </Flex>
         </Box>
