@@ -152,7 +152,7 @@ const ProjectTickets = () => {
                         >
                           {cell.render("Cell")}
                           {!cell.column.Header && (
-                            <Link href={`/project/${parseInt(row.id) + 1}`}>
+                            <Link href={`/project/${parseInt(row.id)}`}>
                               <Text
                                 textDecoration="underline"
                                 cursor="pointer"

@@ -11,7 +11,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import { InputField } from "./InputField";
@@ -20,7 +19,12 @@ import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useEffect, useState } from "react";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { useUsersQuery } from "../generated/graphql";
+import {
+  useCreateTicketMutation,
+  useMeQuery,
+  useUsersQuery,
+} from "../generated/graphql";
+import { useRouter } from "next/router";
 
 interface TicketModalProps {
   isOpen: boolean;
@@ -30,9 +34,9 @@ interface TicketModalProps {
 }
 
 interface TeamMember {
-  name: string;
-  id: number;
   email: string;
+  id: number;
+  name: string;
   selected: boolean;
 }
 
@@ -42,10 +46,11 @@ const TicketModal = ({
   finalRef,
   initialRef,
 }: TicketModalProps) => {
-  const toast = useToast();
+  const [, createTicket] = useCreateTicketMutation();
+  const [{ data: meQuery }] = useMeQuery();
   const [{ data, fetching }] = useUsersQuery();
+  const toast = useToast();
   const [team, setTeam] = useState<TeamMember[]>([]);
-  console.log({ data, team });
 
   useEffect(() => {
     if (!fetching) {
@@ -73,17 +78,21 @@ const TicketModal = ({
         <ModalBody pb={8}>
           <Formik
             initialValues={{
+              projectId: parseInt(useRouter().query.projectId as string),
+              creator: meQuery?.me?.name as string,
               title: "",
               description: "",
-              team: [],
               type: "issue",
               priority: "low",
               status: "new",
             }}
             onSubmit={async (options) => {
               try {
-                // do the api call to create the ticket
-                // loop theough team and do logic related to submitting
+                await createTicket({
+                  options,
+                  team: team.filter((team) => team.selected),
+                });
+
                 if (!toast.isActive("newProjectSuccess")) {
                   toast({
                     id: "newProjectSuccess",
@@ -136,7 +145,7 @@ const TicketModal = ({
                   <InputField
                     onChange={handleChange}
                     value={values.description}
-                    name="ticket"
+                    name="description"
                     label="Ticket Description"
                     textarea
                     required
@@ -155,7 +164,9 @@ const TicketModal = ({
                   >
                     {team.map((p, pdx) => {
                       return (
-                        <Text
+                        <Flex
+                          width="full"
+                          justifyContent={"space-between"}
                           fontSize={"1rem"}
                           onClick={() => {
                             team[pdx].selected = !team[pdx].selected;
@@ -165,8 +176,8 @@ const TicketModal = ({
                           color={p.selected ? "tertiary" : "secondary"}
                           key={p.email}
                         >
-                          {p.name}: {p.email}
-                        </Text>
+                          <Box>{p.name}:</Box> <Box>{p.email}</Box>
+                        </Flex>
                       );
                     })}
                   </Box>
@@ -245,4 +256,4 @@ const TicketModal = ({
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(TicketModal);
+export default withUrqlClient(createUrqlClient)(TicketModal);

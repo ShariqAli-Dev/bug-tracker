@@ -1,5 +1,6 @@
-import { Ticket } from "../entities/Ticket";
 import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import { Ticket } from "../entities/Ticket";
+import { User_Ticket } from "../entities/User_Ticket";
 
 @InputType()
 class userTickets {
@@ -10,16 +11,16 @@ class userTickets {
 @InputType()
 class createTicketInput extends userTickets {
   @Field()
+  projectId: number;
+
+  @Field()
+  creator!: string;
+
+  @Field()
   title!: string;
 
   @Field()
   description!: string;
-
-  @Field()
-  submitter!: string;
-
-  @Field()
-  developer!: string;
 
   @Field()
   priority!: string;
@@ -29,6 +30,21 @@ class createTicketInput extends userTickets {
 
   @Field()
   status!: string;
+}
+
+@InputType()
+class teamMembers {
+  @Field()
+  email: string;
+
+  @Field()
+  id: number;
+
+  @Field()
+  name: string;
+
+  @Field()
+  selected: boolean;
 }
 
 @Resolver()
@@ -45,17 +61,27 @@ export class TicketResolver {
 
   @Mutation(() => Ticket)
   async createTicket(
-    @Arg("options") options: createTicketInput
+    @Arg("options") options: createTicketInput,
+    @Arg("team", () => [teamMembers]) team: teamMembers[]
   ): Promise<Ticket> {
-    return await Ticket.create({
-      title: options.title,
-      description: options.description,
-      submitter: options.submitter,
-      developer: options.developer,
-      priority: options.priority,
-      type: options.type,
-      status: options.status,
-      projectId: options.projectId,
-    }).save();
+    console.log("you got this far");
+    const ticket = await Ticket.create({ ...options }).save();
+
+    let queryString = "";
+    team.forEach((m, mdx) => {
+      queryString += `(${ticket.id}, ${m.id})`;
+      if (mdx !== team.length - 1) {
+        queryString += ",";
+      }
+    });
+
+    User_Ticket.query(`
+    insert into user_ticket
+      ("ticketId", "userId")
+    values
+      ${queryString}
+    `);
+
+    return ticket;
   }
 }

@@ -1,7 +1,0 @@
-query ProjectByType {
-  projectByType {
-    issue
-    bug
-    feature
-  }
-}

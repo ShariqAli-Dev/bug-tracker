@@ -3,9 +3,15 @@ mutation CreateProject($options: CreateProjectInput!) {
     id
     name
     description
-    priority
-    type
-    status
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateProject($options: CreateProjectInput!) {
+  createProject(options: $options) {
+    id
+    name
+    description
     createdAt
     updatedAt
   }

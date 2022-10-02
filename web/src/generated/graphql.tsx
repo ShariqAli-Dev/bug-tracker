@@ -37,8 +37,6 @@ export type Comment = {
 export type CreateProjectInput = {
   description: Scalars['String'];
   name: Scalars['String'];
-  priority: Scalars['String'];
-  type: Scalars['String'];
 };
 
 export type FieldError = {
@@ -95,6 +93,7 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateTicketArgs = {
   options: CreateTicketInput;
+  team: Array<TeamMembers>;
 };
 
 
@@ -152,32 +151,7 @@ export type Project = {
   description: Scalars['String'];
   id: Scalars['Float'];
   name: Scalars['String'];
-  priority: Scalars['String'];
-  status: Scalars['String'];
-  type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
-};
-
-export type ProjectByPriority = {
-  __typename?: 'ProjectByPriority';
-  high: Scalars['String'];
-  immediate: Scalars['String'];
-  low: Scalars['String'];
-  medium: Scalars['String'];
-};
-
-export type ProjectByStatus = {
-  __typename?: 'ProjectByStatus';
-  in_progress: Scalars['String'];
-  new: Scalars['String'];
-  resolved: Scalars['String'];
-};
-
-export type ProjectByType = {
-  __typename?: 'ProjectByType';
-  bug: Scalars['String'];
-  feature: Scalars['String'];
-  issue: Scalars['String'];
 };
 
 export type Query = {
@@ -191,9 +165,6 @@ export type Query = {
   notification?: Maybe<Notification>;
   notifications: Array<Notification>;
   project?: Maybe<Project>;
-  projectByPriority: Array<ProjectByPriority>;
-  projectByStatus: Array<ProjectByStatus>;
-  projectByType: Array<ProjectByType>;
   projects: Array<Project>;
   tickets: Array<Ticket>;
   userComments: Array<Comment>;
@@ -224,12 +195,12 @@ export type QueryUserTicketsArgs = {
 
 export type Ticket = {
   __typename?: 'Ticket';
+  creator: Scalars['String'];
   description: Scalars['String'];
-  developer: Scalars['String'];
   id: Scalars['Float'];
   priority: Scalars['String'];
+  projectId: Scalars['Float'];
   status: Scalars['String'];
-  submitter: Scalars['String'];
   title: Scalars['String'];
   type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
@@ -244,8 +215,6 @@ export type UpdateProjectInput = {
   description: Scalars['String'];
   id?: InputMaybe<Scalars['Float']>;
   name: Scalars['String'];
-  priority: Scalars['String'];
-  type: Scalars['String'];
 };
 
 export type UserLogin = {
@@ -289,14 +258,20 @@ export type CreateComment = {
 };
 
 export type CreateTicketInput = {
+  creator: Scalars['String'];
   description: Scalars['String'];
-  developer: Scalars['String'];
   priority: Scalars['String'];
   projectId: Scalars['Float'];
   status: Scalars['String'];
-  submitter: Scalars['String'];
   title: Scalars['String'];
   type: Scalars['String'];
+};
+
+export type TeamMembers = {
+  email: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  selected: Scalars['Boolean'];
 };
 
 export type UserTickets = {
@@ -323,7 +298,15 @@ export type CreateProjectMutationVariables = Exact<{
 }>;
 
 
-export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', id: number, name: string, description: string, priority: string, type: string, status: string, createdAt: any, updatedAt: any } };
+export type CreateProjectMutation = { __typename?: 'Mutation', createProject: { __typename?: 'Project', id: number, name: string, description: string, createdAt: any, updatedAt: any } };
+
+export type CreateTicketMutationVariables = Exact<{
+  team: Array<TeamMembers> | TeamMembers;
+  options: CreateTicketInput;
+}>;
+
+
+export type CreateTicketMutation = { __typename?: 'Mutation', createTicket: { __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -373,29 +356,14 @@ export type ByeQuery = { __typename?: 'Query', bye: string };
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Users', id: number, role: string } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Users', name: string, id: number, role: string } | null };
 
 export type ProjectQueryVariables = Exact<{
   projectId: Scalars['Float'];
 }>;
 
 
-export type ProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: number, name: string, description: string, priority: string, type: string, status: string, createdAt: any, updatedAt: any } | null };
-
-export type ProjectByPriorityQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ProjectByPriorityQuery = { __typename?: 'Query', projectByPriority: Array<{ __typename?: 'ProjectByPriority', low: string, medium: string, high: string, immediate: string }> };
-
-export type ProjectByStatusQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ProjectByStatusQuery = { __typename?: 'Query', projectByStatus: Array<{ __typename?: 'ProjectByStatus', new: string, in_progress: string, resolved: string }> };
-
-export type ProjectByTypeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ProjectByTypeQuery = { __typename?: 'Query', projectByType: Array<{ __typename?: 'ProjectByType', issue: string, bug: string, feature: string }> };
+export type ProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: number, name: string, description: string, createdAt: any, updatedAt: any } | null };
 
 export type UserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -453,9 +421,6 @@ export const CreateProjectDocument = gql`
     id
     name
     description
-    priority
-    type
-    status
     createdAt
     updatedAt
   }
@@ -464,6 +429,25 @@ export const CreateProjectDocument = gql`
 
 export function useCreateProjectMutation() {
   return Urql.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(CreateProjectDocument);
+};
+export const CreateTicketDocument = gql`
+    mutation CreateTicket($team: [teamMembers!]!, $options: createTicketInput!) {
+  createTicket(team: $team, options: $options) {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    updatedAt
+  }
+}
+    `;
+
+export function useCreateTicketMutation() {
+  return Urql.useMutation<CreateTicketMutation, CreateTicketMutationVariables>(CreateTicketDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
@@ -568,6 +552,7 @@ export function useByeQuery(options?: Omit<Urql.UseQueryArgs<ByeQueryVariables>,
 export const MeDocument = gql`
     query Me {
   me {
+    name
     id
     role
   }
@@ -583,9 +568,6 @@ export const ProjectDocument = gql`
     id
     name
     description
-    priority
-    type
-    status
     createdAt
     updatedAt
   }
@@ -594,46 +576,6 @@ export const ProjectDocument = gql`
 
 export function useProjectQuery(options: Omit<Urql.UseQueryArgs<ProjectQueryVariables>, 'query'>) {
   return Urql.useQuery<ProjectQuery, ProjectQueryVariables>({ query: ProjectDocument, ...options });
-};
-export const ProjectByPriorityDocument = gql`
-    query ProjectByPriority {
-  projectByPriority {
-    low
-    medium
-    high
-    immediate
-  }
-}
-    `;
-
-export function useProjectByPriorityQuery(options?: Omit<Urql.UseQueryArgs<ProjectByPriorityQueryVariables>, 'query'>) {
-  return Urql.useQuery<ProjectByPriorityQuery, ProjectByPriorityQueryVariables>({ query: ProjectByPriorityDocument, ...options });
-};
-export const ProjectByStatusDocument = gql`
-    query ProjectByStatus {
-  projectByStatus {
-    new
-    in_progress
-    resolved
-  }
-}
-    `;
-
-export function useProjectByStatusQuery(options?: Omit<Urql.UseQueryArgs<ProjectByStatusQueryVariables>, 'query'>) {
-  return Urql.useQuery<ProjectByStatusQuery, ProjectByStatusQueryVariables>({ query: ProjectByStatusDocument, ...options });
-};
-export const ProjectByTypeDocument = gql`
-    query ProjectByType {
-  projectByType {
-    issue
-    bug
-    feature
-  }
-}
-    `;
-
-export function useProjectByTypeQuery(options?: Omit<Urql.UseQueryArgs<ProjectByTypeQueryVariables>, 'query'>) {
-  return Urql.useQuery<ProjectByTypeQuery, ProjectByTypeQueryVariables>({ query: ProjectByTypeDocument, ...options });
 };
 export const UserNotificationsDocument = gql`
     query UserNotifications {

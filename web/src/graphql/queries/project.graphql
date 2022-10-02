@@ -3,9 +3,6 @@ query Project($projectId: Float!) {
     id
     name
     description
-    priority
-    type
-    status
     createdAt
     updatedAt
   }

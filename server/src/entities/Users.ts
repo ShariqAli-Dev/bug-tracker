@@ -11,6 +11,7 @@ import {
 import { Notification } from "./Notification";
 import { User_Project } from "./User_Project";
 import { Comment } from "./Comment";
+import { User_Ticket } from "./User_Ticket";
 
 @ObjectType()
 @Entity()
@@ -42,6 +43,9 @@ export class Users extends BaseEntity {
 
   @OneToMany(() => User_Project, (user_project) => user_project.user)
   user_project: User_Project[];
+
+  @OneToMany(() => User_Ticket, (user_ticket) => user_ticket.user)
+  user_ticket: User_Ticket[];
 
   @Field()
   @CreateDateColumn()

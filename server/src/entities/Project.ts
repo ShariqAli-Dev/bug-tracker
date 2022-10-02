@@ -26,18 +26,6 @@ export class Project extends BaseEntity {
   @Column()
   description!: string;
 
-  @Field()
-  @Column()
-  priority!: string;
-
-  @Field()
-  @Column()
-  type!: string;
-
-  @Field()
-  @Column()
-  status!: string;
-
   @OneToMany(() => Ticket, (ticket) => ticket.project)
   tickets: Ticket[];
 
