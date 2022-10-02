@@ -7,13 +7,12 @@ import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
 import ProjectTickets from "../../components/ProjectTickets";
-import { AssignedPersonnel as AssignedPersonnelType } from "../../types";
 import {
-  Ticket,
   useAssignedPersonnelQuery,
   useProjectQuery,
   useProjectTicketsQuery,
 } from "../../generated/graphql";
+import { AssignedPersonnel as AssignedPersonnelType } from "../../types";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 
 interface SectionHeaderProps {
@@ -111,6 +110,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
                 assignedPersonnel={
                   personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
                 }
+                projectId={projectId}
               />
             )}
 

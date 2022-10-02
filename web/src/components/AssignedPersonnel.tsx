@@ -31,6 +31,7 @@ import TeamModal from "./TeamModal";
 
 interface AssignedPersonnelProps {
   assignedPersonnel: AssignedPersonnel[];
+  projectId: number;
 }
 
 const AssignedPersonnel = (props: AssignedPersonnelProps) => {
@@ -223,6 +224,8 @@ const AssignedPersonnel = (props: AssignedPersonnelProps) => {
         </Flex>
       </Box>
       <TeamModal
+        pageProps={{}}
+        projectId={props.projectId}
         isOpen={isOpen}
         onClose={onClose}
         finalRef={finalRef}

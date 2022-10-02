@@ -9,21 +9,27 @@ import {
   ModalHeader,
   ModalOverlay,
   useToast,
+  Text,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useUsersQuery } from "../generated/graphql";
+import { useAvilableUsersQuery } from "../generated/graphql";
 import { ProjectModalProps } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
-const TeamModal = (props: ProjectModalProps) => {
-  const [{ data: users, fetching: usersFetch }] = useUsersQuery();
+interface TeamModalProps extends ProjectModalProps {
+  projectId: number;
+}
+
+const TeamModal = (props: TeamModalProps) => {
+  const [{ data: users, fetching: usersFetch }] = useAvilableUsersQuery({
+    variables: { projectId: props.projectId },
+  });
   const toast = useToast();
-  const router = useRouter();
   const [availableUsers, setAvailableUsers] = useState(
-    users?.users.map((u) => ({ ...u, selected: false }))
+    users?.avilableUsers.map((u) => ({ ...u, selected: false }))
   );
   return (
     <Modal
@@ -68,7 +74,14 @@ const TeamModal = (props: ProjectModalProps) => {
                             setAvailableUsers([...availableUsers]);
                           }}
                         >
-                          me
+                          <Box
+                            display="flex"
+                            justifyContent="space-around"
+                            width="full"
+                          >
+                            <Text>{u.name}</Text>
+                            <Text>{u.email}</Text>
+                          </Box>
                         </Flex>
                       );
                     })}
@@ -94,4 +107,4 @@ const TeamModal = (props: ProjectModalProps) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(TeamModal);
+export default withUrqlClient(createUrqlClient)(TeamModal);
