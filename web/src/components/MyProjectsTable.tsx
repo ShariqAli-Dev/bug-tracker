@@ -159,7 +159,12 @@ const MyProjectsTable = () => {
                           >
                             {cell.render("Cell")}
                             {!cell.column.Header && (
-                              <Link href={`/project/${parseInt(row.id) + 1}`}>
+                              <Link
+                                href={`/project/${parseInt(
+                                  data?.UserProjects[parseInt(row.id)]
+                                    .projectId as any
+                                )}`}
+                              >
                                 <Text
                                   textDecoration="underline"
                                   cursor="pointer"

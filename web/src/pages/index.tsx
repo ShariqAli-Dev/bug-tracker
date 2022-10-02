@@ -72,7 +72,6 @@ const Home: NextPage = () => {
             initialValues={{ email: "", password: "" }}
             onSubmit={async (values) => {
               const { data } = await login({ options: values });
-              console.log({ data });
               if (data?.login.errors) {
                 if (!toast.isActive("login-error")) {
                   toast({

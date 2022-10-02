@@ -1,0 +1,13 @@
+query ProjectTickets($projectId: Float!) {
+  projectTickets(projectId: $projectId) {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    updatedAt
+  }
+}
