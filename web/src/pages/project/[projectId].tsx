@@ -117,7 +117,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
 };
 
 ProjectDetails.getInitialProps = ({ query }: any) => {
-  return { projectId: parseInt(query.projectId) + 1 };
+  return { projectId: parseInt(query.projectId) };
 };
 
 export default withUrqlClient(createUrqlClient)(ProjectDetails);
