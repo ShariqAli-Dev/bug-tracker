@@ -23,13 +23,19 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
 import { SectionHeader } from "../pages/project/[projectId]";
+import { AssignedPersonnel } from "../types";
 import TicketModal from "./TicketModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
-const ProjectTickets = (props: any) => {
+interface ProjectTicketsProps {
+  data: any;
+  assignedPersonnel: AssignedPersonnel[];
+}
+
+const ProjectTickets = (props: ProjectTicketsProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
   const initialRef = useRef(null);
@@ -235,6 +241,7 @@ const ProjectTickets = (props: any) => {
         onClose={onClose}
         finalRef={finalRef}
         initialRef={initialRef}
+        assignedPersonnel={props.assignedPersonnel as AssignedPersonnel[]}
       />
     </>
   );

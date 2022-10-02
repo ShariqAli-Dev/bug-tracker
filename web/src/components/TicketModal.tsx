@@ -14,29 +14,23 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { InputField } from "./InputField";
-
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { useEffect, useState } from "react";
-import { createUrqlClient } from "../utils/createUrqlClient";
-import {
-  useCreateTicketMutation,
-  useMeQuery,
-  useUsersQuery,
-} from "../generated/graphql";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { useCreateTicketMutation, useMeQuery } from "../generated/graphql";
+import { AssignedPersonnel, User } from "../types";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface TicketModalProps {
   isOpen: boolean;
   onClose: () => void;
   finalRef: any;
   initialRef: any;
+  assignedPersonnel: AssignedPersonnel[];
 }
 
-interface TeamMember {
-  email: string;
-  id: number;
-  name: string;
+interface TeamMember extends User {
   selected: boolean;
 }
 
@@ -45,26 +39,16 @@ const TicketModal = ({
   onClose,
   finalRef,
   initialRef,
+  assignedPersonnel,
 }: TicketModalProps) => {
   const [, createTicket] = useCreateTicketMutation();
   const [{ data: meQuery }] = useMeQuery();
-  const [{ data, fetching }] = useUsersQuery();
   const toast = useToast();
-  const [team, setTeam] = useState<TeamMember[]>([]);
-
-  useEffect(() => {
-    if (!fetching) {
-      const teamData = data?.users.map((user) => {
-        return {
-          email: user.email,
-          id: user.id,
-          name: user.name,
-          selected: false,
-        };
-      });
-      setTeam(teamData as TeamMember[]);
-    }
-  }, [data, fetching]);
+  const [team, setTeam] = useState<TeamMember[]>(
+    assignedPersonnel
+      .filter(({ user }) => user.id !== meQuery?.me?.id)
+      .map(({ user }) => ({ ...user, selected: false }))
+  );
 
   return (
     <Modal
@@ -93,7 +77,7 @@ const TicketModal = ({
             }}
             onSubmit={async (options) => {
               try {
-                const filteredTeam = team.filter((team) => team.selected);
+                const filteredTeam = team.filter((member) => member.selected);
                 await createTicket({
                   options,
                   team: filteredTeam,
@@ -158,38 +142,34 @@ const TicketModal = ({
                   />
                 </Box>
                 {/* Add Team Members */}
-                {!fetching && (
-                  <Box
-                    overflowY="auto"
-                    height="150px"
-                    scrollBehavior="auto"
-                    p={4}
-                    borderColor="light-blue"
-                    borderWidth={0.1}
-                    borderRadius={"xl"}
-                  >
-                    {team
-                      .filter((m) => m.id !== meQuery?.me?.id)
-                      .map((p, pdx) => {
-                        return (
-                          <Flex
-                            width="full"
-                            justifyContent={"space-between"}
-                            fontSize={"1rem"}
-                            onClick={() => {
-                              team[pdx].selected = !team[pdx].selected;
-                              setTeam([...team]);
-                            }}
-                            backgroundColor={p.selected ? "primary" : "white"}
-                            color={p.selected ? "tertiary" : "secondary"}
-                            key={p.email}
-                          >
-                            <Box>{p.name}:</Box> <Box>{p.email}</Box>
-                          </Flex>
-                        );
-                      })}
-                  </Box>
-                )}
+                <Box
+                  overflowY="auto"
+                  height="150px"
+                  scrollBehavior="auto"
+                  p={4}
+                  borderColor="light-blue"
+                  borderWidth={0.1}
+                  borderRadius={"xl"}
+                >
+                  {team.map((p, pdx) => {
+                    return (
+                      <Flex
+                        width="full"
+                        justifyContent={"space-between"}
+                        fontSize={"1rem"}
+                        onClick={() => {
+                          team[pdx].selected = !team[pdx].selected;
+                          setTeam([...team]);
+                        }}
+                        backgroundColor={p.selected ? "primary" : "white"}
+                        color={p.selected ? "tertiary" : "secondary"}
+                        key={p.email}
+                      >
+                        <Box>{p.name}</Box> <Box>{p.email}</Box>
+                      </Flex>
+                    );
+                  })}
+                </Box>
                 <Flex
                   justifyContent="space-around"
                   alignItems="center"
