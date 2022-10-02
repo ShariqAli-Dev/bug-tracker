@@ -10,6 +10,7 @@ import ProjectTickets from "../../components/ProjectTickets";
 import {
   useAssignedPersonnelQuery,
   useProjectQuery,
+  useProjectTicketsQuery,
 } from "../../generated/graphql";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 
@@ -41,9 +42,10 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   });
 
   const [{ data: personnelQuery, fetching: personnelFetch }] =
-    useAssignedPersonnelQuery({
-      variables: { projectId },
-    });
+    useAssignedPersonnelQuery({ variables: { projectId } });
+
+  const [{ data: ticketsQuery, fetching: ticketsFetch }] =
+    useProjectTicketsQuery({ variables: { projectId } });
 
   return (
     <Flex
@@ -108,7 +110,9 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               />
             )}
 
-            <ProjectTickets />
+            {!ticketsFetch && (
+              <ProjectTickets data={ticketsQuery?.projectTickets as any} />
+            )}
           </Flex>
         </Box>
       </Flex>

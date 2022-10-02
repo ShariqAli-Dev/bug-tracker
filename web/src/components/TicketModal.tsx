@@ -55,7 +55,12 @@ const TicketModal = ({
   useEffect(() => {
     if (!fetching) {
       const teamData = data?.users.map((user) => {
-        return { ...user, selected: false };
+        return {
+          email: user.email,
+          id: user.id,
+          name: user.name,
+          selected: false,
+        };
       });
       setTeam(teamData as TeamMember[]);
     }
@@ -88,9 +93,10 @@ const TicketModal = ({
             }}
             onSubmit={async (options) => {
               try {
+                const filteredTeam = team.filter((team) => team.selected);
                 await createTicket({
                   options,
-                  team: team.filter((team) => team.selected),
+                  team: filteredTeam,
                 });
 
                 if (!toast.isActive("newProjectSuccess")) {
@@ -162,24 +168,26 @@ const TicketModal = ({
                     borderWidth={0.1}
                     borderRadius={"xl"}
                   >
-                    {team.map((p, pdx) => {
-                      return (
-                        <Flex
-                          width="full"
-                          justifyContent={"space-between"}
-                          fontSize={"1rem"}
-                          onClick={() => {
-                            team[pdx].selected = !team[pdx].selected;
-                            setTeam([...team]);
-                          }}
-                          backgroundColor={p.selected ? "primary" : "white"}
-                          color={p.selected ? "tertiary" : "secondary"}
-                          key={p.email}
-                        >
-                          <Box>{p.name}:</Box> <Box>{p.email}</Box>
-                        </Flex>
-                      );
-                    })}
+                    {team
+                      .filter((m) => m.id !== meQuery?.me?.id)
+                      .map((p, pdx) => {
+                        return (
+                          <Flex
+                            width="full"
+                            justifyContent={"space-between"}
+                            fontSize={"1rem"}
+                            onClick={() => {
+                              team[pdx].selected = !team[pdx].selected;
+                              setTeam([...team]);
+                            }}
+                            backgroundColor={p.selected ? "primary" : "white"}
+                            color={p.selected ? "tertiary" : "secondary"}
+                            key={p.email}
+                          >
+                            <Box>{p.name}:</Box> <Box>{p.email}</Box>
+                          </Flex>
+                        );
+                      })}
                   </Box>
                 )}
                 <Flex

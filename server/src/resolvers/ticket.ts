@@ -3,33 +3,27 @@ import { Ticket } from "../entities/Ticket";
 import { User_Ticket } from "../entities/User_Ticket";
 
 @InputType()
-class userTickets {
+class createTicketInput {
   @Field()
-  projectId!: number;
-}
-
-@InputType()
-class createTicketInput extends userTickets {
-  @Field()
-  projectId: number;
+  projectId?: number;
 
   @Field()
-  creator!: string;
+  creator?: string;
 
   @Field()
-  title!: string;
+  title?: string;
 
   @Field()
-  description!: string;
+  description?: string;
 
   @Field()
-  priority!: string;
+  priority?: string;
 
   @Field()
-  type!: string;
+  type?: string;
 
   @Field()
-  status!: string;
+  status?: string;
 }
 
 @InputType()
@@ -55,8 +49,8 @@ export class TicketResolver {
   }
 
   @Query(() => [Ticket])
-  async userTickets(@Arg("options") options: userTickets): Promise<Ticket[]> {
-    return await Ticket.find({ where: { projectId: options.projectId } });
+  async projectTickets(@Arg("projectId") projectId: number): Promise<Ticket[]> {
+    return await Ticket.find({ where: { projectId } });
   }
 
   @Mutation(() => Ticket)
@@ -64,23 +58,23 @@ export class TicketResolver {
     @Arg("options") options: createTicketInput,
     @Arg("team", () => [teamMembers]) team: teamMembers[]
   ): Promise<Ticket> {
-    console.log("you got this far");
     const ticket = await Ticket.create({ ...options }).save();
+    if (team.length) {
+      let queryString = "";
+      team.forEach((m, mdx) => {
+        queryString += `(${ticket.id}, ${m.id})`;
+        if (mdx !== team.length - 1) {
+          queryString += ",";
+        }
+      });
 
-    let queryString = "";
-    team.forEach((m, mdx) => {
-      queryString += `(${ticket.id}, ${m.id})`;
-      if (mdx !== team.length - 1) {
-        queryString += ",";
-      }
-    });
-
-    User_Ticket.query(`
-    insert into user_ticket
-      ("ticketId", "userId")
-    values
-      ${queryString}
-    `);
+      User_Ticket.query(`
+      insert into user_ticket
+        ("ticketId", "userId")
+      values
+        ${queryString}
+      `);
+    }
 
     return ticket;
   }

@@ -3,19 +3,17 @@ import {
   Arg,
   Ctx,
   Field,
-  FieldResolver,
   InputType,
   Mutation,
   ObjectType,
   Query,
   Resolver,
-  Root,
   UseMiddleware,
 } from "type-graphql";
 import { v4 } from "uuid";
 import {
-  FORGET_PASSWORD_PREFIX,
   COOKIE_NAME,
+  FORGET_PASSWORD_PREFIX,
   INITIAL_ROLE,
 } from "../constants";
 import { myDataSource } from "../data-source";

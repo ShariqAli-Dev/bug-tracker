@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
@@ -29,11 +29,10 @@ const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
-const ProjectTickets = () => {
+const ProjectTickets = (props: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
   const initialRef = useRef(null);
-  const [data, setData] = useState([{}, {}]);
   const columns = useMemo(
     () => [
       {
@@ -41,11 +40,11 @@ const ProjectTickets = () => {
         columns: [
           {
             Header: "Title",
-            accessor: "user.name",
+            accessor: "title",
           },
           {
             Header: "Description",
-            accessor: "user.email",
+            accessor: "description",
           },
           {
             Header: "",
@@ -73,7 +72,7 @@ const ProjectTickets = () => {
   } = useTable(
     {
       columns,
-      data,
+      data: props.data as any,
       initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
