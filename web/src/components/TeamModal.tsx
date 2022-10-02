@@ -8,12 +8,11 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-  useToast,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { useAvilableUsersQuery } from "../generated/graphql";
 import { ProjectModalProps } from "../types";
@@ -27,6 +26,11 @@ const TeamModal = (props: TeamModalProps) => {
   const [{ data: users, fetching: usersFetch }] = useAvilableUsersQuery({
     variables: { projectId: props.projectId },
   });
+  /* 
+  TODO:
+  1. Model an onSubmit for team after the onSubmit for tickets
+  2. Use toasts when you are subbmitting or getting errors
+  */
   const toast = useToast();
   const [availableUsers, setAvailableUsers] = useState(
     users?.avilableUsers.map((u) => ({ ...u, selected: false }))
