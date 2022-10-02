@@ -108,7 +108,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           >
             {!personnelFetch && (
               <AssignedPersonnel
-                data={
+                assignedPersonnel={
                   personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
                 }
               />
@@ -117,7 +117,9 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             {!ticketsFetch && (
               <ProjectTickets
                 data={ticketsQuery?.projectTickets}
-                assignedPersonnel={personnelQuery?.assignedPersonnel as any}
+                assignedPersonnel={
+                  personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
+                }
               />
             )}
           </Flex>

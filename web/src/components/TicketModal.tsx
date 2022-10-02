@@ -13,40 +13,26 @@ import {
   Select,
   useToast,
 } from "@chakra-ui/react";
-import { InputField } from "./InputField";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useCreateTicketMutation, useMeQuery } from "../generated/graphql";
-import { AssignedPersonnel, User } from "../types";
+import { ProjectModalProps, User } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
-
-interface TicketModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  finalRef: any;
-  initialRef: any;
-  assignedPersonnel: AssignedPersonnel[];
-}
+import { InputField } from "./InputField";
 
 interface TeamMember extends User {
   selected: boolean;
 }
 
-const TicketModal = ({
-  isOpen,
-  onClose,
-  finalRef,
-  initialRef,
-  assignedPersonnel,
-}: TicketModalProps) => {
+const TicketModal = (props: ProjectModalProps) => {
   const [, createTicket] = useCreateTicketMutation();
   const [{ data: meQuery, fetching: meFetch }] = useMeQuery();
   const toast = useToast();
   const router = useRouter();
   const [team, setTeam] = useState<TeamMember[]>(
-    assignedPersonnel
+    props.assignedPersonnel
       .filter(({ user }) => user.id !== meQuery?.me?.id)
       .map(({ user }) => ({ ...user, selected: false }))
   );
@@ -55,10 +41,10 @@ const TicketModal = ({
     <>
       {!meFetch && (
         <Modal
-          initialFocusRef={initialRef}
-          finalFocusRef={finalRef}
-          isOpen={isOpen}
-          onClose={onClose}
+          initialFocusRef={props.initialRef}
+          finalFocusRef={props.finalRef}
+          isOpen={props.isOpen}
+          onClose={props.onClose}
           closeOnOverlayClick={false}
           size={{ base: "xs", sm: "sm", md: "lg" }}
           isCentered
@@ -242,7 +228,7 @@ const TicketModal = ({
                       <Button type="submit" isLoading={isSubmitting}>
                         Create Ticket
                       </Button>
-                      <Button onClick={onClose}>Cancel</Button>
+                      <Button onClick={props.onClose}>Cancel</Button>
                     </Box>
                   </Form>
                 )}
