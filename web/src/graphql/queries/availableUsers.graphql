@@ -1,0 +1,10 @@
+query AvilableUsers($projectId: Float!) {
+  avilableUsers(projectId: $projectId) {
+    id
+    email
+    role
+    name
+    createdAt
+    updatedAt
+  }
+}
