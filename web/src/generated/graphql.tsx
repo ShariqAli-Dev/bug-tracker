@@ -177,8 +177,8 @@ export type QueryProjectArgs = {
   id: Scalars["Float"];
 };
 
-export type QueryUserTicketsArgs = {
-  options: UserTickets;
+export type QueryProjectTicketsArgs = {
+  projectId: Scalars["Float"];
 };
 
 export type Ticket = {
@@ -260,10 +260,6 @@ export type TeamMembers = {
   id: Scalars["Float"];
   name: Scalars["String"];
   selected: Scalars["Boolean"];
-};
-
-export type UserTickets = {
-  projectId: Scalars["Float"];
 };
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -462,6 +458,26 @@ export type ProjectQuery = {
     createdAt: any;
     updatedAt: any;
   } | null;
+};
+
+export type ProjectTicketsQueryVariables = Exact<{
+  projectId: Scalars["Float"];
+}>;
+
+export type ProjectTicketsQuery = {
+  __typename?: "Query";
+  projectTickets: Array<{
+    __typename?: "Ticket";
+    id: number;
+    projectId: number;
+    creator: string;
+    title: string;
+    description: string;
+    priority: string;
+    type: string;
+    status: string;
+    updatedAt: any;
+  }>;
 };
 
 export type UserNotificationsQueryVariables = Exact<{ [key: string]: never }>;
@@ -740,6 +756,30 @@ export function useProjectQuery(
 ) {
   return Urql.useQuery<ProjectQuery, ProjectQueryVariables>({
     query: ProjectDocument,
+    ...options,
+  });
+}
+export const ProjectTicketsDocument = gql`
+  query ProjectTickets($projectId: Float!) {
+    projectTickets(projectId: $projectId) {
+      id
+      projectId
+      creator
+      title
+      description
+      priority
+      type
+      status
+      updatedAt
+    }
+  }
+`;
+
+export function useProjectTicketsQuery(
+  options: Omit<Urql.UseQueryArgs<ProjectTicketsQueryVariables>, "query">
+) {
+  return Urql.useQuery<ProjectTicketsQuery, ProjectTicketsQueryVariables>({
+    query: ProjectTicketsDocument,
     ...options,
   });
 }
