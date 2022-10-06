@@ -33,11 +33,12 @@ export class UserProjectResolver {
   @UseMiddleware(isAuth) // another middleware so only admin and project manager can create a project or un assign users from projects
   async assignUser(
     @Arg("projectId") projectId: number,
+    @Arg("userId") userId: number,
     @Ctx() { req }: MyContext
   ) {
     await User_Project.insert({
       projectId,
-      userId: req.session.userId,
+      userId,
     });
     return true;
   }
