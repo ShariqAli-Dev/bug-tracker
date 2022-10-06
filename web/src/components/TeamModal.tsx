@@ -13,9 +13,9 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAvilableUsersQuery } from "../generated/graphql";
-import { ProjectModalProps } from "../types";
+import { ProjectModalProps, User } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface TeamModalProps extends ProjectModalProps {
@@ -32,9 +32,17 @@ const TeamModal = (props: TeamModalProps) => {
   2. Use toasts when you are subbmitting or getting errors
   */
   const toast = useToast();
-  const [availableUsers, setAvailableUsers] = useState(
-    users?.avilableUsers.map((u) => ({ ...u, selected: false }))
-  );
+
+  const [availableUsers, setAvailableUsers] = useState<any>([]);
+
+  useEffect(() => {
+    if (!usersFetch) {
+      setAvailableUsers(
+        users?.avilableUsers.map((u) => ({ ...u, selected: false }))
+      );
+    }
+    return;
+  }, [users, usersFetch]);
   return (
     <Modal
       initialFocusRef={props.initialRef}
@@ -63,32 +71,34 @@ const TeamModal = (props: TeamModalProps) => {
                     borderWidth={0.1}
                     borderRadius={"xl"}
                   >
-                    {availableUsers?.map((u, udx) => {
-                      return (
-                        <Flex
-                          width="full"
-                          justifyContent={"space-between"}
-                          fontSize={"1rem"}
-                          key={u.email}
-                          backgroundColor={u.selected ? "primary" : "white"}
-                          color={u.selected ? "tertiary" : "secondary"}
-                          onClick={() => {
-                            availableUsers[udx].selected =
-                              !availableUsers[udx].selected;
-                            setAvailableUsers([...availableUsers]);
-                          }}
-                        >
-                          <Box
-                            display="flex"
-                            justifyContent="space-around"
+                    {availableUsers?.map(
+                      (u: User & { selected: boolean }, udx: number) => {
+                        return (
+                          <Flex
                             width="full"
+                            justifyContent={"space-between"}
+                            fontSize={"1rem"}
+                            key={u.email}
+                            backgroundColor={u.selected ? "primary" : "white"}
+                            color={u.selected ? "tertiary" : "secondary"}
+                            onClick={() => {
+                              availableUsers[udx].selected =
+                                !availableUsers[udx].selected;
+                              setAvailableUsers([...availableUsers]);
+                            }}
                           >
-                            <Text>{u.name}</Text>
-                            <Text>{u.email}</Text>
-                          </Box>
-                        </Flex>
-                      );
-                    })}
+                            <Box
+                              display="flex"
+                              justifyContent="space-around"
+                              width="full"
+                            >
+                              <Text>{u.name}</Text>
+                              <Text>{u.email}</Text>
+                            </Box>
+                          </Flex>
+                        );
+                      }
+                    )}
                   </Box>
                   {/* Submit button */}
                   <Box
