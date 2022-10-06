@@ -14,7 +14,10 @@ import {
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useEffect, useState } from "react";
-import { useAvilableUsersQuery } from "../generated/graphql";
+import {
+  useAssignUsersMutation,
+  useAvilableUsersQuery,
+} from "../generated/graphql";
 import { ProjectModalProps, User } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
@@ -26,14 +29,9 @@ const TeamModal = (props: TeamModalProps) => {
   const [{ data: users, fetching: usersFetch }] = useAvilableUsersQuery({
     variables: { projectId: props.projectId },
   });
-  /* 
-  TODO:
-  1. Model an onSubmit for team after the onSubmit for tickets
-  2. Use toasts when you are subbmitting or getting errors
-  */
   const toast = useToast();
-
   const [availableUsers, setAvailableUsers] = useState<any>([]);
+  const [, assignUsers] = useAssignUsersMutation();
 
   useEffect(() => {
     if (!usersFetch) {
@@ -59,7 +57,52 @@ const TeamModal = (props: TeamModalProps) => {
         <ModalCloseButton />
         <ModalBody pb={8}>
           {!usersFetch && (
-            <Formik initialValues={{}} onSubmit={() => {}}>
+            <Formik
+              initialValues={{}}
+              onSubmit={async () => {
+                try {
+                  const filteredTeam = availableUsers
+                    .filter((m: { selected: boolean }) => m.selected)
+                    .map((m: { id: number }) => ({ id: m.id }));
+                  await assignUsers({
+                    projectId: props.projectId,
+                    team: filteredTeam,
+                  });
+                  if (!toast.isActive("assignedUsersSuccess")) {
+                    toast({
+                      id: "assignedUsersSuccess",
+                      title: "Success",
+                      description: "We succesfully assigned the users",
+                      status: "success",
+                      duration: 3000,
+                      isClosable: true,
+                      variant: "subtle",
+                      containerStyle: {
+                        color: "primary",
+                      },
+                      position: "top",
+                    });
+                  }
+                } catch {
+                  if (!toast.isActive("assignedUsersError")) {
+                    toast({
+                      id: "assignedUsersError",
+                      title: "Assigning Error",
+                      description:
+                        "Unfortunately, we  could not assign the users",
+                      status: "error",
+                      duration: 3000,
+                      isClosable: true,
+                      variant: "subtle",
+                      containerStyle: {
+                        color: "primary",
+                      },
+                      position: "top",
+                    });
+                  }
+                }
+              }}
+            >
               {({ isSubmitting }) => (
                 <Form>
                   <Box
