@@ -3,7 +3,6 @@ query AssignedPersonnel($projectId: Float!) {
     user {
       id
       email
-      role
       name
     }
   }

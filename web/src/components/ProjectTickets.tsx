@@ -32,7 +32,7 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 interface ProjectTicketsProps {
   data: any;
-  assignedPersonnel: AssignedPersonnel[];
+  projectId: number;
 }
 
 const ProjectTickets = (props: ProjectTicketsProps) => {
@@ -241,7 +241,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
         onClose={onClose}
         finalRef={finalRef}
         initialRef={initialRef}
-        assignedPersonnel={props.assignedPersonnel as AssignedPersonnel[]}
+        projectId={props.projectId}
       />
     </>
   );
