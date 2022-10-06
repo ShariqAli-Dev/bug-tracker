@@ -41,7 +41,6 @@ export class UserProjectResolver {
     @Arg("projectId") projectId: number,
     @Arg("team", () => [assignTeamInput]) team: assignTeamInput[]
   ) {
-    console.log({ team, projectId });
     if (team.length) {
       let queryString = "";
       team.forEach((m, mdx) => {
