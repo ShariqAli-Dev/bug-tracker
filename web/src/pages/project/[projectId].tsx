@@ -7,13 +7,12 @@ import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
 import ProjectTickets from "../../components/ProjectTickets";
-import { AssignedPersonnel as AssignedPersonnelType } from "../../types";
 import {
-  Ticket,
   useAssignedPersonnelQuery,
   useProjectQuery,
   useProjectTicketsQuery,
 } from "../../generated/graphql";
+import { AssignedPersonnel as AssignedPersonnelType } from "../../types";
 import { createUrqlClient } from "../../utils/createUrqlClient";
 
 interface SectionHeaderProps {
@@ -108,16 +107,19 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           >
             {!personnelFetch && (
               <AssignedPersonnel
-                data={
+                assignedPersonnel={
                   personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
                 }
+                projectId={projectId}
               />
             )}
 
             {!ticketsFetch && (
               <ProjectTickets
                 data={ticketsQuery?.projectTickets}
-                assignedPersonnel={personnelQuery?.assignedPersonnel as any}
+                assignedPersonnel={
+                  personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
+                }
               />
             )}
           </Flex>

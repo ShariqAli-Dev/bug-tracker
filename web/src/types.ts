@@ -8,3 +8,11 @@ export interface User {
 export interface AssignedPersonnel {
   user: User;
 }
+
+export interface ProjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  finalRef: any;
+  initialRef: any;
+  assignedPersonnel: AssignedPersonnel[];
+}

@@ -68,6 +68,17 @@ export class ProjectResolver {
     `);
   }
 
+  // this function returns a list of users that are not in the current project
+  @Query(() => [Users])
+  async avilableUsers(@Arg("projectId") projectId: number) {
+    return await myDataSource.query(`
+    select * from users 
+	    where "id" not in 
+		    (select "userId" from user_project
+			    where user_project."projectId" = ${projectId})
+    `);
+  }
+
   @Mutation(() => Project)
   // add middleware so only admin or
   async createProject(

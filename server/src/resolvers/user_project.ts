@@ -4,6 +4,8 @@ import { MyContext } from "../types";
 import {
   Arg,
   Ctx,
+  Field,
+  InputType,
   Mutation,
   Query,
   Resolver,
@@ -11,6 +13,26 @@ import {
 } from "type-graphql";
 import { myDataSource } from "../data-source";
 
+@InputType()
+class assignUserInput {
+  @Field()
+  userId: number;
+
+  @Field()
+  projectId: number;
+}
+
+@InputType()
+class assignTeamInput {
+  @Field()
+  id: number;
+
+  @Field()
+  name: string;
+
+  @Field()
+  email: string;
+}
 @Resolver()
 export class UserProjectResolver {
   @Query(() => [User_Project])
@@ -30,15 +52,26 @@ export class UserProjectResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth) // another middleware so only admin and project manager can create a project or un assign users from projects
-  async assignUser(
-    @Arg("projectId") projectId: number,
-    @Ctx() { req }: MyContext
+  async assignUsers(
+    @Arg("options") options: assignUserInput,
+    @Arg("team", () => [assignTeamInput]) team: assignTeamInput[]
   ) {
-    await User_Project.insert({
-      projectId,
-      userId: req.session.userId,
-    });
+    if (team.length) {
+      let queryString = "";
+      team.forEach((m, mdx) => {
+        queryString += `${options.projectId}, ${m.id}`;
+        if (mdx !== team.length - 1) {
+          queryString += ",";
+        }
+      });
+      User_Project.query(`
+    insert into user_project
+      ("projectId", "userId")
+    values
+      ${queryString}
+    `);
+    }
+
     return true;
   }
 
