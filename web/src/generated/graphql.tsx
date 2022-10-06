@@ -47,7 +47,7 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  assignUser: Scalars['Boolean'];
+  assignUsers: Scalars['Boolean'];
   changePassword: UserResponse;
   createComment: Comment;
   createNotification: Notification;
@@ -65,8 +65,9 @@ export type Mutation = {
 };
 
 
-export type MutationAssignUserArgs = {
-  projectId: Scalars['Float'];
+export type MutationAssignUsersArgs = {
+  options: AssignUserInput;
+  team: Array<AssignTeamInput>;
 };
 
 
@@ -258,6 +259,17 @@ export type Users = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type AssignTeamInput = {
+  email: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+};
+
+export type AssignUserInput = {
+  projectId: Scalars['Float'];
+  userId: Scalars['Float'];
+};
+
 export type CreateComment = {
   message: Scalars['String'];
   ticketId: Scalars['Float'];
@@ -279,6 +291,14 @@ export type TeamMembers = {
   name: Scalars['String'];
   selected: Scalars['Boolean'];
 };
+
+export type AssignUsersMutationVariables = Exact<{
+  team: Array<AssignTeamInput> | AssignTeamInput;
+  options: AssignUserInput;
+}>;
+
+
+export type AssignUsersMutation = { __typename?: 'Mutation', assignUsers: boolean };
 
 export type ChangePasswordMutationVariables = Exact<{
   newPassword: Scalars['String'];
@@ -355,7 +375,7 @@ export type AvilableUsersQueryVariables = Exact<{
 }>;
 
 
-export type AvilableUsersQuery = { __typename?: 'Query', avilableUsers: Array<{ __typename?: 'Users', id: number, email: string, role: string, name: string, createdAt: any, updatedAt: any }> };
+export type AvilableUsersQuery = { __typename?: 'Query', avilableUsers: Array<{ __typename?: 'Users', id: number, name: string, email: string }> };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -397,6 +417,15 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number, email: string }> };
 
 
+export const AssignUsersDocument = gql`
+    mutation AssignUsers($team: [assignTeamInput!]!, $options: assignUserInput!) {
+  assignUsers(team: $team, options: $options)
+}
+    `;
+
+export function useAssignUsersMutation() {
+  return Urql.useMutation<AssignUsersMutation, AssignUsersMutationVariables>(AssignUsersDocument);
+};
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($newPassword: String!, $token: String!) {
   changePassword(newPassword: $newPassword, token: $token) {
@@ -560,11 +589,8 @@ export const AvilableUsersDocument = gql`
     query AvilableUsers($projectId: Float!) {
   avilableUsers(projectId: $projectId) {
     id
-    email
-    role
     name
-    createdAt
-    updatedAt
+    email
   }
 }
     `;

@@ -1,0 +1,3 @@
+mutation AssignUsers($team: [assignTeamInput!]!, $options: assignUserInput!) {
+  assignUsers(team: $team, options: $options)
+}
