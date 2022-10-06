@@ -14,24 +14,9 @@ import {
 import { myDataSource } from "../data-source";
 
 @InputType()
-class assignUserInput {
-  @Field()
-  userId: number;
-
-  @Field()
-  projectId: number;
-}
-
-@InputType()
 class assignTeamInput {
   @Field()
-  id: number;
-
-  @Field()
-  name: string;
-
-  @Field()
-  email: string;
+  id?: number;
 }
 @Resolver()
 export class UserProjectResolver {
@@ -53,25 +38,25 @@ export class UserProjectResolver {
 
   @Mutation(() => Boolean)
   async assignUsers(
-    @Arg("options") options: assignUserInput,
+    @Arg("projectId") projectId: number,
     @Arg("team", () => [assignTeamInput]) team: assignTeamInput[]
   ) {
+    console.log({ team, projectId });
     if (team.length) {
       let queryString = "";
       team.forEach((m, mdx) => {
-        queryString += `${options.projectId}, ${m.id}`;
+        queryString += `(${projectId}, ${m.id})`;
         if (mdx !== team.length - 1) {
           queryString += ",";
         }
       });
       User_Project.query(`
-    insert into user_project
-      ("projectId", "userId")
-    values
-      ${queryString}
-    `);
+      insert into user_project
+        ("projectId", "userId")
+      values
+        ${queryString}
+      `);
     }
-
     return true;
   }
 

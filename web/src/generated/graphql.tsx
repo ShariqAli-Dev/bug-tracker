@@ -66,7 +66,7 @@ export type Mutation = {
 
 
 export type MutationAssignUsersArgs = {
-  options: AssignUserInput;
+  projectId: Scalars['Float'];
   team: Array<AssignTeamInput>;
 };
 
@@ -260,14 +260,7 @@ export type Users = {
 };
 
 export type AssignTeamInput = {
-  email: Scalars['String'];
   id: Scalars['Float'];
-  name: Scalars['String'];
-};
-
-export type AssignUserInput = {
-  projectId: Scalars['Float'];
-  userId: Scalars['Float'];
 };
 
 export type CreateComment = {
@@ -294,7 +287,7 @@ export type TeamMembers = {
 
 export type AssignUsersMutationVariables = Exact<{
   team: Array<AssignTeamInput> | AssignTeamInput;
-  options: AssignUserInput;
+  projectId: Scalars['Float'];
 }>;
 
 
@@ -418,8 +411,8 @@ export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Us
 
 
 export const AssignUsersDocument = gql`
-    mutation AssignUsers($team: [assignTeamInput!]!, $options: assignUserInput!) {
-  assignUsers(team: $team, options: $options)
+    mutation AssignUsers($team: [assignTeamInput!]!, $projectId: Float!) {
+  assignUsers(team: $team, projectId: $projectId)
 }
     `;
 
