@@ -166,10 +166,10 @@ export type Query = {
   me?: Maybe<Users>;
   notification?: Maybe<Notification>;
   notifications: Array<Notification>;
-  passtickets: Array<Ticket>;
   project?: Maybe<Project>;
   projectTickets: Array<Ticket>;
   projects: Array<Project>;
+  tickets: Array<Ticket>;
   userComments: Array<Comment>;
   userNotifications: Array<Notification>;
   users: Array<Users>;
@@ -361,7 +361,7 @@ export type AssignedPersonnelQueryVariables = Exact<{
 }>;
 
 
-export type AssignedPersonnelQuery = { __typename?: 'Query', assignedPersonnel: Array<{ __typename?: 'AssignedPersonnel', user: { __typename?: 'Users', id: number, email: string, name: string } }> };
+export type AssignedPersonnelQuery = { __typename?: 'Query', assignedPersonnel: Array<{ __typename?: 'AssignedPersonnel', user: { __typename?: 'Users', id: number, email: string, name: string, role: string } }> };
 
 export type AvilableUsersQueryVariables = Exact<{
   projectId: Scalars['Float'];
@@ -569,6 +569,7 @@ export const AssignedPersonnelDocument = gql`
       id
       email
       name
+      role
     }
   }
 }
