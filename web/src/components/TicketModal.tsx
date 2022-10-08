@@ -16,26 +16,53 @@ import {
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { useCreateTicketMutation, useMeQuery } from "../generated/graphql";
-import { ProjectModalProps, User } from "../types";
+import { useEffect, useState } from "react";
+import {
+  useAssignedPersonnelQuery,
+  useCreateTicketMutation,
+  useMeQuery,
+} from "../generated/graphql";
+import { ProjectModalProps } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { InputField } from "./InputField";
 
-interface TeamMember extends User {
+interface TeamMember {
   selected: boolean;
+  email: string;
+  id: number;
+  name: string;
+}
+interface TicketModalProps extends ProjectModalProps {
+  projectId: number;
 }
 
-const TicketModal = (props: ProjectModalProps) => {
+const TicketModal = (props: TicketModalProps) => {
   const [, createTicket] = useCreateTicketMutation();
   const [{ data: meQuery, fetching: meFetch }] = useMeQuery();
   const toast = useToast();
   const router = useRouter();
-  const [team, setTeam] = useState<TeamMember[]>(
-    props.assignedPersonnel
-      .filter(({ user }) => user.id !== meQuery?.me?.id)
-      .map(({ user }) => ({ ...user, selected: false }))
-  );
+  const [{ data: assignedPersonnel, fetching: assignedPersonnelFetch }] =
+    useAssignedPersonnelQuery({
+      variables: { projectId: props.projectId },
+    });
+  const [team, setTeam] = useState<TeamMember[]>([]);
+
+  useEffect(() => {
+    if (!assignedPersonnelFetch) {
+      const tempPersonnel = assignedPersonnel?.assignedPersonnel as unknown as {
+        user: TeamMember;
+      }[];
+      setTeam(
+        tempPersonnel.map(({ user }) => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          selected: false,
+        }))
+      );
+    }
+    return;
+  }, [assignedPersonnel, assignedPersonnelFetch]);
 
   return (
     <>

@@ -23,16 +23,26 @@ export const createUrqlClient = (ssrExchange: any) => {
       cacheExchange({
         updates: {
           Mutation: {
-            createProject: (_result, args, cache, info) => {
+            assignUsers: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "UserProjects"
+                (info) => info.fieldName === "assignedPersonnel"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
               });
             },
+            createProject: (_result, args, cache, info) => {
+              const allFields = cache.inspectFields("Query");
 
+              const fieldInfos = allFields.filter(
+                (info) => info.fieldName === "UserProjects"
+              );
+
+              fieldInfos.forEach((fi) => {
+                cache.invalidate("Query", fi.fieldName, fi.arguments);
+              });
+            },
             createTicket: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(
@@ -42,7 +52,6 @@ export const createUrqlClient = (ssrExchange: any) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
               });
             },
-
             logout: (_result, args, cache, info) => {
               betterUpdateQuery<LogoutMutation, MeQuery>(
                 cache,
@@ -51,7 +60,6 @@ export const createUrqlClient = (ssrExchange: any) => {
                 () => ({ me: null })
               );
             },
-
             login: (_result, args, cache, info) => {
               betterUpdateQuery<LoginMutation, MeQuery>(
                 cache,
