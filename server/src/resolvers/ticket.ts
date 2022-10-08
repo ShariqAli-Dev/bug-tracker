@@ -48,6 +48,11 @@ export class TicketResolver {
     return await Ticket.find();
   }
 
+  @Query(() => Ticket, { nullable: true })
+  async ticket(@Arg("id") id: number): Promise<Ticket | null> {
+    return await Ticket.findOne({ where: { id } });
+  }
+
   @Query(() => [Ticket])
   async projectTickets(@Arg("projectId") projectId: number): Promise<Ticket[]> {
     return await Ticket.find({ where: { projectId } });

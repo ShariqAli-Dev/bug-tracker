@@ -1,6 +1,7 @@
 import { Box, Container, Flex, Text } from "@chakra-ui/react";
 
 const TicketDetails = () => {
+  // ticket api call
   return (
     <>
       <Box>
@@ -9,7 +10,7 @@ const TicketDetails = () => {
           {/* Ticket Info */}
           <Container>
             <Flex>
-              {/* Map Ticket Section Component */}
+              {/* Map Ticket section */}
               <Box>
                 <Text>Ticket Title</Text>
                 <Text>Create Schema</Text>
