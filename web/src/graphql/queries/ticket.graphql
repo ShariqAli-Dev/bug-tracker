@@ -1,0 +1,11 @@
+query Ticket($ticketId: Float!) {
+  ticket(id: $ticketId) {
+    id
+    title
+    status
+    priority
+    creator
+    description
+    type
+  }
+}

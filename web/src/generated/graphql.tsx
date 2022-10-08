@@ -169,6 +169,7 @@ export type Query = {
   project?: Maybe<Project>;
   projectTickets: Array<Ticket>;
   projects: Array<Project>;
+  ticket?: Maybe<Ticket>;
   tickets: Array<Ticket>;
   userComments: Array<Comment>;
   userNotifications: Array<Notification>;
@@ -198,6 +199,11 @@ export type QueryProjectArgs = {
 
 export type QueryProjectTicketsArgs = {
   projectId: Scalars['Float'];
+};
+
+
+export type QueryTicketArgs = {
+  id: Scalars['Float'];
 };
 
 export type Ticket = {
@@ -393,6 +399,13 @@ export type ProjectTicketsQueryVariables = Exact<{
 
 
 export type ProjectTicketsQuery = { __typename?: 'Query', projectTickets: Array<{ __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any }> };
+
+export type TicketQueryVariables = Exact<{
+  ticketId: Scalars['Float'];
+}>;
+
+
+export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: number, title: string, status: string, priority: string, creator: string, description: string, type: string } | null };
 
 export type UserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -646,6 +659,23 @@ export const ProjectTicketsDocument = gql`
 
 export function useProjectTicketsQuery(options: Omit<Urql.UseQueryArgs<ProjectTicketsQueryVariables>, 'query'>) {
   return Urql.useQuery<ProjectTicketsQuery, ProjectTicketsQueryVariables>({ query: ProjectTicketsDocument, ...options });
+};
+export const TicketDocument = gql`
+    query Ticket($ticketId: Float!) {
+  ticket(id: $ticketId) {
+    id
+    title
+    status
+    priority
+    creator
+    description
+    type
+  }
+}
+    `;
+
+export function useTicketQuery(options: Omit<Urql.UseQueryArgs<TicketQueryVariables>, 'query'>) {
+  return Urql.useQuery<TicketQuery, TicketQueryVariables>({ query: TicketDocument, ...options });
 };
 export const UserNotificationsDocument = gql`
     query UserNotifications {
