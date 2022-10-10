@@ -23,7 +23,6 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
 import { SectionHeader } from "../pages/project/[projectId]";
-import { AssignedPersonnel } from "../types";
 import TicketModal from "./TicketModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
@@ -39,6 +38,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
   const initialRef = useRef(null);
+  console.log(props.data);
   const columns = useMemo(
     () => [
       {
@@ -157,7 +157,11 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                         >
                           {cell.render("Cell")}
                           {!cell.column.Header && (
-                            <Link href={`/project/${parseInt(row.id)}`}>
+                            <Link
+                              href={`/project/?ticketId=${
+                                props.data[parseInt(row.id)].id
+                              }`}
+                            >
                               <Text
                                 textDecoration="underline"
                                 cursor="pointer"

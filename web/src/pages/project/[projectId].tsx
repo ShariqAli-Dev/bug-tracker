@@ -7,7 +7,7 @@ import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
 import ProjectTickets from "../../components/ProjectTickets";
-import TicketDetails from "../../components/TicketDetails";
+import TicketDetail from "../../components/TicketDetail";
 import {
   useAssignedPersonnelQuery,
   useProjectQuery,
@@ -125,7 +125,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               />
             )}
           </Flex>
-          <TicketDetails />
+          <TicketDetail id={1} />
         </Box>
       </Flex>
     </Flex>

@@ -1,7 +1,13 @@
 import { Box, Container, Flex, Text } from "@chakra-ui/react";
+import { useTicketQuery } from "../generated/graphql";
 
-const TicketDetails = () => {
-  // ticket api call
+interface TicketDetailProps {
+  id: number;
+}
+
+const TicketDetail = ({ id }: TicketDetailProps) => {
+  const [{ data }] = useTicketQuery({ variables: { ticketId: id } });
+  console.log({ data });
   return (
     <>
       <Box>
@@ -25,4 +31,4 @@ const TicketDetails = () => {
   );
 };
 
-export default TicketDetails;
+export default TicketDetail;
