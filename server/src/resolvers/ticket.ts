@@ -81,7 +81,7 @@ export class TicketResolver {
   }
 
   @Query(() => [AssignedDeveloper])
-  async assignedDeveloper(
+  async assignedDevelopers(
     @Arg("ticketId") ticketId: number
   ): Promise<AssignedDeveloper> {
     return await myDataSource.query(`

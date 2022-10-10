@@ -1,6 +1,6 @@
 import { Box, Container, Flex, Text } from "@chakra-ui/react";
 import {
-  useAssignedDeveloperQuery,
+  useAssignedDevelopersQuery,
   useTicketQuery,
 } from "../generated/graphql";
 
@@ -13,11 +13,14 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
     variables: { ticketId },
   });
 
-  const [{ data: devData, fetching: devFetch }] = useAssignedDeveloperQuery({
+  const [{ data: devData, fetching: devFetch }] = useAssignedDevelopersQuery({
     variables: { ticketId },
   });
 
-  console.log({ ticket: ticketData?.ticket, devs: devData?.assignedDeveloper });
+  console.log({
+    ticket: ticketData?.ticket,
+    devs: devData?.assignedDevelopers,
+  });
 
   if (ticketFetch || devFetch) {
     return <></>;
