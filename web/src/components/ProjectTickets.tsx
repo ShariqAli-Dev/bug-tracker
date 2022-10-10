@@ -17,8 +17,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
-import Link from "next/link";
-import { useMemo, useRef } from "react";
+import { Dispatch, SetStateAction, useMemo, useRef } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
@@ -32,13 +31,13 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 interface ProjectTicketsProps {
   data: any;
   projectId: number;
+  setTicketId: Dispatch<SetStateAction<undefined | number>>;
 }
 
 const ProjectTickets = (props: ProjectTicketsProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
   const initialRef = useRef(null);
-  console.log(props.data);
   const columns = useMemo(
     () => [
       {
@@ -157,10 +156,12 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                         >
                           {cell.render("Cell")}
                           {!cell.column.Header && (
-                            <Link
-                              href={`/project/?ticketId=${
-                                props.data[parseInt(row.id)].id
-                              }`}
+                            <Text
+                              onClick={() => {
+                                props.setTicketId(
+                                  props.data[parseInt(row.id)].id
+                                );
+                              }}
                             >
                               <Text
                                 textDecoration="underline"
@@ -169,7 +170,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                               >
                                 Details
                               </Text>
-                            </Link>
+                            </Text>
                           )}
                         </Td>
                       );
