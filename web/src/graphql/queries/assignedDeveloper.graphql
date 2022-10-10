@@ -1,0 +1,10 @@
+query AssignedDeveloper($ticketId: Float!) {
+  assignedDeveloper(ticketId: $ticketId) {
+    ticketId
+    userId
+    user {
+      id
+      name
+    }
+  }
+}

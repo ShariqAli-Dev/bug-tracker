@@ -16,6 +16,13 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AssignedDeveloper = {
+  __typename?: 'AssignedDeveloper';
+  ticketId: Scalars['Float'];
+  user: Users;
+  userId: Scalars['Float'];
+};
+
 export type AssignedPersonnel = {
   __typename?: 'AssignedPersonnel';
   projectId: Scalars['Float'];
@@ -158,6 +165,7 @@ export type Project = {
 export type Query = {
   __typename?: 'Query';
   UserProjects: Array<User_Project>;
+  assignedDeveloper: Array<AssignedDeveloper>;
   assignedPersonnel: Array<AssignedPersonnel>;
   avilableUsers: Array<Users>;
   bye: Scalars['String'];
@@ -174,6 +182,11 @@ export type Query = {
   userComments: Array<Comment>;
   userNotifications: Array<Notification>;
   users: Array<Users>;
+};
+
+
+export type QueryAssignedDeveloperArgs = {
+  ticketId: Scalars['Float'];
 };
 
 
@@ -361,6 +374,13 @@ export type UpdateNotificationMutationVariables = Exact<{
 
 
 export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } | null };
+
+export type AssignedDeveloperQueryVariables = Exact<{
+  ticketId: Scalars['Float'];
+}>;
+
+
+export type AssignedDeveloperQuery = { __typename?: 'Query', assignedDeveloper: Array<{ __typename?: 'AssignedDeveloper', ticketId: number, userId: number, user: { __typename?: 'Users', id: number, name: string } }> };
 
 export type AssignedPersonnelQueryVariables = Exact<{
   projectId: Scalars['Float'];
@@ -574,6 +594,22 @@ export const UpdateNotificationDocument = gql`
 
 export function useUpdateNotificationMutation() {
   return Urql.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument);
+};
+export const AssignedDeveloperDocument = gql`
+    query AssignedDeveloper($ticketId: Float!) {
+  assignedDeveloper(ticketId: $ticketId) {
+    ticketId
+    userId
+    user {
+      id
+      name
+    }
+  }
+}
+    `;
+
+export function useAssignedDeveloperQuery(options: Omit<Urql.UseQueryArgs<AssignedDeveloperQueryVariables>, 'query'>) {
+  return Urql.useQuery<AssignedDeveloperQuery, AssignedDeveloperQueryVariables>({ query: AssignedDeveloperDocument, ...options });
 };
 export const AssignedPersonnelDocument = gql`
     query AssignedPersonnel($projectId: Float!) {
