@@ -92,6 +92,7 @@ const TicketModal = (props: TicketModalProps) => {
                   status: "new",
                 }}
                 onSubmit={async (options) => {
+                  console.log(options);
                   try {
                     const filteredTeam = team.filter(
                       (member) => member.selected
@@ -235,7 +236,7 @@ const TicketModal = (props: TicketModalProps) => {
                           <Select
                             value={values.status}
                             id="status"
-                            name="Priority"
+                            name="status"
                             onChange={handleChange}
                             required
                           >

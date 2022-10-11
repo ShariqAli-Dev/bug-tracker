@@ -32,7 +32,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
         Ticket Details
       </Text>
       <Box display="flex" margin="auto" height="40%" alignItems="center">
-        <Container height="full">
+        <Box width="50%" height="full">
           {/* Ticket Detail */}
           <Flex
             height="75%"
@@ -41,7 +41,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
             flexDirection="column"
           >
             {/* Top Half */}
-            <Flex width="full" justifyContent="space-between">
+            <Flex width="full" justifyContent="space-around">
               <Box>
                 <Text fontWeight="medium" textColor="primary" fontSize="sm">
                   Title
@@ -65,12 +65,14 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
                 <Text fontWeight="medium" fontSize="sm">
                   Description
                 </Text>
-                <Text>{ticketData?.ticket?.description}</Text>
+                <Text noOfLines={[3, 3, 3]}>
+                  {ticketData?.ticket?.description}
+                </Text>
               </Box>
             </Flex>
 
             {/* Bottom Half */}
-            <Flex width="full" justifyContent="space-between">
+            <Flex width="full" justifyContent="space-around">
               <Box>
                 <Text fontWeight="medium" fontSize="sm">
                   Status
@@ -129,9 +131,9 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
               })}
             </Text>
           </Box>
-        </Container>
+        </Box>
         {/* Comments */}
-        <Container>Comments</Container>
+        <Box width="50%">Comments</Box>
       </Box>
     </>
   );
