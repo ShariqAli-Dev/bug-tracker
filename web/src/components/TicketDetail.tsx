@@ -27,55 +27,99 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
   }
 
   return (
-    <Box display="flex" margin="auto" height="40%" alignItems="center">
-      <Container height="full">
-        {/* Ticket Detail */}
-        <Flex
-          height="75%"
-          width="full"
-          justifyContent="space-around"
-          flexDirection="column"
-        >
-          {/* Top Half */}
-          <Flex width="full" justifyContent="space-around">
-            <Box>
-              <Text>Title</Text>
-              <Text>{ticketData?.ticket?.title}</Text>
-            </Box>
-            <Box>
-              <Text>Author</Text>
-              <Text>{ticketData?.ticket?.creator}</Text>
-            </Box>
-            <Box>
-              <Text>Description</Text>
-              <Text>{ticketData?.ticket?.description}</Text>
-            </Box>
+    <>
+      <Text width="full" textAlign="center" fontSize="2xl" fontWeight="bold">
+        Ticket Details
+      </Text>
+      <Box display="flex" margin="auto" height="40%" alignItems="center">
+        <Container height="full">
+          {/* Ticket Detail */}
+          <Flex
+            height="75%"
+            width="full"
+            justifyContent="space-around"
+            flexDirection="column"
+          >
+            {/* Top Half */}
+            <Flex width="full" justifyContent="space-between">
+              <Box>
+                <Text fontWeight="medium" textColor="primary" fontSize="sm">
+                  Title
+                </Text>
+                <Text
+                  backgroundColor="tertiary"
+                  textColor="secondary"
+                  padding={0.5}
+                  borderRadius="lg"
+                >
+                  {ticketData?.ticket?.title}
+                </Text>
+              </Box>
+              <Box>
+                <Text fontWeight="medium" fontSize="sm">
+                  Author
+                </Text>
+                <Text>{ticketData?.ticket?.creator}</Text>
+              </Box>
+              <Box>
+                <Text fontWeight="medium" fontSize="sm">
+                  Description
+                </Text>
+                <Text>{ticketData?.ticket?.description}</Text>
+              </Box>
+            </Flex>
+
+            {/* Bottom Half */}
+            <Flex width="full" justifyContent="space-between">
+              <Box>
+                <Text fontWeight="medium" fontSize="sm">
+                  Status
+                </Text>
+                <Text
+                  backgroundColor="tertiary"
+                  textColor="secondary"
+                  padding={0.5}
+                  borderRadius="lg"
+                >
+                  {ticketData?.ticket?.status}
+                </Text>
+              </Box>
+              <Box>
+                <Text fontWeight="medium" fontSize="sm">
+                  Priority
+                </Text>
+                <Text
+                  backgroundColor="tertiary"
+                  textColor="secondary"
+                  padding={0.5}
+                  borderRadius="lg"
+                >
+                  {ticketData?.ticket?.priority}
+                </Text>
+              </Box>
+              <Box>
+                <Text fontWeight="medium" fontSize="sm">
+                  Type
+                </Text>
+                <Text
+                  backgroundColor="tertiary"
+                  textColor="secondary"
+                  padding={0.5}
+                  borderRadius="lg"
+                >
+                  {ticketData?.ticket?.type}
+                </Text>
+              </Box>
+            </Flex>
           </Flex>
 
-          {/* Bottom Half */}
-          <Flex width="full" justifyContent="space-around">
-            <Box>
-              <Text>Status</Text>
-              <Text>{ticketData?.ticket?.status}</Text>
-            </Box>
-            <Box>
-              <Text>Priority</Text>
-              <Text>{ticketData?.ticket?.priority}</Text>
-            </Box>
-            <Box>
-              <Text>Type</Text>
-              <Text>{ticketData?.ticket?.type}</Text>
-            </Box>
-          </Flex>
-        </Flex>
-
-        {/* Assigned Developers */}
-        <Box height="25%">I am assigned devs</Box>
-      </Container>
-
-      {/* Comments */}
-      <Container>Comments</Container>
-    </Box>
+          {/* Assigned Developers */}
+          <Box height="25%">I am assigned devs</Box>
+        </Container>
+        {/* Comments */}
+        <Container>Comments</Container>
+      </Box>
+    </>
   );
 };
 
