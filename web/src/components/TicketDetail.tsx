@@ -17,10 +17,10 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
     variables: { ticketId },
   });
 
-  console.log({
-    ticket: ticketData?.ticket,
-    devs: devData?.assignedDevelopers,
-  });
+  // console.log({
+  //   ticket: ticketData?.ticket,
+  //   devs: devData?.assignedDevelopers,
+  // });
 
   if (ticketFetch || devFetch) {
     return <></>;
@@ -114,7 +114,21 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
           </Flex>
 
           {/* Assigned Developers */}
-          <Box height="25%">I am assigned devs</Box>
+          <Box height="25%">
+            <Text fontWeight="medium" fontSize="sm">
+              Assigned Developers
+            </Text>
+            <Text>
+              {devData?.assignedDevelopers.map(({ user }, udx) => {
+                // if the index is the last, return just the name
+                if (udx === devData.assignedDevelopers.length - 1) {
+                  return user.name;
+                }
+                // else, add the comma
+                return user.name + ", ";
+              })}
+            </Text>
+          </Box>
         </Container>
         {/* Comments */}
         <Container>Comments</Container>
