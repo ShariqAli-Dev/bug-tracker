@@ -52,13 +52,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   const [ticketId, setTicketId] = useState<undefined | number>(undefined);
 
   return (
-    <Flex
-      h="100vh"
-      flexDir="row"
-      overflow="hidden"
-      scrollBehavior="auto"
-      color="primary"
-    >
+    <Flex h="100vh" overflow="hidden" scrollBehavior="auto" color="primary">
       {/* Sidebar Nav */}
       <Flex
         w="15%"
@@ -71,12 +65,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
       </Flex>
 
       {/* Inner Section */}
-      <Flex
-        w="full"
-        flexDir="column"
-        overflowY="auto"
-        backgroundColor="tertiary"
-      >
+      <Flex w="full" flexDir="column" overflowY="auto">
         {/* Dash Header */}
         <DashHeader pageProps={{}} />
         {/* Contents */}
@@ -105,7 +94,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             flexDirection={{ base: "column", md: "row" }}
             height="50%"
           >
-            {!personnelFetch && (
+            {!personnelFetch === !ticketsFetch && (
               <AssignedPersonnel
                 assignedPersonnel={
                   personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
