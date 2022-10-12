@@ -93,8 +93,9 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             justifyContent="space-around"
             flexDirection={{ base: "column", md: "row" }}
             height="50%"
+            marginTop={{ base: "10rem", md: "1rem" }}
           >
-            {!personnelFetch === !ticketsFetch && (
+            {!personnelFetch && (
               <AssignedPersonnel
                 assignedPersonnel={
                   personnelQuery?.assignedPersonnel as AssignedPersonnelType[]

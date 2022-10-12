@@ -78,7 +78,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
     {
       columns,
       data: props.data as any,
-      initialState: { pageIndex: 0, pageSize: 5 },
+      initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
   );
@@ -119,7 +119,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
         <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
           <Table
             {...getTableBodyProps()}
-            size={{ base: "sm", lg: "md" }}
+            size={{ lg: "md" }}
             border="2px"
             borderColor="primary"
           >

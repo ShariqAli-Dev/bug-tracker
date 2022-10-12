@@ -22,7 +22,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
   }
 
   return (
-    <>
+    <Box marginTop={{ base: "8rem", md: "auto" }}>
       <Text width="full" textAlign="center" fontSize="2xl" fontWeight="bold">
         Ticket Details
       </Text>
@@ -46,12 +46,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
                 <Text fontWeight="medium" textColor="primary" fontSize="sm">
                   Title
                 </Text>
-                <Text
-                  backgroundColor="tertiary"
-                  textColor="secondary"
-                  padding={0.5}
-                  borderRadius="lg"
-                >
+                <Text textColor="secondary" padding={0.5} borderRadius="lg">
                   {ticketData?.ticket?.title}
                 </Text>
               </Box>
@@ -149,7 +144,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
         {/* Comments */}
         <Box width="50%">Comments</Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 
