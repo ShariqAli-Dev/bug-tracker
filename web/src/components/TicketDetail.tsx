@@ -17,11 +17,6 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
     variables: { ticketId },
   });
 
-  // console.log({
-  //   ticket: ticketData?.ticket,
-  //   devs: devData?.assignedDevelopers,
-  // });
-
   if (ticketFetch || devFetch) {
     return <></>;
   }
@@ -31,18 +26,23 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
       <Text width="full" textAlign="center" fontSize="2xl" fontWeight="bold">
         Ticket Details
       </Text>
-      <Box display="flex" margin="auto" height="40%" alignItems="center">
-        <Box width="50%" height="full">
+      <Flex
+        margin="auto"
+        height="40%"
+        alignItems="center"
+        flexDirection={{ base: "column", md: "row" }}
+      >
+        <Box
+          width="50%"
+          display="flex"
+          alignItems="center"
+          flexDirection="column"
+        >
           {/* Ticket Detail */}
-          <Flex
-            height="75%"
-            width="full"
-            justifyContent="space-around"
-            flexDirection="column"
-          >
-            {/* Top Half */}
-            <Flex width="full" justifyContent="space-around">
-              <Box>
+          <Flex justifyContent="space-around" width="full">
+            {/* 1/3 */}
+            <Box>
+              <Box m="1rem">
                 <Text fontWeight="medium" textColor="primary" fontSize="sm">
                   Title
                 </Text>
@@ -55,64 +55,78 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
                   {ticketData?.ticket?.title}
                 </Text>
               </Box>
-              <Box>
+              <Box m="1rem">
+                <Text fontWeight="medium" fontSize="sm">
+                  Status
+                </Text>
+                <Text>
+                  <span
+                    style={{
+                      backgroundColor: "#EBEBEB",
+                      color: "#7A7A7A",
+                      padding: "2px",
+                      borderRadius: ".5rem",
+                    }}
+                  >
+                    {ticketData?.ticket?.status}
+                  </span>
+                </Text>
+              </Box>
+            </Box>
+
+            {/* 2/3 */}
+            <Box>
+              <Box m="1rem">
                 <Text fontWeight="medium" fontSize="sm">
                   Author
                 </Text>
                 <Text>{ticketData?.ticket?.creator}</Text>
               </Box>
-              <Box>
-                <Text fontWeight="medium" fontSize="sm">
-                  Description
-                </Text>
-                <Text noOfLines={[3, 3, 3]}>
-                  {ticketData?.ticket?.description}
-                </Text>
-              </Box>
-            </Flex>
-
-            {/* Bottom Half */}
-            <Flex width="full" justifyContent="space-around">
-              <Box>
-                <Text fontWeight="medium" fontSize="sm">
-                  Status
-                </Text>
-                <Text
-                  backgroundColor="tertiary"
-                  textColor="secondary"
-                  padding={0.5}
-                  borderRadius="lg"
-                >
-                  {ticketData?.ticket?.status}
-                </Text>
-              </Box>
-              <Box>
+              <Box m="1rem">
                 <Text fontWeight="medium" fontSize="sm">
                   Priority
                 </Text>
-                <Text
-                  backgroundColor="tertiary"
-                  textColor="secondary"
-                  padding={0.5}
-                  borderRadius="lg"
-                >
-                  {ticketData?.ticket?.priority}
+                <Text>
+                  <span
+                    style={{
+                      backgroundColor: "#EBEBEB",
+                      color: "#7A7A7A",
+                      padding: "2px",
+                      borderRadius: ".5rem",
+                    }}
+                  >
+                    {ticketData?.ticket?.priority}
+                  </span>
                 </Text>
               </Box>
-              <Box>
+            </Box>
+
+            {/* 3/3 */}
+            <Box>
+              <Box m="1rem">
+                <Text fontWeight="medium" fontSize="sm">
+                  Description
+                </Text>
+                <Text>{ticketData?.ticket?.description}</Text>
+              </Box>
+              <Box m="1rem">
                 <Text fontWeight="medium" fontSize="sm">
                   Type
                 </Text>
-                <Text
-                  backgroundColor="tertiary"
-                  textColor="secondary"
-                  padding={0.5}
-                  borderRadius="lg"
-                >
-                  {ticketData?.ticket?.type}
+                <Text>
+                  <span
+                    style={{
+                      backgroundColor: "#EBEBEB",
+                      color: "#7A7A7A",
+                      padding: "2px",
+                      borderRadius: ".5rem",
+                    }}
+                  >
+                    {ticketData?.ticket?.type}
+                  </span>
                 </Text>
               </Box>
-            </Flex>
+            </Box>
           </Flex>
 
           {/* Assigned Developers */}
@@ -134,7 +148,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
         </Box>
         {/* Comments */}
         <Box width="50%">Comments</Box>
-      </Box>
+      </Flex>
     </>
   );
 };
