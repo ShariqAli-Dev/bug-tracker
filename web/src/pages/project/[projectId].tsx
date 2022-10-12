@@ -2,11 +2,12 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import NavBar from "../../components/Navbar";
 import ProjectTickets from "../../components/ProjectTickets";
+import TicketDetail from "../../components/TicketDetail";
 import {
   useAssignedPersonnelQuery,
   useProjectQuery,
@@ -48,14 +49,10 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   const [{ data: ticketsQuery, fetching: ticketsFetch }] =
     useProjectTicketsQuery({ variables: { projectId } });
 
+  const [ticketId, setTicketId] = useState<undefined | number>(undefined);
+
   return (
-    <Flex
-      h="100vh"
-      flexDir="row"
-      overflow="hidden"
-      scrollBehavior="auto"
-      color="primary"
-    >
+    <Flex h="100vh" overflow="hidden" scrollBehavior="auto" color="primary">
       {/* Sidebar Nav */}
       <Flex
         w="15%"
@@ -68,12 +65,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
       </Flex>
 
       {/* Inner Section */}
-      <Flex
-        w="full"
-        flexDir="column"
-        overflowY="auto"
-        backgroundColor="tertiary"
-      >
+      <Flex w="full" flexDir="column" overflowY="auto">
         {/* Dash Header */}
         <DashHeader pageProps={{}} />
         {/* Contents */}
@@ -83,27 +75,25 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           marginBottom={8}
           marginLeft={4}
           marginRight={4}
-          // background="red"
           height="80%"
         >
-          {/* Top Part */}
-          <Box>
-            <SectionHeader title={`Project: ${projectQuery?.project?.name}`}>
-              <Text>{projectQuery?.project?.description}</Text>
-              <Link href="/dashboard">
-                <a>Back to Dashboard</a>
-              </Link>
-              <span> | </span>
-              <Link href="testing">
-                <a>Edit</a>
-              </Link>
-            </SectionHeader>
-          </Box>
-          {/* Bottom Duplex */}
+          <SectionHeader title={`Project: ${projectQuery?.project?.name}`}>
+            <Text>{projectQuery?.project?.description}</Text>
+            <Link href="/dashboard">
+              <a>Back to Dashboard</a>
+            </Link>
+            <span> | </span>
+            <Link href="testing">
+              <a>Edit</a>
+            </Link>
+          </SectionHeader>
+
+          {/* Duplex */}
           <Flex
             justifyContent="space-around"
             flexDirection={{ base: "column", md: "row" }}
-            height="75%"
+            height="50%"
+            marginTop={{ base: "10rem", md: "1rem" }}
           >
             {!personnelFetch && (
               <AssignedPersonnel
@@ -117,13 +107,12 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             {!ticketsFetch && (
               <ProjectTickets
                 data={ticketsQuery?.projectTickets}
-                // assignedPersonnel={
-                //   personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
-                // }
                 projectId={projectId}
+                setTicketId={setTicketId}
               />
             )}
           </Flex>
+          {ticketId && <TicketDetail ticketId={ticketId} />}
         </Box>
       </Flex>
     </Flex>

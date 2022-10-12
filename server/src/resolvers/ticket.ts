@@ -1,5 +1,15 @@
-import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Field,
+  InputType,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from "type-graphql";
+import { myDataSource } from "../data-source";
 import { Ticket } from "../entities/Ticket";
+import { Users } from "../entities/Users";
 import { User_Ticket } from "../entities/User_Ticket";
 
 @InputType()
@@ -41,6 +51,18 @@ class teamMembers {
   selected: boolean;
 }
 
+@ObjectType()
+class AssignedDeveloper {
+  @Field()
+  ticketId: number;
+
+  @Field()
+  userId: number;
+
+  @Field()
+  user: Users;
+}
+
 @Resolver()
 export class TicketResolver {
   @Query(() => [Ticket])
@@ -48,9 +70,30 @@ export class TicketResolver {
     return await Ticket.find();
   }
 
+  @Query(() => Ticket, { nullable: true })
+  async ticket(@Arg("id") id: number): Promise<Ticket | null> {
+    return await Ticket.findOne({ where: { id } });
+  }
+
   @Query(() => [Ticket])
   async projectTickets(@Arg("projectId") projectId: number): Promise<Ticket[]> {
     return await Ticket.find({ where: { projectId } });
+  }
+
+  @Query(() => [AssignedDeveloper])
+  async assignedDevelopers(
+    @Arg("ticketId") ticketId: number
+  ): Promise<AssignedDeveloper> {
+    return await myDataSource.query(`
+    select ut.*,
+    json_build_object(
+	  'id', u.id,
+	  'name', u.name
+    )   "user"
+    from user_ticket ut
+    inner join users u on u.id = ut."userId"
+    where ut."ticketId" = ${ticketId}
+    `);
   }
 
   @Mutation(() => Ticket)

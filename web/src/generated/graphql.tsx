@@ -16,6 +16,13 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AssignedDeveloper = {
+  __typename?: 'AssignedDeveloper';
+  ticketId: Scalars['Float'];
+  user: Users;
+  userId: Scalars['Float'];
+};
+
 export type AssignedPersonnel = {
   __typename?: 'AssignedPersonnel';
   projectId: Scalars['Float'];
@@ -158,6 +165,7 @@ export type Project = {
 export type Query = {
   __typename?: 'Query';
   UserProjects: Array<User_Project>;
+  assignedDevelopers: Array<AssignedDeveloper>;
   assignedPersonnel: Array<AssignedPersonnel>;
   avilableUsers: Array<Users>;
   bye: Scalars['String'];
@@ -166,13 +174,19 @@ export type Query = {
   me?: Maybe<Users>;
   notification?: Maybe<Notification>;
   notifications: Array<Notification>;
-  passtickets: Array<Ticket>;
   project?: Maybe<Project>;
   projectTickets: Array<Ticket>;
   projects: Array<Project>;
+  ticket?: Maybe<Ticket>;
+  tickets: Array<Ticket>;
   userComments: Array<Comment>;
   userNotifications: Array<Notification>;
   users: Array<Users>;
+};
+
+
+export type QueryAssignedDevelopersArgs = {
+  ticketId: Scalars['Float'];
 };
 
 
@@ -198,6 +212,11 @@ export type QueryProjectArgs = {
 
 export type QueryProjectTicketsArgs = {
   projectId: Scalars['Float'];
+};
+
+
+export type QueryTicketArgs = {
+  id: Scalars['Float'];
 };
 
 export type Ticket = {
@@ -356,12 +375,19 @@ export type UpdateNotificationMutationVariables = Exact<{
 
 export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } | null };
 
+export type AssignedDevelopersQueryVariables = Exact<{
+  ticketId: Scalars['Float'];
+}>;
+
+
+export type AssignedDevelopersQuery = { __typename?: 'Query', assignedDevelopers: Array<{ __typename?: 'AssignedDeveloper', ticketId: number, userId: number, user: { __typename?: 'Users', id: number, name: string } }> };
+
 export type AssignedPersonnelQueryVariables = Exact<{
   projectId: Scalars['Float'];
 }>;
 
 
-export type AssignedPersonnelQuery = { __typename?: 'Query', assignedPersonnel: Array<{ __typename?: 'AssignedPersonnel', user: { __typename?: 'Users', id: number, email: string, name: string } }> };
+export type AssignedPersonnelQuery = { __typename?: 'Query', assignedPersonnel: Array<{ __typename?: 'AssignedPersonnel', user: { __typename?: 'Users', id: number, email: string, name: string, role: string } }> };
 
 export type AvilableUsersQueryVariables = Exact<{
   projectId: Scalars['Float'];
@@ -393,6 +419,13 @@ export type ProjectTicketsQueryVariables = Exact<{
 
 
 export type ProjectTicketsQuery = { __typename?: 'Query', projectTickets: Array<{ __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any }> };
+
+export type TicketQueryVariables = Exact<{
+  ticketId: Scalars['Float'];
+}>;
+
+
+export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: number, title: string, status: string, priority: string, creator: string, description: string, type: string } | null };
 
 export type UserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -562,6 +595,22 @@ export const UpdateNotificationDocument = gql`
 export function useUpdateNotificationMutation() {
   return Urql.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument);
 };
+export const AssignedDevelopersDocument = gql`
+    query AssignedDevelopers($ticketId: Float!) {
+  assignedDevelopers(ticketId: $ticketId) {
+    ticketId
+    userId
+    user {
+      id
+      name
+    }
+  }
+}
+    `;
+
+export function useAssignedDevelopersQuery(options: Omit<Urql.UseQueryArgs<AssignedDevelopersQueryVariables>, 'query'>) {
+  return Urql.useQuery<AssignedDevelopersQuery, AssignedDevelopersQueryVariables>({ query: AssignedDevelopersDocument, ...options });
+};
 export const AssignedPersonnelDocument = gql`
     query AssignedPersonnel($projectId: Float!) {
   assignedPersonnel(projectId: $projectId) {
@@ -569,6 +618,7 @@ export const AssignedPersonnelDocument = gql`
       id
       email
       name
+      role
     }
   }
 }
@@ -645,6 +695,23 @@ export const ProjectTicketsDocument = gql`
 
 export function useProjectTicketsQuery(options: Omit<Urql.UseQueryArgs<ProjectTicketsQueryVariables>, 'query'>) {
   return Urql.useQuery<ProjectTicketsQuery, ProjectTicketsQueryVariables>({ query: ProjectTicketsDocument, ...options });
+};
+export const TicketDocument = gql`
+    query Ticket($ticketId: Float!) {
+  ticket(id: $ticketId) {
+    id
+    title
+    status
+    priority
+    creator
+    description
+    type
+  }
+}
+    `;
+
+export function useTicketQuery(options: Omit<Urql.UseQueryArgs<TicketQueryVariables>, 'query'>) {
+  return Urql.useQuery<TicketQuery, TicketQueryVariables>({ query: TicketDocument, ...options });
 };
 export const UserNotificationsDocument = gql`
     query UserNotifications {

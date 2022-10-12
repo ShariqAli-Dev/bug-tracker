@@ -17,13 +17,11 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
-import Link from "next/link";
-import { useMemo, useRef } from "react";
+import { Dispatch, SetStateAction, useMemo, useRef } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
 import { SectionHeader } from "../pages/project/[projectId]";
-import { AssignedPersonnel } from "../types";
 import TicketModal from "./TicketModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
@@ -33,6 +31,7 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 interface ProjectTicketsProps {
   data: any;
   projectId: number;
+  setTicketId: Dispatch<SetStateAction<undefined | number>>;
 }
 
 const ProjectTickets = (props: ProjectTicketsProps) => {
@@ -79,7 +78,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
     {
       columns,
       data: props.data as any,
-      initialState: { pageIndex: 0, pageSize: 5 },
+      initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
   );
@@ -120,7 +119,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
         <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
           <Table
             {...getTableBodyProps()}
-            size={{ base: "sm", lg: "md" }}
+            size={{ lg: "md" }}
             border="2px"
             borderColor="primary"
           >
@@ -157,7 +156,13 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                         >
                           {cell.render("Cell")}
                           {!cell.column.Header && (
-                            <Link href={`/project/${parseInt(row.id)}`}>
+                            <Text
+                              onClick={() => {
+                                props.setTicketId(
+                                  props.data[parseInt(row.id)].id
+                                );
+                              }}
+                            >
                               <Text
                                 textDecoration="underline"
                                 cursor="pointer"
@@ -165,7 +170,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                               >
                                 Details
                               </Text>
-                            </Link>
+                            </Text>
                           )}
                         </Td>
                       );

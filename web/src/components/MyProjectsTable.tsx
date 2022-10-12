@@ -83,7 +83,7 @@ const MyProjectsTable = () => {
   );
 
   useEffect(() => {
-    if (!fetching) {
+    if (!fetching && data?.UserProjects) {
       setTableData(data?.UserProjects as any);
     } else {
       return;

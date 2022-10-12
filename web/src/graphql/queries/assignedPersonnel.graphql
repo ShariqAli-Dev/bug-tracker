@@ -4,6 +4,7 @@ query AssignedPersonnel($projectId: Float!) {
       id
       email
       name
+      role
     }
   }
 }
