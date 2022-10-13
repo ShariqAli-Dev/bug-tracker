@@ -3,6 +3,7 @@ import {
   useAssignedDevelopersQuery,
   useTicketQuery,
 } from "../generated/graphql";
+import TicketComments from "./TicketComments";
 
 interface TicketDetailProps {
   ticketId: number;
@@ -28,7 +29,6 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
       </Text>
       <Flex
         margin="auto"
-        height="40%"
         alignItems="center"
         flexDirection={{ base: "column", md: "row" }}
       >
@@ -142,10 +142,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
           </Box>
         </Box>
         {/* Comments */}
-        <Box width="50%">
-          <Text>Comments</Text>
-          <Container>comment box</Container>
-        </Box>
+        <TicketComments ticketId={ticketId} />
       </Flex>
     </Box>
   );
