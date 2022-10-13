@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Text } from "@chakra-ui/react";
+import { Box, Container, Divider, Flex, Text } from "@chakra-ui/react";
 import {
   useAssignedDevelopersQuery,
   useTicketQuery,
@@ -142,7 +142,10 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
           </Box>
         </Box>
         {/* Comments */}
-        <Box width="50%">Comments</Box>
+        <Box width="50%">
+          <Text>Comments</Text>
+          <Container>comment box</Container>
+        </Box>
       </Flex>
     </Box>
   );
