@@ -60,6 +60,7 @@ export type Mutation = {
   createNotification: Notification;
   createProject: Project;
   createTicket: Ticket;
+  deleteComment: Scalars['Boolean'];
   deleteNotification: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
@@ -102,6 +103,11 @@ export type MutationCreateProjectArgs = {
 export type MutationCreateTicketArgs = {
   options: CreateTicketInput;
   team: Array<TeamMembers>;
+};
+
+
+export type MutationDeleteCommentArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -361,6 +367,13 @@ export type CreateTicketMutationVariables = Exact<{
 
 export type CreateTicketMutation = { __typename?: 'Mutation', createTicket: { __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any } };
 
+export type DeleteCommentMutationVariables = Exact<{
+  deleteCommentId: Scalars['Float'];
+}>;
+
+
+export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: boolean };
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -554,6 +567,15 @@ export const CreateTicketDocument = gql`
 
 export function useCreateTicketMutation() {
   return Urql.useMutation<CreateTicketMutation, CreateTicketMutationVariables>(CreateTicketDocument);
+};
+export const DeleteCommentDocument = gql`
+    mutation DeleteComment($deleteCommentId: Float!) {
+  deleteComment(id: $deleteCommentId)
+}
+    `;
+
+export function useDeleteCommentMutation() {
+  return Urql.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
