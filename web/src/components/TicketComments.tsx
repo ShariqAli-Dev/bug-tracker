@@ -43,7 +43,7 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
           {data?.ticketComments.map(({ id, user, message }) => (
             <Box
               display="flex"
-              alignItems={me?.me?.id === user.id ? "start" : "end"}
+              alignItems={me?.me?.id === user.id ? "end" : "start"}
               justifyContent="space-between"
               flexDirection="column"
               key={id}
