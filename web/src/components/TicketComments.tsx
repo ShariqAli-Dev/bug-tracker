@@ -10,6 +10,7 @@ import {
 import { Form, Formik } from "formik";
 import {
   useCreateCommentMutation,
+  useDeleteCommentMutation,
   useMeQuery,
   useTicketCommentsQuery,
 } from "../generated/graphql";
@@ -31,6 +32,7 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
   });
   const [{ data: me, fetching: meFetch }] = useMeQuery();
   const [, createComment] = useCreateCommentMutation();
+  const [, deleteComment] = useDeleteCommentMutation();
 
   return (
     <Flex
@@ -70,9 +72,9 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
                 {me?.me?.id === user.id && (
                   <CFaTrash
                     cursor="pointer"
-                    onClick={() => {
-                      alert("i am being clicked");
-                    }}
+                    onClick={async () =>
+                      await deleteComment({ deleteCommentId: id })
+                    }
                     marginRight={{ base: 2, md: 4 }}
                   />
                 )}
