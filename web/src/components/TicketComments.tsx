@@ -15,7 +15,6 @@ const initialValues = {
 };
 
 const TicketComments = ({ ticketId }: TicketCommentsProps) => {
-  // graphql api call grabbing the comments by the ticketId
   const [{ data, fetching: commentFetch }] = useTicketCommentsQuery({
     variables: { ticketId },
   });
@@ -39,6 +38,8 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
           width="full"
           overflowY="auto"
           maxHeight={{ base: "10rem", lg: "15rem" }}
+          borderColor="red"
+          border="1px"
         >
           {data?.ticketComments.map(({ id, user, message }) => (
             <Box
@@ -47,8 +48,12 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
               justifyContent="space-between"
               flexDirection="column"
               key={id}
+              padding={1}
+              color="primary"
             >
-              <Text>{user.name}</Text>
+              <Text color="primary" fontWeight="semibold" fontSize="lg">
+                {user.name}
+              </Text>
               <Text>{message}</Text>
             </Box>
           ))}
