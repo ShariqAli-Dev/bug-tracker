@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import {
   useAssignedDevelopersQuery,
   useTicketQuery,

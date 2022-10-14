@@ -1,14 +1,26 @@
-import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react";
+import {
+  Box,
+  chakra,
+  Button,
+  Flex,
+  FormControl,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import {
   useCreateCommentMutation,
+  useDeleteCommentMutation,
   useMeQuery,
   useTicketCommentsQuery,
 } from "../generated/graphql";
+import { FaTrash } from "react-icons/fa";
 
 interface TicketCommentsProps {
   ticketId: number;
 }
+
+const CFaTrash = chakra(FaTrash);
 
 const initialValues = {
   comment: "",
@@ -20,6 +32,7 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
   });
   const [{ data: me, fetching: meFetch }] = useMeQuery();
   const [, createComment] = useCreateCommentMutation();
+  const [, deleteComment] = useDeleteCommentMutation();
 
   return (
     <Flex
@@ -42,8 +55,7 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
           border="1px"
         >
           {data?.ticketComments.map(({ id, user, message }) => (
-            <Box
-              display="flex"
+            <Flex
               alignItems={me?.me?.id === user.id ? "end" : "start"}
               justifyContent="space-between"
               flexDirection="column"
@@ -51,11 +63,25 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
               padding={1}
               color="primary"
             >
-              <Text color="primary" fontWeight="semibold" fontSize="lg">
+              <Flex
+                color="primary"
+                fontWeight="semibold"
+                fontSize="lg"
+                alignItems="center"
+              >
+                {me?.me?.id === user.id && (
+                  <CFaTrash
+                    cursor="pointer"
+                    onClick={async () =>
+                      await deleteComment({ deleteCommentId: id })
+                    }
+                    marginRight={{ base: 2, md: 4 }}
+                  />
+                )}
                 {user.name}
-              </Text>
+              </Flex>
               <Text>{message}</Text>
-            </Box>
+            </Flex>
           ))}
         </Box>
       )}

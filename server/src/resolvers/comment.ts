@@ -74,4 +74,15 @@ export class CommentResolver {
       return false;
     }
   }
+
+  @Mutation(() => Boolean)
+  async deleteComment(@Arg("id") id: number): Promise<boolean> {
+    try {
+      await Comment.delete(id);
+      return true;
+    } catch (err) {
+      console.error(err);
+      return false;
+    }
+  }
 }
