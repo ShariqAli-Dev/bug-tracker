@@ -1,0 +1,3 @@
+mutation CreateComment($options: createComment!) {
+  createComment(options: $options)
+}

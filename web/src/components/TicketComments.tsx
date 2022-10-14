@@ -1,16 +1,10 @@
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  FormControl,
-  Input,
-  InputGroup,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { useMeQuery, useTicketCommentsQuery } from "../generated/graphql";
-import { InputField } from "./InputField";
+import {
+  useCreateCommentMutation,
+  useMeQuery,
+  useTicketCommentsQuery,
+} from "../generated/graphql";
 
 interface TicketCommentsProps {
   ticketId: number;
@@ -26,7 +20,8 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
     variables: { ticketId },
   });
   const [{ data: me, fetching: meFetch }] = useMeQuery();
-  console.log(data?.ticketComments);
+  const [, createComment] = useCreateCommentMutation();
+
   return (
     <Flex
       flexDirection="column"
@@ -61,8 +56,15 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
       )}
       <Formik
         initialValues={initialValues}
-        onSubmit={({ comment }) => {
-          console.log("form value for comments component is", { comment });
+        onSubmit={async ({ comment }, { resetForm }) => {
+          try {
+            await createComment({
+              options: { message: comment, ticketId: ticketId },
+            });
+            resetForm();
+          } catch (err) {
+            console.log(err);
+          }
         }}
       >
         {({ values, handleChange, isSubmitting }) => (
