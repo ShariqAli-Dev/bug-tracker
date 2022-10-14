@@ -1,15 +1,17 @@
-import { Comment } from "../entities/Comment";
 import {
   Arg,
   Ctx,
   Field,
   InputType,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
 } from "type-graphql";
-import { MyContext } from "src/types";
 import { myDataSource } from "../data-source";
+import { Comment } from "../entities/Comment";
+import { Users } from "../entities/Users";
+import { MyContext } from "../types";
 @InputType()
 class createComment {
   @Field()
@@ -19,6 +21,18 @@ class createComment {
   message!: string;
 }
 
+@ObjectType()
+class TicketComment {
+  @Field()
+  id: number;
+
+  @Field()
+  message: string;
+
+  @Field()
+  user: Users;
+}
+
 @Resolver()
 export class CommentResolver {
   @Query(() => [Comment])
@@ -26,37 +40,38 @@ export class CommentResolver {
     return await Comment.find();
   }
 
-  @Query(() => [Comment])
-  async userComments(@Ctx() { req }: MyContext): Promise<Comment[]> {
-    const comments = await myDataSource.query(`
-    select c.*, 
-    json_build_object(
-      'id', u.id,
-      'email', u.email,
-      'role', u.role,
-      'tokenVersion', u."tokenVersion",
-      'createdAt', u."createdAt",
-      'updatedAt', u."updatedAt"
-      ) user 
-    from comment c
-
-    inner join users u on u.id = c."userId"
-    where c."userId" = ${req.session.userId || 1}
-    
-    order by c."createdAt" DESC
-    `);
-    return comments;
+  @Query(() => [TicketComment])
+  async ticketComments(
+    @Arg("ticketId") ticketId: number
+  ): Promise<TicketComment[]> {
+    return await myDataSource.query(
+      `select "c".*,
+      json_build_object(
+        'id', u.id,
+        'name', u.name
+      ) "user"
+      from "comment" "c"
+      inner join users u on u.id = "c"."userId"
+      where "c"."ticketId" = ${ticketId}
+      order by "c"."createdAt" asc`
+    );
   }
 
-  @Mutation(() => Comment)
+  @Mutation(() => Boolean)
   async createComment(
     @Arg("options") options: createComment,
     @Ctx() { req }: MyContext
-  ): Promise<Comment> {
-    return await Comment.create({
-      message: options.message,
-      userId: req.session.userId,
-      ticketId: options.ticketId,
-    }).save();
+  ): Promise<boolean> {
+    try {
+      await Comment.create({
+        message: options.message,
+        userId: req.session.userId || 1,
+        ticketId: options.ticketId,
+        createdAt: new Date(),
+      }).save();
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

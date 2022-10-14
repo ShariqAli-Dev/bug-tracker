@@ -17,9 +17,10 @@ const UserActions = () => {
   const router = useRouter();
   const [{ fetching }, logout] = useLogoutMutation();
 
-  const logoutUser = () => {
-    logout({});
-    router.push("/");
+  const logoutUser = async () => {
+    await logout({});
+    await router.push("/");
+    router.reload();
   };
 
   return (

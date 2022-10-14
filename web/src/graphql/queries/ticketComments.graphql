@@ -1,0 +1,10 @@
+query TicketComments($ticketId: Float!) {
+  ticketComments(ticketId: $ticketId) {
+    id
+    message
+    user {
+      id
+      name
+    }
+  }
+}

@@ -1,8 +1,9 @@
-import { Box, Container, Flex, Text } from "@chakra-ui/react";
+import { Box, Container, Divider, Flex, Text } from "@chakra-ui/react";
 import {
   useAssignedDevelopersQuery,
   useTicketQuery,
 } from "../generated/graphql";
+import TicketComments from "./TicketComments";
 
 interface TicketDetailProps {
   ticketId: number;
@@ -28,7 +29,6 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
       </Text>
       <Flex
         margin="auto"
-        height="40%"
         alignItems="center"
         flexDirection={{ base: "column", md: "row" }}
       >
@@ -142,7 +142,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
           </Box>
         </Box>
         {/* Comments */}
-        <Box width="50%">Comments</Box>
+        <TicketComments ticketId={ticketId} />
       </Flex>
     </Box>
   );
