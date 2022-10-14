@@ -30,9 +30,6 @@ class TicketComment {
   message: string;
 
   @Field()
-  createdAt: Date;
-
-  @Field()
   user: Users;
 }
 
@@ -49,14 +46,14 @@ export class CommentResolver {
   ): Promise<TicketComment[]> {
     return await myDataSource.query(
       `select "c".*,
-        json_build_object(
-          'id', u.id,
-          'name', u.name,
-          'createdAt', u."createdAt"
-        ) "user"
+      json_build_object(
+        'id', u.id,
+        'name', u.name
+      ) "user"
       from "comment" "c"
       inner join users u on u.id = "c"."userId"
-      where c."ticketId" = ${ticketId}`
+      where "c"."ticketId" = ${ticketId}
+      order by "c"."createdAt" asc`
     );
   }
 
@@ -70,6 +67,7 @@ export class CommentResolver {
         message: options.message,
         userId: req.session.userId || 1,
         ticketId: options.ticketId,
+        createdAt: new Date(),
       }).save();
       return true;
     } catch {
