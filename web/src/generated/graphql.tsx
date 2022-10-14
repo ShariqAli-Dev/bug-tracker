@@ -56,7 +56,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   assignUsers: Scalars['Boolean'];
   changePassword: UserResponse;
-  createComment: Comment;
+  createComment: Scalars['Boolean'];
   createNotification: Notification;
   createProject: Project;
   createTicket: Ticket;
@@ -178,8 +178,8 @@ export type Query = {
   projectTickets: Array<Ticket>;
   projects: Array<Project>;
   ticket?: Maybe<Ticket>;
+  ticketComments: Array<TicketComment>;
   tickets: Array<Ticket>;
-  userComments: Array<Comment>;
   userNotifications: Array<Notification>;
   users: Array<Users>;
 };
@@ -219,6 +219,11 @@ export type QueryTicketArgs = {
   id: Scalars['Float'];
 };
 
+
+export type QueryTicketCommentsArgs = {
+  ticketId: Scalars['Float'];
+};
+
 export type Ticket = {
   __typename?: 'Ticket';
   creator: Scalars['String'];
@@ -230,6 +235,13 @@ export type Ticket = {
   title: Scalars['String'];
   type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type TicketComment = {
+  __typename?: 'TicketComment';
+  id: Scalars['Float'];
+  message: Scalars['String'];
+  user: Users;
 };
 
 export type UpdateNotificationInput = {
@@ -426,6 +438,13 @@ export type TicketQueryVariables = Exact<{
 
 
 export type TicketQuery = { __typename?: 'Query', ticket?: { __typename?: 'Ticket', id: number, title: string, status: string, priority: string, creator: string, description: string, type: string } | null };
+
+export type TicketCommentsQueryVariables = Exact<{
+  ticketId: Scalars['Float'];
+}>;
+
+
+export type TicketCommentsQuery = { __typename?: 'Query', ticketComments: Array<{ __typename?: 'TicketComment', id: number, message: string, user: { __typename?: 'Users', id: number, name: string } }> };
 
 export type UserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -712,6 +731,22 @@ export const TicketDocument = gql`
 
 export function useTicketQuery(options: Omit<Urql.UseQueryArgs<TicketQueryVariables>, 'query'>) {
   return Urql.useQuery<TicketQuery, TicketQueryVariables>({ query: TicketDocument, ...options });
+};
+export const TicketCommentsDocument = gql`
+    query TicketComments($ticketId: Float!) {
+  ticketComments(ticketId: $ticketId) {
+    id
+    message
+    user {
+      id
+      name
+    }
+  }
+}
+    `;
+
+export function useTicketCommentsQuery(options: Omit<Urql.UseQueryArgs<TicketCommentsQueryVariables>, 'query'>) {
+  return Urql.useQuery<TicketCommentsQuery, TicketCommentsQueryVariables>({ query: TicketCommentsDocument, ...options });
 };
 export const UserNotificationsDocument = gql`
     query UserNotifications {

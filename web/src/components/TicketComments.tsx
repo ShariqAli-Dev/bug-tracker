@@ -9,6 +9,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
+import { useMeQuery, useTicketCommentsQuery } from "../generated/graphql";
 import { InputField } from "./InputField";
 
 interface TicketCommentsProps {
@@ -19,8 +20,13 @@ const initialValues = {
   comment: "",
 };
 
-const TicketComments = (props: TicketCommentsProps) => {
+const TicketComments = ({ ticketId }: TicketCommentsProps) => {
   // graphql api call grabbing the comments by the ticketId
+  const [{ data, fetching: commentFetch }] = useTicketCommentsQuery({
+    variables: { ticketId },
+  });
+  const [{ data: me, fetching: meFetch }] = useMeQuery();
+  console.log(data?.ticketComments);
   return (
     <Flex
       flexDirection="column"
@@ -33,51 +39,26 @@ const TicketComments = (props: TicketCommentsProps) => {
       <Text width="full" textAlign="center" fontSize="2xl" fontWeight="bold">
         Comments
       </Text>
-      <Container>
-        <Box overflowY="auto" maxHeight={{ base: "10rem", lg: "15rem" }}>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
-          <div>testing</div>
+      {!commentFetch && !meFetch && (
+        <Box
+          width="full"
+          overflowY="auto"
+          maxHeight={{ base: "10rem", lg: "15rem" }}
+        >
+          {data?.ticketComments.map(({ id, user, message }) => (
+            <Box
+              display="flex"
+              alignItems={me?.me?.id === user.id ? "start" : "end"}
+              justifyContent="space-between"
+              flexDirection="column"
+              key={id}
+            >
+              <Text>{user.name}</Text>
+              <Text>{message}</Text>
+            </Box>
+          ))}
         </Box>
-      </Container>
+      )}
       <Formik
         initialValues={initialValues}
         onSubmit={({ comment }) => {
