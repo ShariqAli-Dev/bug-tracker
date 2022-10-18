@@ -72,7 +72,7 @@ const EditTicketModal = ({
           if (assignedDevHash[user.name]) {
             return { ...user, selected: true };
           } else {
-            return user;
+            return { ...user, selected: false };
           }
         })
       );
@@ -95,13 +95,22 @@ const EditTicketModal = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>I am modal header</ModalHeader>
+        <ModalHeader>Edit Ticket</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={8}>
           <Formik
             initialValues={{ ...ticketData }}
             onSubmit={async (options, { resetForm }) => {
-              console.log(options);
+              const assignedDevHash = {} as any;
+              assignedDevelopers?.assignedDevelopers.forEach(({ user }) => {
+                if (!assignedDevHash[user.name]) {
+                  assignedDevHash[user.name] = user.id;
+                }
+              });
+
+              console.log(assignedDevHash);
+
+              resetForm();
             }}
           >
             {({ values, handleChange, isSubmitting }) => (
@@ -157,7 +166,7 @@ const EditTicketModal = ({
                           }}
                           backgroundColor={p.selected ? "primary" : "white"}
                           color={p.selected ? "tertiary" : "secondary"}
-                          key={p.email}
+                          key={p.name + p.email}
                         >
                           <Box>{p.name}</Box> <Box>{p.email}</Box>
                         </Flex>
@@ -226,7 +235,7 @@ const EditTicketModal = ({
 
                 <Box width="full" display="flex" justifyContent="space-around">
                   <Button type="submit" isLoading={isSubmitting}>
-                    Create Ticket
+                    Confirm
                   </Button>
                   <Button onClick={onClose}>Cancel</Button>
                 </Box>

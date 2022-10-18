@@ -37,6 +37,27 @@ class createTicketInput {
 }
 
 @InputType()
+class editTicketInput {
+  @Field()
+  id: number;
+
+  @Field()
+  title: string;
+
+  @Field()
+  description: string;
+
+  @Field()
+  type: string;
+
+  @Field()
+  priority: string;
+
+  @Field()
+  status: string;
+}
+
+@InputType()
 class teamMembers {
   @Field()
   email: string;
@@ -119,6 +140,21 @@ export class TicketResolver {
       `);
     }
 
+    return ticket;
+  }
+
+  @Mutation(() => Ticket, { nullable: true })
+  async updateTicket(
+    @Arg("options") options: editTicketInput
+  ): Promise<Ticket | null> {
+    const { id, ...ticketData } = options;
+    const ticket = await Ticket.findOne({ where: { id } });
+
+    if (!ticket) {
+      return null;
+    }
+
+    await Ticket.update({ id }, { ...ticketData });
     return ticket;
   }
 }
