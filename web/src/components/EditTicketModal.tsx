@@ -21,6 +21,7 @@ import {
   Ticket,
   useAssignedDevelopersQuery,
   useAssignedPersonnelQuery,
+  useUpdateTicketMutation,
 } from "../generated/graphql";
 import { ProjectModalProps } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
@@ -29,6 +30,14 @@ import { InputField } from "./InputField";
 interface EditTicketModalProps extends ProjectModalProps {
   projectId: number;
   ticketData: Ticket;
+}
+
+interface TeamMember {
+  id: number;
+  name: string;
+  selected: boolean;
+  email: string;
+  changed: boolean;
 }
 
 const EditTicketModal = ({
@@ -44,6 +53,8 @@ const EditTicketModal = ({
 
   const [{ data: assignedDevelopers, fetching: developerFetch }] =
     useAssignedDevelopersQuery({ variables: { ticketId: ticketData.id } });
+
+  const [, updateTicket] = useUpdateTicketMutation();
 
   const [team, setTeam] = useState<
     AssignedPersonnel[] | AssignedDeveloper[] | any
@@ -97,9 +108,17 @@ const EditTicketModal = ({
         <ModalBody pb={8}>
           <Formik
             initialValues={{ ...ticketData }}
-            onSubmit={async (options, { resetForm }) => {
-              // team = team.filter(onlyChangedTickets)
-              // updateTicketMutation(options, filteredteam)
+            onSubmit={async (
+              { projectId, updatedAt, creator, ...options },
+              { resetForm }
+            ) => {
+              let filteredTeam = team.filter(
+                (member: TeamMember) => member.changed
+              ) as TeamMember[] | any;
+              filteredTeam = filteredTeam.map(
+                ({ changed, role, ...member }) => member
+              );
+              updateTicket({ options, team: filteredTeam });
               // invalidation
               resetForm();
             }}
@@ -107,12 +126,7 @@ const EditTicketModal = ({
             {({ values, handleChange, isSubmitting }) => (
               <Form>
                 {/* Ticket Title */}
-                <Box
-                  pb={2}
-                  onClick={() => {
-                    console.log(values);
-                  }}
-                >
+                <Box pb={2}>
                   <InputField
                     onChange={handleChange}
                     name="title"
@@ -141,36 +155,26 @@ const EditTicketModal = ({
                   borderWidth={0.1}
                   borderRadius={"xl"}
                 >
-                  {team.map(
-                    (
-                      p: {
-                        name: string;
-                        selected: boolean;
-                        email: string;
-                        changed: false;
-                      },
-                      pdx: number
-                    ) => {
-                      return (
-                        <Flex
-                          width="full"
-                          justifyContent={"space-between"}
-                          fontSize={"1rem"}
-                          onClick={() => {
-                            team[pdx].selected = !team[pdx].selected;
-                            team[pdx].changed = !team[pdx].changed;
-                            console.log(team[pdx]);
-                            setTeam([...team]);
-                          }}
-                          backgroundColor={p.selected ? "primary" : "white"}
-                          color={p.selected ? "tertiary" : "secondary"}
-                          key={p.name + p.email}
-                        >
-                          <Box>{p.name}</Box> <Box>{p.email}</Box>
-                        </Flex>
-                      );
-                    }
-                  )}
+                  {team.map((p: TeamMember, pdx: number) => {
+                    return (
+                      <Flex
+                        width="full"
+                        justifyContent={"space-between"}
+                        fontSize={"1rem"}
+                        onClick={() => {
+                          team[pdx].selected = !team[pdx].selected;
+                          team[pdx].changed = !team[pdx].changed;
+
+                          setTeam([...team]);
+                        }}
+                        backgroundColor={p.selected ? "primary" : "white"}
+                        color={p.selected ? "tertiary" : "secondary"}
+                        key={p.name + p.email}
+                      >
+                        <Box>{p.name}</Box> <Box>{p.email}</Box>
+                      </Flex>
+                    );
+                  })}
                 </Box>
                 <Flex
                   justifyContent="space-around"
