@@ -45,8 +45,6 @@ const EditTicketModal = ({
   const [{ data: assignedDevelopers, fetching: developerFetch }] =
     useAssignedDevelopersQuery({ variables: { ticketId: ticketData.id } });
 
-  // const editTicket = useEditTicketMutation();
-
   const [team, setTeam] = useState<
     AssignedPersonnel[] | AssignedDeveloper[] | any
   >([]);
@@ -66,13 +64,12 @@ const EditTicketModal = ({
           assignedDevHash[user.name] = user.id;
         }
       });
-
       setTeam(
         assignedPersonnel.assignedPersonnel.map(({ user }) => {
           if (assignedDevHash[user.name]) {
-            return { ...user, selected: true };
+            return { ...user, selected: true, changed: false };
           } else {
-            return { ...user, selected: false };
+            return { ...user, selected: false, changed: false };
           }
         })
       );
@@ -101,15 +98,9 @@ const EditTicketModal = ({
           <Formik
             initialValues={{ ...ticketData }}
             onSubmit={async (options, { resetForm }) => {
-              const assignedDevHash = {} as any;
-              assignedDevelopers?.assignedDevelopers.forEach(({ user }) => {
-                if (!assignedDevHash[user.name]) {
-                  assignedDevHash[user.name] = user.id;
-                }
-              });
-
-              console.log(assignedDevHash);
-
+              // team = team.filter(onlyChangedTickets)
+              // updateTicketMutation(options, filteredteam)
+              // invalidation
               resetForm();
             }}
           >
@@ -152,7 +143,12 @@ const EditTicketModal = ({
                 >
                   {team.map(
                     (
-                      p: { name: string; selected: boolean; email: string },
+                      p: {
+                        name: string;
+                        selected: boolean;
+                        email: string;
+                        changed: false;
+                      },
                       pdx: number
                     ) => {
                       return (
@@ -162,6 +158,8 @@ const EditTicketModal = ({
                           fontSize={"1rem"}
                           onClick={() => {
                             team[pdx].selected = !team[pdx].selected;
+                            team[pdx].changed = !team[pdx].changed;
+                            console.log(team[pdx]);
                             setTeam([...team]);
                           }}
                           backgroundColor={p.selected ? "primary" : "white"}
