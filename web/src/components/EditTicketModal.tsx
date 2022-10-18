@@ -1,6 +1,3 @@
-import { withUrqlClient } from "next-urql";
-import { ProjectModalProps } from "../types";
-import { createUrqlClient } from "../utils/createUrqlClient";
 import {
   Box,
   Button,
@@ -14,17 +11,23 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
-  useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { useRouter } from "next/router";
+import { withUrqlClient } from "next-urql";
 import { useEffect, useState } from "react";
+import {
+  AssignedDeveloper,
+  AssignedPersonnel,
+  Ticket,
+  useAssignedDevelopersQuery,
+  useAssignedPersonnelQuery,
+} from "../generated/graphql";
+import { ProjectModalProps } from "../types";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import { InputField } from "./InputField";
-import { Ticket } from "../generated/graphql";
 
 interface EditTicketModalProps extends ProjectModalProps {
   projectId: number;
-  tickeId: number;
   ticketData: Ticket;
 }
 
@@ -34,8 +37,51 @@ const EditTicketModal = ({
   isOpen,
   onClose,
   ticketData,
+  projectId,
 }: EditTicketModalProps) => {
+  const [{ data: assignedPersonnel, fetching: personnelFetch }] =
+    useAssignedPersonnelQuery({ variables: { projectId } });
+
+  const [{ data: assignedDevelopers, fetching: developerFetch }] =
+    useAssignedDevelopersQuery({ variables: { ticketId: ticketData.id } });
+
   // const editTicket = useEditTicketMutation();
+
+  const [team, setTeam] = useState<
+    AssignedPersonnel[] | AssignedDeveloper[] | any
+  >([]);
+
+  useEffect(() => {
+    if (
+      personnelFetch ||
+      developerFetch ||
+      typeof assignedDevelopers === "undefined" ||
+      typeof assignedPersonnel === "undefined"
+    ) {
+      return;
+    } else {
+      const assignedDevHash = {} as any; // {name: id}
+      assignedDevelopers.assignedDevelopers.forEach(({ user }) => {
+        if (!assignedDevHash[user.name]) {
+          assignedDevHash[user.name] = user.id;
+        }
+      });
+
+      setTeam(
+        assignedPersonnel.assignedPersonnel.map(({ user }) => {
+          if (assignedDevHash[user.name]) {
+            return { ...user, selected: true };
+          } else {
+            return user;
+          }
+        })
+      );
+    }
+  }, [personnelFetch, developerFetch, assignedPersonnel, assignedDevelopers]);
+
+  if (personnelFetch || developerFetch) {
+    return <div></div>;
+  }
 
   return (
     <Modal
@@ -95,24 +141,29 @@ const EditTicketModal = ({
                   borderWidth={0.1}
                   borderRadius={"xl"}
                 >
-                  {/* {team.map((p, pdx) => {
-                    return (
-                      <Flex
-                        width="full"
-                        justifyContent={"space-between"}
-                        fontSize={"1rem"}
-                        onClick={() => {
-                          team[pdx].selected = !team[pdx].selected;
-                          setTeam([...team]);
-                        }}
-                        backgroundColor={p.selected ? "primary" : "white"}
-                        color={p.selected ? "tertiary" : "secondary"}
-                        key={p.email}
-                      >
-                        <Box>{p.name}</Box> <Box>{p.email}</Box>
-                      </Flex>
-                    );
-                  })} */}
+                  {team.map(
+                    (
+                      p: { name: string; selected: boolean; email: string },
+                      pdx: number
+                    ) => {
+                      return (
+                        <Flex
+                          width="full"
+                          justifyContent={"space-between"}
+                          fontSize={"1rem"}
+                          onClick={() => {
+                            team[pdx].selected = !team[pdx].selected;
+                            setTeam([...team]);
+                          }}
+                          backgroundColor={p.selected ? "primary" : "white"}
+                          color={p.selected ? "tertiary" : "secondary"}
+                          key={p.email}
+                        >
+                          <Box>{p.name}</Box> <Box>{p.email}</Box>
+                        </Flex>
+                      );
+                    }
+                  )}
                 </Box>
                 <Flex
                   justifyContent="space-around"

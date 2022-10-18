@@ -273,15 +273,18 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
         initialRef={initialRef}
         projectId={props.projectId}
       />
-      <EditTicketModal
-        pageProps={{}}
-        isOpen={editTicketIsOpen}
-        onClose={editTicketOnClose}
-        finalRef={finalRef}
-        initialRef={initialRef}
-        projectId={props.projectId}
-        ticketData={editTicketData}
-      />
+
+      {editTicketData && (
+        <EditTicketModal
+          pageProps={{}}
+          isOpen={editTicketIsOpen}
+          onClose={editTicketOnClose}
+          finalRef={finalRef}
+          initialRef={initialRef}
+          projectId={props.projectId}
+          ticketData={editTicketData}
+        />
+      )}
     </>
   );
 };
