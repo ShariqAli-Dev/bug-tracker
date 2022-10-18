@@ -12,6 +12,7 @@ export type MyContext = {
   payload?: Users;
 };
 
+// likely depricated frot the generated graphql
 export type User = {
   email: string;
   role: string;
