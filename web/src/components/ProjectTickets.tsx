@@ -162,14 +162,19 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                                   props.projectTickets[parseInt(row.id)].id
                                 );
                               }}
+                              cursor="pointer"
+                              textAlign="center"
                             >
-                              <Text
-                                textDecoration="underline"
-                                cursor="pointer"
-                                textAlign="center"
-                              >
+                              <span style={{ textDecoration: "underline" }}>
                                 Details
-                              </Text>
+                              </span>{" "}
+                              |{" "}
+                              <span
+                                onClick={onOpen}
+                                style={{ textDecoration: "underline" }}
+                              >
+                                Edit
+                              </span>
                             </Text>
                           )}
                         </Td>
