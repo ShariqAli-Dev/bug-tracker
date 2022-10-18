@@ -96,6 +96,23 @@ export class TicketResolver {
     `);
   }
 
+  @Query()
+  async editTicketDevelopers() {
+    // devs assigned to the project
+    // const  assignedPersonnel = user_project? i thnk
+    // devs assigned to the ticket
+    // const assignedDevelopers = query above
+    // const hash = self.toHash(assignedDeveopers)
+    /*
+    for dev in assignedPersonnel
+      if dev in hash {
+        return {...devData, selected: true} 
+      } else {
+        return {...devData, selected: false}
+      }
+    */
+  }
+
   @Mutation(() => Ticket)
   async createTicket(
     @Arg("options") options: createTicketInput,

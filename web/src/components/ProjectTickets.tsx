@@ -29,7 +29,7 @@ const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 interface ProjectTicketsProps {
-  data: any;
+  projectTickets: any;
   projectId: number;
   setTicketId: Dispatch<SetStateAction<undefined | number>>;
 }
@@ -77,7 +77,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   } = useTable(
     {
       columns,
-      data: props.data as any,
+      data: props.projectTickets as any,
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
@@ -159,7 +159,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                             <Text
                               onClick={() => {
                                 props.setTicketId(
-                                  props.data[parseInt(row.id)].id
+                                  props.projectTickets[parseInt(row.id)].id
                                 );
                               }}
                             >
