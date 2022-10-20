@@ -21,6 +21,7 @@ import {
   Ticket,
   useAssignedDevelopersQuery,
   useAssignedPersonnelQuery,
+  useDeleteTicketMutation,
   useUpdateTicketMutation,
 } from "../generated/graphql";
 import { ProjectModalProps } from "../types";
@@ -55,6 +56,8 @@ const EditTicketModal = ({
     useAssignedDevelopersQuery({ variables: { ticketId: ticketData.id } });
 
   const [, updateTicket] = useUpdateTicketMutation();
+
+  const [, deleteTicket] = useDeleteTicketMutation();
 
   const [team, setTeam] = useState<
     AssignedPersonnel[] | AssignedDeveloper[] | any
@@ -241,6 +244,15 @@ const EditTicketModal = ({
                 <Box width="full" display="flex" justifyContent="space-around">
                   <Button type="submit" isLoading={isSubmitting}>
                     Confirm
+                  </Button>
+                  <Button>Archive</Button>
+                  <Button
+                    onClick={async () => {
+                      await deleteTicket({ ticketId: ticketData.id });
+                      onClose();
+                    }}
+                  >
+                    Delete
                   </Button>
                   <Button onClick={onClose}>Cancel</Button>
                 </Box>
