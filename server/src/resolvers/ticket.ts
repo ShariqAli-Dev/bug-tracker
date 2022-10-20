@@ -213,4 +213,10 @@ export class TicketResolver {
     await Ticket.update({ id }, { ...ticketData });
     return ticket;
   }
+
+  @Mutation(() => Boolean)
+  async deleteTicket(@Arg("ticketId") ticketId: number) {
+    await Ticket.delete(ticketId);
+    return true;
+  }
 }
