@@ -145,13 +145,66 @@ export class TicketResolver {
 
   @Mutation(() => Ticket, { nullable: true })
   async updateTicket(
-    @Arg("options") options: editTicketInput
+    @Arg("options") options: editTicketInput,
+    @Arg("team", () => [teamMembers]) team: teamMembers[]
   ): Promise<Ticket | null> {
     const { id, ...ticketData } = options;
     const ticket = await Ticket.findOne({ where: { id } });
-
     if (!ticket) {
       return null;
+    }
+
+    interface RequestUserType {
+      email: string;
+      id: number;
+      name: string;
+    }
+
+    if (team.length) {
+      const insertRequests = [] as RequestUserType[];
+      const deleteRequests = [] as RequestUserType[];
+
+      team.forEach(({ selected, ...user }) => {
+        if (selected) {
+          // if selected == true, then it was previously false. Admin wants to add user to ticket. add user to user_ticket
+          insertRequests.push(user);
+        } else {
+          // if selected was false, then it previously was true. Admin want's to remove user from ticket. remove from user_ticket
+          deleteRequests.push(user);
+        }
+      });
+
+      let insertString = "";
+      let deleteString = "";
+
+      insertRequests.forEach((m, mdx) => {
+        insertString += `(${ticket.id}, ${m.id})`;
+        if (mdx !== team.length - 1) {
+          insertString += ",";
+        }
+      });
+      deleteRequests.forEach((m, mdx) => {
+        deleteString += `${m.id}`;
+        if (mdx !== team.length - 1) {
+          deleteString += ",";
+        }
+      });
+
+      insertString.length &&
+        User_Ticket.query(`
+      insert into user_ticket
+        ("ticketId", "userId")
+      values
+        ${insertString}
+      `);
+
+      deleteString.length &&
+        User_Ticket.query(`
+      delete from user_ticket
+        where
+          "ticketId" = ${ticket.id} and
+          "userId" in (${deleteString})
+      `);
     }
 
     await Ticket.update({ id }, { ...ticketData });
