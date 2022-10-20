@@ -106,7 +106,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
 
             {!ticketsFetch && (
               <ProjectTickets
-                data={ticketsQuery?.projectTickets}
+                projectTickets={ticketsQuery?.projectTickets}
                 projectId={projectId}
                 setTicketId={setTicketId}
               />

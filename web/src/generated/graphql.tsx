@@ -70,6 +70,7 @@ export type Mutation = {
   unassignUser: Scalars['Boolean'];
   updateNotification?: Maybe<Notification>;
   updateProject?: Maybe<Project>;
+  updateTicket?: Maybe<Ticket>;
 };
 
 
@@ -148,6 +149,12 @@ export type MutationUpdateNotificationArgs = {
 
 export type MutationUpdateProjectArgs = {
   options: UpdateProjectInput;
+};
+
+
+export type MutationUpdateTicketArgs = {
+  options: EditTicketInput;
+  team: Array<TeamMembers>;
 };
 
 export type Notification = {
@@ -315,6 +322,15 @@ export type CreateTicketInput = {
   type: Scalars['String'];
 };
 
+export type EditTicketInput = {
+  description: Scalars['String'];
+  id: Scalars['Float'];
+  priority: Scalars['String'];
+  status: Scalars['String'];
+  title: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type TeamMembers = {
   email: Scalars['String'];
   id: Scalars['Float'];
@@ -406,6 +422,14 @@ export type UpdateNotificationMutationVariables = Exact<{
 
 
 export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } | null };
+
+export type UpdateTicketMutationVariables = Exact<{
+  team: Array<TeamMembers> | TeamMembers;
+  options: EditTicketInput;
+}>;
+
+
+export type UpdateTicketMutation = { __typename?: 'Mutation', updateTicket?: { __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any } | null };
 
 export type AssignedDevelopersQueryVariables = Exact<{
   ticketId: Scalars['Float'];
@@ -651,6 +675,25 @@ export const UpdateNotificationDocument = gql`
 
 export function useUpdateNotificationMutation() {
   return Urql.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument);
+};
+export const UpdateTicketDocument = gql`
+    mutation UpdateTicket($team: [teamMembers!]!, $options: editTicketInput!) {
+  updateTicket(team: $team, options: $options) {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    updatedAt
+  }
+}
+    `;
+
+export function useUpdateTicketMutation() {
+  return Urql.useMutation<UpdateTicketMutation, UpdateTicketMutationVariables>(UpdateTicketDocument);
 };
 export const AssignedDevelopersDocument = gql`
     query AssignedDevelopers($ticketId: Float!) {

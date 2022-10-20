@@ -17,11 +17,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
-import { Dispatch, SetStateAction, useMemo, useRef } from "react";
+import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
+import { Ticket } from "../generated/graphql";
 import { SectionHeader } from "../pages/project/[projectId]";
+import EditTicketModal from "./EditTicketModal";
 import TicketModal from "./TicketModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
@@ -29,13 +31,26 @@ const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 interface ProjectTicketsProps {
-  data: any;
+  projectTickets: any;
   projectId: number;
   setTicketId: Dispatch<SetStateAction<undefined | number>>;
 }
 
 const ProjectTickets = (props: ProjectTicketsProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: newTicketIsOpen,
+    onOpen: newTicketOnOpen,
+    onClose: newTicketOnClose,
+  } = useDisclosure();
+  const {
+    isOpen: editTicketIsOpen,
+    onOpen: editTicketOnOpen,
+    onClose: editTicketOnClose,
+  } = useDisclosure();
+  const [editTicketData, setEditTicketData] = useState<Ticket | undefined>(
+    undefined
+  );
+
   const finalRef = useRef(null);
   const initialRef = useRef(null);
   const columns = useMemo(
@@ -77,7 +92,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   } = useTable(
     {
       columns,
-      data: props.data as any,
+      data: props.projectTickets as any,
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
@@ -109,7 +124,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                 border: "2px",
                 borderColor: "primary",
               }}
-              onClick={onOpen}
+              onClick={newTicketOnOpen}
             >
               New Ticket
             </Button>
@@ -159,17 +174,27 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                             <Text
                               onClick={() => {
                                 props.setTicketId(
-                                  props.data[parseInt(row.id)].id
+                                  props.projectTickets[parseInt(row.id)].id
                                 );
                               }}
+                              cursor="pointer"
+                              textAlign="center"
                             >
-                              <Text
-                                textDecoration="underline"
-                                cursor="pointer"
-                                textAlign="center"
-                              >
+                              <span style={{ textDecoration: "underline" }}>
                                 Details
-                              </Text>
+                              </span>{" "}
+                              |{" "}
+                              <span
+                                onClick={() => {
+                                  setEditTicketData(
+                                    props.projectTickets[parseInt(row.id)]
+                                  );
+                                  editTicketOnOpen();
+                                }}
+                                style={{ textDecoration: "underline" }}
+                              >
+                                Edit
+                              </span>
                             </Text>
                           )}
                         </Td>
@@ -242,12 +267,24 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
       </Box>
       <TicketModal
         pageProps={{}}
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={newTicketIsOpen}
+        onClose={newTicketOnClose}
         finalRef={finalRef}
         initialRef={initialRef}
         projectId={props.projectId}
       />
+
+      {editTicketData && (
+        <EditTicketModal
+          pageProps={{}}
+          isOpen={editTicketIsOpen}
+          onClose={editTicketOnClose}
+          finalRef={finalRef}
+          initialRef={initialRef}
+          projectId={props.projectId}
+          ticketData={editTicketData}
+        />
+      )}
     </>
   );
 };
