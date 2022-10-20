@@ -63,6 +63,7 @@ export type Mutation = {
   deleteComment: Scalars['Boolean'];
   deleteNotification: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
+  deleteTicket: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -119,6 +120,11 @@ export type MutationDeleteNotificationArgs = {
 
 export type MutationDeleteProjectArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationDeleteTicketArgs = {
+  ticketId: Scalars['Float'];
 };
 
 
@@ -390,6 +396,13 @@ export type DeleteCommentMutationVariables = Exact<{
 
 export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: boolean };
 
+export type DeleteTicketMutationVariables = Exact<{
+  ticketId: Scalars['Float'];
+}>;
+
+
+export type DeleteTicketMutation = { __typename?: 'Mutation', deleteTicket: boolean };
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -600,6 +613,15 @@ export const DeleteCommentDocument = gql`
 
 export function useDeleteCommentMutation() {
   return Urql.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument);
+};
+export const DeleteTicketDocument = gql`
+    mutation DeleteTicket($ticketId: Float!) {
+  deleteTicket(ticketId: $ticketId)
+}
+    `;
+
+export function useDeleteTicketMutation() {
+  return Urql.useMutation<DeleteTicketMutation, DeleteTicketMutationVariables>(DeleteTicketDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
