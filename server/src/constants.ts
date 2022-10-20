@@ -25,7 +25,7 @@ export const CHART_PRIORITIES = {
 
 export const CHART_STATUS = {
   NEW: "new",
-  IN_PROGRESS: "in_progress",
+  IN_PROGRESS: "in progress",
   RESOLVED: "resolved",
 };
 
