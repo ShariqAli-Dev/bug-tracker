@@ -98,7 +98,10 @@ export class TicketResolver {
 
   @Query(() => [Ticket])
   async projectTickets(@Arg("projectId") projectId: number): Promise<Ticket[]> {
-    return await Ticket.find({ where: { projectId } });
+    return await Ticket.find({
+      where: { projectId },
+      order: { createdAt: "ASC" },
+    });
   }
 
   @Query(() => [AssignedDeveloper])
