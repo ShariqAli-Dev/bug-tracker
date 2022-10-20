@@ -1,0 +1,13 @@
+mutation UpdateTicket($team: [teamMembers!]!, $options: editTicketInput!) {
+  updateTicket(team: $team, options: $options) {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    updatedAt
+  }
+}

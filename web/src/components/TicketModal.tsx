@@ -36,14 +36,20 @@ interface TicketModalProps extends ProjectModalProps {
   projectId: number;
 }
 
-const TicketModal = (props: TicketModalProps) => {
+const TicketModal = ({
+  finalRef,
+  initialRef,
+  isOpen,
+  onClose,
+  projectId,
+}: TicketModalProps) => {
   const [, createTicket] = useCreateTicketMutation();
   const [{ data: meQuery, fetching: meFetch }] = useMeQuery();
   const toast = useToast();
   const router = useRouter();
   const [{ data: assignedPersonnel, fetching: assignedPersonnelFetch }] =
     useAssignedPersonnelQuery({
-      variables: { projectId: props.projectId },
+      variables: { projectId: projectId },
     });
   const [team, setTeam] = useState<TeamMember[]>([]);
 
@@ -68,10 +74,10 @@ const TicketModal = (props: TicketModalProps) => {
     <>
       {!meFetch && (
         <Modal
-          initialFocusRef={props.initialRef}
-          finalFocusRef={props.finalRef}
-          isOpen={props.isOpen}
-          onClose={props.onClose}
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+          isOpen={isOpen}
+          onClose={onClose}
           closeOnOverlayClick={false}
           size={{ base: "xs", sm: "sm", md: "lg" }}
           isCentered
@@ -256,7 +262,7 @@ const TicketModal = (props: TicketModalProps) => {
                       <Button type="submit" isLoading={isSubmitting}>
                         Create Ticket
                       </Button>
-                      <Button onClick={props.onClose}>Cancel</Button>
+                      <Button onClick={onClose}>Cancel</Button>
                     </Box>
                   </Form>
                 )}

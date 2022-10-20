@@ -231,7 +231,7 @@ const EditTicketModal = ({
                         required
                       >
                         <option value="new">New</option>
-                        <option value="in progress">In Progress</option>
+                        <option value="in_progress">In Progress</option>
                         <option value="resolved">Resolved</option>
                       </Select>
                     </FormControl>

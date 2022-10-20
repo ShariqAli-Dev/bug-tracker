@@ -14,5 +14,5 @@ export interface ProjectModalProps {
   onClose: () => void;
   finalRef: any;
   initialRef: any;
-  assignedPersonnel: AssignedPersonnel[];
+  assignedPersonnel?: AssignedPersonnel[];
 }
