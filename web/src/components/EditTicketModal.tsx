@@ -248,8 +248,21 @@ const EditTicketModal = ({
                   <Button>Archive</Button>
                   <Button
                     onClick={async () => {
-                      await deleteTicket({ ticketId: ticketData.id });
+                      if (assignedDevelopers) {
+                        await deleteTicket({
+                          ticketId: ticketData.id,
+                          team: assignedDevelopers.assignedDevelopers.map(
+                            ({ userId }) => ({ userId })
+                          ),
+                        });
+                      }
+                      await deleteTicket({
+                        ticketId: ticketData.id,
+                        team: [],
+                      });
+
                       onClose();
+                      return true;
                     }}
                   >
                     Delete

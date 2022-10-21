@@ -124,6 +124,7 @@ export type MutationDeleteProjectArgs = {
 
 
 export type MutationDeleteTicketArgs = {
+  team?: InputMaybe<Array<DeleteDev>>;
   ticketId: Scalars['Float'];
 };
 
@@ -328,6 +329,10 @@ export type CreateTicketInput = {
   type: Scalars['String'];
 };
 
+export type DeleteDev = {
+  userId: Scalars['Float'];
+};
+
 export type EditTicketInput = {
   description: Scalars['String'];
   id: Scalars['Float'];
@@ -397,6 +402,7 @@ export type DeleteCommentMutationVariables = Exact<{
 export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: boolean };
 
 export type DeleteTicketMutationVariables = Exact<{
+  team: Array<DeleteDev> | DeleteDev;
   ticketId: Scalars['Float'];
 }>;
 
@@ -615,8 +621,8 @@ export function useDeleteCommentMutation() {
   return Urql.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument);
 };
 export const DeleteTicketDocument = gql`
-    mutation DeleteTicket($ticketId: Float!) {
-  deleteTicket(ticketId: $ticketId)
+    mutation DeleteTicket($team: [deleteDev!]!, $ticketId: Float!) {
+  deleteTicket(team: $team, ticketId: $ticketId)
 }
     `;
 
