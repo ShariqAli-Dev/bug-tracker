@@ -1,14 +1,14 @@
-query ProjectTickets($projectId: Float!) {
-  projectTickets(projectId: $projectId) {
+mutation ArchiveTicket($archiveTicketId: Float!) {
+  archiveTicket(id: $archiveTicketId) {
     id
     projectId
     creator
     title
     description
-    archived
     priority
     type
     status
+    archived
     updatedAt
   }
 }

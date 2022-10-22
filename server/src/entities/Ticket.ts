@@ -48,6 +48,10 @@ export class Ticket extends BaseEntity {
   @Column()
   status: string; // new in-progress resolved
 
+  @Field()
+  @Column("boolean", { default: false })
+  archived: boolean;
+
   @OneToMany(() => Comment, (comment) => comment.ticket)
   comments: Comment[];
 

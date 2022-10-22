@@ -26,6 +26,10 @@ export class Project extends BaseEntity {
   @Column()
   description!: string;
 
+  @Field()
+  @Column("boolean", { default: false })
+  archived: boolean;
+
   @OneToMany(() => Ticket, (ticket) => ticket.project)
   tickets: Ticket[];
 

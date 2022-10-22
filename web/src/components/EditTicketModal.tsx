@@ -14,11 +14,12 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   AssignedDeveloper,
   AssignedPersonnel,
   Ticket,
+  useArchiveTicketMutation,
   useAssignedDevelopersQuery,
   useAssignedPersonnelQuery,
   useDeleteTicketMutation,
@@ -31,6 +32,7 @@ import { InputField } from "./InputField";
 interface EditTicketModalProps extends ProjectModalProps {
   projectId: number;
   ticketData: Ticket;
+  setTicketId: Dispatch<SetStateAction<undefined | number>>;
 }
 
 interface TeamMember {
@@ -48,17 +50,15 @@ const EditTicketModal = ({
   onClose,
   ticketData,
   projectId,
+  setTicketId,
 }: EditTicketModalProps) => {
   const [{ data: assignedPersonnel, fetching: personnelFetch }] =
     useAssignedPersonnelQuery({ variables: { projectId } });
-
   const [{ data: assignedDevelopers, fetching: developerFetch }] =
     useAssignedDevelopersQuery({ variables: { ticketId: ticketData.id } });
-
   const [, updateTicket] = useUpdateTicketMutation();
-
   const [, deleteTicket] = useDeleteTicketMutation();
-
+  const [, archiveTicket] = useArchiveTicketMutation();
   const [team, setTeam] = useState<
     AssignedPersonnel[] | AssignedDeveloper[] | any
   >([]);
@@ -245,7 +245,15 @@ const EditTicketModal = ({
                   <Button type="submit" isLoading={isSubmitting}>
                     Confirm
                   </Button>
-                  <Button>Archive</Button>
+                  <Button
+                    onClick={async () => {
+                      await archiveTicket({ archiveTicketId: ticketData.id });
+                      setTicketId(undefined);
+                      onClose();
+                    }}
+                  >
+                    Archive
+                  </Button>
                   <Button
                     onClick={async () => {
                       if (assignedDevelopers) {

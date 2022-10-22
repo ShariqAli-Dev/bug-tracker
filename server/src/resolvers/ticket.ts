@@ -104,7 +104,17 @@ export class TicketResolver {
   @Query(() => [Ticket])
   async projectTickets(@Arg("projectId") projectId: number): Promise<Ticket[]> {
     return await Ticket.find({
-      where: { projectId },
+      where: { projectId, archived: false },
+      order: { createdAt: "ASC" },
+    });
+  }
+
+  @Query(() => [Ticket])
+  async archivedProjectTickets(
+    @Arg("projectId") projectId: number
+  ): Promise<Ticket[]> {
+    return await Ticket.find({
+      where: { projectId, archived: true },
       order: { createdAt: "ASC" },
     });
   }
@@ -148,6 +158,18 @@ export class TicketResolver {
       `);
     }
 
+    return ticket;
+  }
+
+  @Mutation(() => Ticket, { nullable: true })
+  async archiveTicket(@Arg("id") id: number): Promise<Ticket | undefined> {
+    const ticket = await Ticket.findOne({ where: { id } });
+
+    if (!ticket) {
+      return undefined;
+    }
+
+    await Ticket.update({ id }, { archived: true });
     return ticket;
   }
 
