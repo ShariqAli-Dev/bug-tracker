@@ -285,6 +285,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
           initialRef={initialRef}
           projectId={props.projectId}
           ticketData={editTicketData}
+          setTicketId={props.setTicketId}
         />
       )}
     </>

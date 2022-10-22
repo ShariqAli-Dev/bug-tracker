@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   AssignedDeveloper,
   AssignedPersonnel,
@@ -32,6 +32,7 @@ import { InputField } from "./InputField";
 interface EditTicketModalProps extends ProjectModalProps {
   projectId: number;
   ticketData: Ticket;
+  setTicketId: Dispatch<SetStateAction<undefined | number>>;
 }
 
 interface TeamMember {
@@ -49,6 +50,7 @@ const EditTicketModal = ({
   onClose,
   ticketData,
   projectId,
+  setTicketId,
 }: EditTicketModalProps) => {
   const [{ data: assignedPersonnel, fetching: personnelFetch }] =
     useAssignedPersonnelQuery({ variables: { projectId } });
@@ -246,6 +248,7 @@ const EditTicketModal = ({
                   <Button
                     onClick={async () => {
                       await archiveTicket({ archiveTicketId: ticketData.id });
+                      setTicketId(undefined);
                       onClose();
                     }}
                   >
