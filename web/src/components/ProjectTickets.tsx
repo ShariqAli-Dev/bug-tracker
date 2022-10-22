@@ -21,7 +21,7 @@ import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { Ticket, useArchivedProjectTicketsQuery } from "../generated/graphql";
+import { Ticket } from "../generated/graphql";
 import { SectionHeader } from "../pages/project/[projectId]";
 import EditTicketModal from "./EditTicketModal";
 import TicketModal from "./TicketModal";
@@ -33,7 +33,9 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 interface ProjectTicketsProps {
   projectTickets: any;
   projectId: number;
+  viewArchived: boolean;
   setTicketId: Dispatch<SetStateAction<undefined | number>>;
+  setViewArchived: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectTickets = (props: ProjectTicketsProps) => {
@@ -50,14 +52,9 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   const [editTicketData, setEditTicketData] = useState<Ticket | undefined>(
     undefined
   );
-  const [{ data: archivedTickets, fetching: archivedTicketFetch }] =
-    useArchivedProjectTicketsQuery({
-      variables: { projectId: props.projectId },
-    });
 
   const finalRef = useRef(null);
   const initialRef = useRef(null);
-  const [viewArchived, setViewArchived] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -98,9 +95,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   } = useTable(
     {
       columns,
-      data: viewArchived
-        ? archivedTickets?.archivedProjectTickets
-        : (props.projectTickets as any),
+      data: props.projectTickets as any,
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
@@ -125,25 +120,23 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
           >
             <Heading>Tickets</Heading>
             <Box display="flex">
-              {!archivedTicketFetch && (
-                <Button
-                  size="xs"
-                  color="tertiary"
-                  backgroundColor="primary"
-                  border="2px"
-                  margin={2}
-                  padding={1}
-                  _hover={{
-                    backgroundColor: "tertiary",
-                    color: "primary",
-                    border: "2px",
-                    borderColor: "primary",
-                  }}
-                  onClick={() => setViewArchived(!viewArchived)}
-                >
-                  View {viewArchived ? "Tickets" : "Archived"}
-                </Button>
-              )}
+              <Button
+                size="xs"
+                color="tertiary"
+                backgroundColor="primary"
+                border="2px"
+                margin={2}
+                padding={1}
+                _hover={{
+                  backgroundColor: "tertiary",
+                  color: "primary",
+                  border: "2px",
+                  borderColor: "primary",
+                }}
+                onClick={() => props.setViewArchived(!props.viewArchived)}
+              >
+                View {props.viewArchived ? "Tickets" : "Archived"}
+              </Button>
               <Button
                 size="xs"
                 color="tertiary"
