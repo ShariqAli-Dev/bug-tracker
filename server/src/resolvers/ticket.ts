@@ -109,6 +109,16 @@ export class TicketResolver {
     });
   }
 
+  @Query(() => [Ticket])
+  async archivedProjectTickets(
+    @Arg("projectId") projectId: number
+  ): Promise<Ticket[]> {
+    return await Ticket.find({
+      where: { projectId, archived: true },
+      order: { createdAt: "ASC" },
+    });
+  }
+
   @Query(() => [AssignedDeveloper])
   async assignedDevelopers(
     @Arg("ticketId") ticketId: number
