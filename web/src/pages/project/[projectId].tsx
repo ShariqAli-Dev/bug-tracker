@@ -170,6 +170,9 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
         cancelRef={cancelRef}
         isOpen={isOpen}
         onClose={onClose}
+        assignedPersonnel={
+          personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
+        }
       />
     </>
   );

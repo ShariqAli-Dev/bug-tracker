@@ -8,10 +8,12 @@ import {
   AlertDialogFooter,
 } from "@chakra-ui/react";
 import { MutableRefObject } from "react";
+import { AssignedPersonnel } from "../types";
 
 interface AlertProps {
   isOpen: boolean;
   cancelRef: MutableRefObject<any>;
+  assignedPersonnel: AssignedPersonnel[];
   onClose: () => void;
 }
 
