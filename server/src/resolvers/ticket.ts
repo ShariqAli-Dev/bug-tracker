@@ -265,7 +265,6 @@ export class TicketResolver {
       `);
     }
     await Ticket.delete(ticketId);
-
     return true;
   }
 }

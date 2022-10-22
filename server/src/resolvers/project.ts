@@ -27,6 +27,12 @@ class AssignedPersonnel {
 }
 
 @InputType()
+class ProjectTeam {
+  @Field()
+  user: Users;
+}
+
+@InputType()
 class CreateProjectInput {
   @Field()
   name!: string;
@@ -122,8 +128,29 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteProject(@Arg("id") id: number) {
-    await Project.delete(id);
+  async deleteTicket(
+    @Arg("projectId") projectId: number,
+    @Arg("team", () => [ProjectTeam], { nullable: true })
+    team: ProjectTeam[]
+  ) {
+    if (team.length) {
+      let deleteString = "";
+
+      team.forEach(({ user }, mdx) => {
+        deleteString += `${user.id}`;
+        if (mdx !== team.length - 1) {
+          deleteString += ",";
+        }
+      });
+
+      User_Project.query(`
+      delete from user_ticket
+      where
+      "projectId" = ${projectId} and
+      "userId" in (${deleteString})
+      `);
+    }
+    await Project.delete(projectId);
     return true;
   }
 }
