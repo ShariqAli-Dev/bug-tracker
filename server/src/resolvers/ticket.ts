@@ -169,7 +169,7 @@ export class TicketResolver {
       return undefined;
     }
 
-    await Ticket.update({ id }, { archived: true });
+    await Ticket.update({ id }, { archived: !ticket.archived });
     return ticket;
   }
 
