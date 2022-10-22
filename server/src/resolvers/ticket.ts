@@ -263,9 +263,8 @@ export class TicketResolver {
       "ticketId" = ${ticketId} and
       "userId" in (${deleteString})
       `);
-
-      await Ticket.delete(ticketId);
     }
+    await Ticket.delete(ticketId);
 
     return true;
   }
