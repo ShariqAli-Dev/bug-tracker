@@ -7,9 +7,8 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import Link from "next/link";
-import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [

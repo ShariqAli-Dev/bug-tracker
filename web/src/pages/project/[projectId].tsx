@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Heading, Text } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
@@ -85,13 +85,44 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
         >
           <SectionHeader title={`Project: ${projectQuery?.project?.name}`}>
             <Text>{projectQuery?.project?.description}</Text>
-            <Link href="/dashboard">
-              <a>Back to Dashboard</a>
-            </Link>
-            <span> | </span>
-            <Link href="testing">
-              <a>Edit</a>
-            </Link>
+
+            <Flex
+              width="full"
+              justifyContent={{ base: "space-around", md: "start" }}
+            >
+              <Button
+                size="xs"
+                color="tertiary"
+                backgroundColor="primary"
+                border="2px"
+                margin={2}
+                padding={1}
+                _hover={{
+                  backgroundColor: "tertiary",
+                  color: "primary",
+                  border: "2px",
+                  borderColor: "primary",
+                }}
+              >
+                Archive Project
+              </Button>
+              <Button
+                size="xs"
+                color="tertiary"
+                backgroundColor="primary"
+                border="2px"
+                margin={2}
+                padding={1}
+                _hover={{
+                  backgroundColor: "tertiary",
+                  color: "primary",
+                  border: "2px",
+                  borderColor: "primary",
+                }}
+              >
+                Delete Project
+              </Button>
+            </Flex>
           </SectionHeader>
 
           {/* Duplex */}
@@ -99,7 +130,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             justifyContent="space-around"
             flexDirection={{ base: "column", md: "row" }}
             height="50%"
-            marginTop={{ base: "10rem", md: "1rem" }}
+            marginTop={{ base: "15rem", md: "1rem" }}
           >
             {!personnelFetch && (
               <AssignedPersonnel
