@@ -33,7 +33,9 @@ const ChevronLeft = chakra(BsChevronDoubleLeft);
 interface ProjectTicketsProps {
   projectTickets: any;
   projectId: number;
+  viewArchived: boolean;
   setTicketId: Dispatch<SetStateAction<undefined | number>>;
+  setViewArchived: Dispatch<SetStateAction<boolean>>;
 }
 
 const ProjectTickets = (props: ProjectTicketsProps) => {
@@ -51,10 +53,9 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
     undefined
   );
 
-  console.log(props.projectTickets);
-
   const finalRef = useRef(null);
   const initialRef = useRef(null);
+
   const columns = useMemo(
     () => [
       {
@@ -94,7 +95,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   } = useTable(
     {
       columns,
-      data: props.projectTickets,
+      data: props.projectTickets as any,
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
@@ -111,25 +112,49 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
         ref={finalRef}
       >
         <SectionHeader>
-          <Flex width="full" padding={2} justifyContent="space-between">
+          <Flex
+            width="full"
+            padding={2}
+            justifyContent="space-between"
+            flexDirection={{ base: "column", lg: "row" }}
+          >
             <Heading>Tickets</Heading>
-            <Button
-              size="sm"
-              color="tertiary"
-              backgroundColor="primary"
-              border="2px"
-              margin={2}
-              padding={1}
-              _hover={{
-                backgroundColor: "tertiary",
-                color: "primary",
-                border: "2px",
-                borderColor: "primary",
-              }}
-              onClick={newTicketOnOpen}
-            >
-              New Ticket
-            </Button>
+            <Box display="flex">
+              <Button
+                size="xs"
+                color="tertiary"
+                backgroundColor="primary"
+                border="2px"
+                margin={2}
+                padding={1}
+                _hover={{
+                  backgroundColor: "tertiary",
+                  color: "primary",
+                  border: "2px",
+                  borderColor: "primary",
+                }}
+                onClick={() => props.setViewArchived(!props.viewArchived)}
+              >
+                View {props.viewArchived ? "Tickets" : "Archived"}
+              </Button>
+              <Button
+                size="xs"
+                color="tertiary"
+                backgroundColor="primary"
+                border="2px"
+                margin={2}
+                padding={1}
+                _hover={{
+                  backgroundColor: "tertiary",
+                  color: "primary",
+                  border: "2px",
+                  borderColor: "primary",
+                }}
+                onClick={newTicketOnOpen}
+              >
+                New Ticket
+              </Button>
+            </Box>
           </Flex>
           <Text>A condensed view of the tickets</Text>
         </SectionHeader>

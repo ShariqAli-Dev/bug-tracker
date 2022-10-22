@@ -252,7 +252,7 @@ const EditTicketModal = ({
                       onClose();
                     }}
                   >
-                    Archive
+                    {ticketData.archived ? "Unarchive" : "Archive"}
                   </Button>
                   <Button
                     onClick={async () => {

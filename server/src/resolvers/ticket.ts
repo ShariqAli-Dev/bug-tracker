@@ -169,7 +169,7 @@ export class TicketResolver {
       return undefined;
     }
 
-    await Ticket.update({ id }, { archived: true });
+    await Ticket.update({ id }, { archived: !ticket.archived });
     return ticket;
   }
 
@@ -263,9 +263,8 @@ export class TicketResolver {
       "ticketId" = ${ticketId} and
       "userId" in (${deleteString})
       `);
-
-      await Ticket.delete(ticketId);
     }
+    await Ticket.delete(ticketId);
 
     return true;
   }

@@ -9,6 +9,7 @@ import NavBar from "../../components/Navbar";
 import ProjectTickets from "../../components/ProjectTickets";
 import TicketDetail from "../../components/TicketDetail";
 import {
+  useArchivedProjectTicketsQuery,
   useAssignedPersonnelQuery,
   useProjectQuery,
   useProjectTicketsQuery,
@@ -49,7 +50,12 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   const [{ data: ticketsQuery, fetching: ticketsFetch }] =
     useProjectTicketsQuery({ variables: { projectId } });
 
+  const [{ data: archivedTickets, fetching: archivedTicketsFetch }] =
+    useArchivedProjectTicketsQuery({ variables: { projectId } });
+
   const [ticketId, setTicketId] = useState<undefined | number>(undefined);
+
+  const [viewArchived, setViewArchived] = useState(false);
 
   return (
     <Flex h="100vh" overflow="hidden" scrollBehavior="auto" color="primary">
@@ -104,11 +110,17 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
               />
             )}
 
-            {!ticketsFetch && (
+            {!ticketsFetch && !archivedTicketsFetch && (
               <ProjectTickets
-                projectTickets={ticketsQuery?.projectTickets}
+                projectTickets={
+                  viewArchived
+                    ? archivedTickets?.archivedProjectTickets
+                    : ticketsQuery?.projectTickets
+                }
                 projectId={projectId}
                 setTicketId={setTicketId}
+                viewArchived={viewArchived}
+                setViewArchived={setViewArchived}
               />
             )}
           </Flex>
