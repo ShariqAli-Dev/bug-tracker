@@ -175,6 +175,7 @@ export type Notification = {
 
 export type Project = {
   __typename?: 'Project';
+  archived: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
   description: Scalars['String'];
   id: Scalars['Float'];
@@ -246,6 +247,7 @@ export type QueryTicketCommentsArgs = {
 
 export type Ticket = {
   __typename?: 'Ticket';
+  archived: Scalars['Boolean'];
   creator: Scalars['String'];
   description: Scalars['String'];
   id: Scalars['Float'];
@@ -493,7 +495,7 @@ export type ProjectTicketsQueryVariables = Exact<{
 }>;
 
 
-export type ProjectTicketsQuery = { __typename?: 'Query', projectTickets: Array<{ __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any }> };
+export type ProjectTicketsQuery = { __typename?: 'Query', projectTickets: Array<{ __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, archived: boolean, priority: string, type: string, status: string, updatedAt: any }> };
 
 export type TicketQueryVariables = Exact<{
   ticketId: Scalars['Float'];
@@ -813,6 +815,7 @@ export const ProjectTicketsDocument = gql`
     creator
     title
     description
+    archived
     priority
     type
     status

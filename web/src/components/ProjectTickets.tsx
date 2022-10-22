@@ -51,6 +51,8 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
     undefined
   );
 
+  console.log(props.projectTickets);
+
   const finalRef = useRef(null);
   const initialRef = useRef(null);
   const columns = useMemo(
@@ -92,7 +94,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   } = useTable(
     {
       columns,
-      data: props.projectTickets as any,
+      data: props.projectTickets,
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination

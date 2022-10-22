@@ -5,6 +5,7 @@ query ProjectTickets($projectId: Float!) {
     creator
     title
     description
+    archived
     priority
     type
     status
