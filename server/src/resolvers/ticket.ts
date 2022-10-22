@@ -56,6 +56,11 @@ class editTicketInput {
   @Field()
   status: string;
 }
+@InputType()
+class deleteDev {
+  @Field()
+  userId: number;
+}
 
 @InputType()
 class teamMembers {
@@ -215,8 +220,31 @@ export class TicketResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteTicket(@Arg("ticketId") ticketId: number) {
-    await Ticket.delete(ticketId);
+  async deleteTicket(
+    @Arg("ticketId") ticketId: number,
+    @Arg("team", () => [deleteDev], { nullable: true })
+    team: deleteDev[]
+  ) {
+    if (team.length) {
+      let deleteString = "";
+
+      team.forEach((m, mdx) => {
+        deleteString += `${m.userId}`;
+        if (mdx !== team.length - 1) {
+          deleteString += ",";
+        }
+      });
+
+      User_Ticket.query(`
+      delete from user_ticket
+      where
+      "ticketId" = ${ticketId} and
+      "userId" in (${deleteString})
+      `);
+
+      await Ticket.delete(ticketId);
+    }
+
     return true;
   }
 }
