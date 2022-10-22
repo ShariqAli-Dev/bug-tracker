@@ -19,6 +19,7 @@ import {
   AssignedDeveloper,
   AssignedPersonnel,
   Ticket,
+  useArchiveTicketMutation,
   useAssignedDevelopersQuery,
   useAssignedPersonnelQuery,
   useDeleteTicketMutation,
@@ -51,14 +52,11 @@ const EditTicketModal = ({
 }: EditTicketModalProps) => {
   const [{ data: assignedPersonnel, fetching: personnelFetch }] =
     useAssignedPersonnelQuery({ variables: { projectId } });
-
   const [{ data: assignedDevelopers, fetching: developerFetch }] =
     useAssignedDevelopersQuery({ variables: { ticketId: ticketData.id } });
-
   const [, updateTicket] = useUpdateTicketMutation();
-
   const [, deleteTicket] = useDeleteTicketMutation();
-
+  const [, archiveTicket] = useArchiveTicketMutation();
   const [team, setTeam] = useState<
     AssignedPersonnel[] | AssignedDeveloper[] | any
   >([]);
@@ -245,7 +243,14 @@ const EditTicketModal = ({
                   <Button type="submit" isLoading={isSubmitting}>
                     Confirm
                   </Button>
-                  <Button>Archive</Button>
+                  <Button
+                    onClick={async () => {
+                      await archiveTicket({ archiveTicketId: ticketData.id });
+                      onClose();
+                    }}
+                  >
+                    Archive
+                  </Button>
                   <Button
                     onClick={async () => {
                       if (assignedDevelopers) {

@@ -54,6 +54,7 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  archiveTicket?: Maybe<Ticket>;
   assignUsers: Scalars['Boolean'];
   changePassword: UserResponse;
   createComment: Scalars['Boolean'];
@@ -72,6 +73,11 @@ export type Mutation = {
   updateNotification?: Maybe<Notification>;
   updateProject?: Maybe<Project>;
   updateTicket?: Maybe<Ticket>;
+};
+
+
+export type MutationArchiveTicketArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -186,6 +192,7 @@ export type Project = {
 export type Query = {
   __typename?: 'Query';
   UserProjects: Array<User_Project>;
+  archivedProjectTickets: Array<Ticket>;
   assignedDevelopers: Array<AssignedDeveloper>;
   assignedPersonnel: Array<AssignedPersonnel>;
   avilableUsers: Array<Users>;
@@ -203,6 +210,11 @@ export type Query = {
   tickets: Array<Ticket>;
   userNotifications: Array<Notification>;
   users: Array<Users>;
+};
+
+
+export type QueryArchivedProjectTicketsArgs = {
+  projectId: Scalars['Float'];
 };
 
 
@@ -350,6 +362,13 @@ export type TeamMembers = {
   name: Scalars['String'];
   selected: Scalars['Boolean'];
 };
+
+export type ArchiveTicketMutationVariables = Exact<{
+  archiveTicketId: Scalars['Float'];
+}>;
+
+
+export type ArchiveTicketMutation = { __typename?: 'Mutation', archiveTicket?: { __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, archived: boolean, updatedAt: any } | null };
 
 export type AssignUsersMutationVariables = Exact<{
   team: Array<AssignTeamInput> | AssignTeamInput;
@@ -527,6 +546,26 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number, email: string }> };
 
 
+export const ArchiveTicketDocument = gql`
+    mutation ArchiveTicket($archiveTicketId: Float!) {
+  archiveTicket(id: $archiveTicketId) {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    archived
+    updatedAt
+  }
+}
+    `;
+
+export function useArchiveTicketMutation() {
+  return Urql.useMutation<ArchiveTicketMutation, ArchiveTicketMutationVariables>(ArchiveTicketDocument);
+};
 export const AssignUsersDocument = gql`
     mutation AssignUsers($team: [assignTeamInput!]!, $projectId: Float!) {
   assignUsers(team: $team, projectId: $projectId)
