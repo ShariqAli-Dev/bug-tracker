@@ -162,6 +162,18 @@ export class TicketResolver {
   }
 
   @Mutation(() => Ticket, { nullable: true })
+  async archiveTicket(@Arg("id") id: number): Promise<Ticket | undefined> {
+    const ticket = await Ticket.findOne({ where: { id } });
+
+    if (!ticket) {
+      return undefined;
+    }
+
+    await Ticket.update({ id }, { archived: true });
+    return ticket;
+  }
+
+  @Mutation(() => Ticket, { nullable: true })
   async updateTicket(
     @Arg("options") options: editTicketInput,
     @Arg("team", () => [teamMembers]) team: teamMembers[]
