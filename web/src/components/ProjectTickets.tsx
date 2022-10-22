@@ -21,7 +21,7 @@ import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { Ticket } from "../generated/graphql";
+import { Ticket, useArchivedProjectTicketsQuery } from "../generated/graphql";
 import { SectionHeader } from "../pages/project/[projectId]";
 import EditTicketModal from "./EditTicketModal";
 import TicketModal from "./TicketModal";
@@ -50,11 +50,15 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   const [editTicketData, setEditTicketData] = useState<Ticket | undefined>(
     undefined
   );
-
-  console.log(props.projectTickets);
+  const [{ data: archivedTickets, fetching: archivedTicketFetch }] =
+    useArchivedProjectTicketsQuery({
+      variables: { projectId: props.projectId },
+    });
 
   const finalRef = useRef(null);
   const initialRef = useRef(null);
+  const [viewArchived, setViewArchived] = useState(false);
+
   const columns = useMemo(
     () => [
       {
@@ -94,7 +98,9 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   } = useTable(
     {
       columns,
-      data: props.projectTickets,
+      data: viewArchived
+        ? archivedTickets?.archivedProjectTickets
+        : (props.projectTickets as any),
       initialState: { pageIndex: 0, pageSize: 3 },
     },
     usePagination
@@ -111,25 +117,51 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
         ref={finalRef}
       >
         <SectionHeader>
-          <Flex width="full" padding={2} justifyContent="space-between">
+          <Flex
+            width="full"
+            padding={2}
+            justifyContent="space-between"
+            flexDirection={{ base: "column", lg: "row" }}
+          >
             <Heading>Tickets</Heading>
-            <Button
-              size="sm"
-              color="tertiary"
-              backgroundColor="primary"
-              border="2px"
-              margin={2}
-              padding={1}
-              _hover={{
-                backgroundColor: "tertiary",
-                color: "primary",
-                border: "2px",
-                borderColor: "primary",
-              }}
-              onClick={newTicketOnOpen}
-            >
-              New Ticket
-            </Button>
+            <Box display="flex">
+              {!archivedTicketFetch && (
+                <Button
+                  size="xs"
+                  color="tertiary"
+                  backgroundColor="primary"
+                  border="2px"
+                  margin={2}
+                  padding={1}
+                  _hover={{
+                    backgroundColor: "tertiary",
+                    color: "primary",
+                    border: "2px",
+                    borderColor: "primary",
+                  }}
+                  onClick={() => setViewArchived(!viewArchived)}
+                >
+                  View {viewArchived ? "Tickets" : "Archived"}
+                </Button>
+              )}
+              <Button
+                size="xs"
+                color="tertiary"
+                backgroundColor="primary"
+                border="2px"
+                margin={2}
+                padding={1}
+                _hover={{
+                  backgroundColor: "tertiary",
+                  color: "primary",
+                  border: "2px",
+                  borderColor: "primary",
+                }}
+                onClick={newTicketOnOpen}
+              >
+                New Ticket
+              </Button>
+            </Box>
           </Flex>
           <Text>A condensed view of the tickets</Text>
         </SectionHeader>

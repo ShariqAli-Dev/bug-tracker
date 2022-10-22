@@ -471,6 +471,13 @@ export type UpdateTicketMutationVariables = Exact<{
 
 export type UpdateTicketMutation = { __typename?: 'Mutation', updateTicket?: { __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, updatedAt: any } | null };
 
+export type ArchivedProjectTicketsQueryVariables = Exact<{
+  projectId: Scalars['Float'];
+}>;
+
+
+export type ArchivedProjectTicketsQuery = { __typename?: 'Query', archivedProjectTickets: Array<{ __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, archived: boolean, updatedAt: any }> };
+
 export type AssignedDevelopersQueryVariables = Exact<{
   ticketId: Scalars['Float'];
 }>;
@@ -763,6 +770,26 @@ export const UpdateTicketDocument = gql`
 
 export function useUpdateTicketMutation() {
   return Urql.useMutation<UpdateTicketMutation, UpdateTicketMutationVariables>(UpdateTicketDocument);
+};
+export const ArchivedProjectTicketsDocument = gql`
+    query ArchivedProjectTickets($projectId: Float!) {
+  archivedProjectTickets(projectId: $projectId) {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    archived
+    updatedAt
+  }
+}
+    `;
+
+export function useArchivedProjectTicketsQuery(options: Omit<Urql.UseQueryArgs<ArchivedProjectTicketsQueryVariables>, 'query'>) {
+  return Urql.useQuery<ArchivedProjectTicketsQuery, ArchivedProjectTicketsQueryVariables>({ query: ArchivedProjectTicketsDocument, ...options });
 };
 export const AssignedDevelopersDocument = gql`
     query AssignedDevelopers($ticketId: Float!) {
