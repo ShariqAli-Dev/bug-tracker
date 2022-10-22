@@ -24,7 +24,7 @@ const TicketsByType = () => {
       data={{
         datasets: [
           {
-            data: [],
+            data: [4, 2, 3],
             backgroundColor: ["#B2B2B2", "#666666", "#999999"],
           },
         ],
