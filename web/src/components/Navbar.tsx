@@ -7,7 +7,7 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
@@ -21,6 +21,7 @@ const navbar = [
 ];
 
 const NavBar = () => {
+  const router = useRouter();
   return (
     <Stack>
       {/* Home title, user imgage */}
@@ -43,14 +44,18 @@ const NavBar = () => {
       <Flex flexDir="column">
         {navbar.map((item) => {
           return (
-            <Box p={5} key={item.title}>
+            <Box
+              p={5}
+              onClick={() => router.push(`/${item.url}`)}
+              key={item.title}
+            >
               <Flex flexDir="row" alignItems="center">
                 <CAiOutlineUsergroupAdd color="secondary" size="25px" />
                 <Text
                   fontSize={{ base: "xs", md: "sm", lg: "md" }}
                   color="primary"
                 >
-                  <Link href={item.url}>{item.title}</Link>
+                  {item.title}
                 </Text>
               </Flex>
             </Box>
