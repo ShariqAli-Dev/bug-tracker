@@ -125,6 +125,17 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Boolean)
+  async archiveProject(@Arg("id") id: number) {
+    const project = await Project.findOne({ where: { id } });
+    if (!project) {
+      return false;
+    }
+    await Project.update({ id }, { archived: !project.archived });
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
   async deleteProject(@Arg("projectId") projectId: number) {
     // delete commments
     await Comment.query(`
