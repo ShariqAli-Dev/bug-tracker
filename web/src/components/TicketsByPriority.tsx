@@ -22,13 +22,21 @@ ChartJS.register(
 );
 
 const TicketsByPriority = () => {
-  const [, getticket] = useTicketsByPriorityQuery();
-  // console.log(data);
+  const [{ data, fetching }] = useTicketsByPriorityQuery();
+  if (fetching) {
+    return <></>;
+  }
+
   const chartData = {
     labels: ["Low", "Medium", "High", "Immediate"],
     datasets: [
       {
-        data: [2, 3, 4, 1],
+        data: [
+          data?.ticketsByPriority.low,
+          data?.ticketsByPriority.medium,
+          data?.ticketsByPriority.high,
+          data?.ticketsByPriority.immediate,
+        ],
         borderColor: "#EBEBEB",
         backgroundColor: ["#E5E5E5", "#B2B2B2", "#999999", "#666666"],
       },
@@ -49,17 +57,6 @@ const TicketsByPriority = () => {
       },
     },
   };
-
-  return (
-    <Button
-      onClick={async () => {
-        const data = await getticket();
-        console.log(data);
-      }}
-    >
-      Get Data
-    </Button>
-  );
 
   return <Bar options={chartOptions} data={chartData} />;
 };
