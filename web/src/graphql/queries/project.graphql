@@ -3,6 +3,7 @@ query Project($projectId: Float!) {
     id
     name
     description
+    archived
     createdAt
     updatedAt
   }

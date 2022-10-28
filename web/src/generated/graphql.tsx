@@ -54,6 +54,7 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  archiveProject: Scalars['Boolean'];
   archiveTicket?: Maybe<Ticket>;
   assignUsers: Scalars['Boolean'];
   changePassword: UserResponse;
@@ -73,6 +74,11 @@ export type Mutation = {
   updateNotification?: Maybe<Notification>;
   updateProject?: Maybe<Project>;
   updateTicket?: Maybe<Ticket>;
+};
+
+
+export type MutationArchiveProjectArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -363,6 +369,13 @@ export type TeamMembers = {
   selected: Scalars['Boolean'];
 };
 
+export type ArchiveProjectMutationVariables = Exact<{
+  archiveProjectId: Scalars['Float'];
+}>;
+
+
+export type ArchiveProjectMutation = { __typename?: 'Mutation', archiveProject: boolean };
+
 export type ArchiveTicketMutationVariables = Exact<{
   archiveTicketId: Scalars['Float'];
 }>;
@@ -521,7 +534,7 @@ export type ProjectQueryVariables = Exact<{
 }>;
 
 
-export type ProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: number, name: string, description: string, createdAt: any, updatedAt: any } | null };
+export type ProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: number, name: string, description: string, archived: boolean, createdAt: any, updatedAt: any } | null };
 
 export type ProjectTicketsQueryVariables = Exact<{
   projectId: Scalars['Float'];
@@ -560,6 +573,15 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number, email: string }> };
 
 
+export const ArchiveProjectDocument = gql`
+    mutation ArchiveProject($archiveProjectId: Float!) {
+  archiveProject(id: $archiveProjectId)
+}
+    `;
+
+export function useArchiveProjectMutation() {
+  return Urql.useMutation<ArchiveProjectMutation, ArchiveProjectMutationVariables>(ArchiveProjectDocument);
+};
 export const ArchiveTicketDocument = gql`
     mutation ArchiveTicket($archiveTicketId: Float!) {
   archiveTicket(id: $archiveTicketId) {
@@ -880,6 +902,7 @@ export const ProjectDocument = gql`
     id
     name
     description
+    archived
     createdAt
     updatedAt
   }

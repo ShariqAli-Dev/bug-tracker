@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
+import { useRouter } from "next/router";
 import { ReactNode, useRef, useState } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
@@ -17,6 +18,7 @@ import ProjectTickets from "../../components/ProjectTickets";
 import TicketDetail from "../../components/TicketDetail";
 import {
   useArchivedProjectTicketsQuery,
+  useArchiveProjectMutation,
   useAssignedPersonnelQuery,
   useProjectQuery,
   useProjectTicketsQuery,
@@ -56,9 +58,11 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
     useProjectTicketsQuery({ variables: { projectId } });
   const [{ data: archivedTickets, fetching: archivedTicketsFetch }] =
     useArchivedProjectTicketsQuery({ variables: { projectId } });
+  const [, archiveProject] = useArchiveProjectMutation();
   const [ticketId, setTicketId] = useState<undefined | number>(undefined);
   const [viewArchived, setViewArchived] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
   const cancelRef = useRef();
 
   return (
@@ -108,8 +112,13 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
                     border: "2px",
                     borderColor: "primary",
                   }}
+                  onClick={async () => {
+                    await archiveProject({ archiveProjectId: projectId });
+                    router.push("/dashboard");
+                  }}
                 >
-                  Archive Project
+                  {projectQuery?.project?.archived ? "Unarchive" : "Archive"}{" "}
+                  Project
                 </Button>
                 <Button
                   size="xs"
