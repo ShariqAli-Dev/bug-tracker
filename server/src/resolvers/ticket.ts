@@ -158,7 +158,7 @@ export class TicketResolver {
   async assignedDevelopers(
     @Arg("ticketId") ticketId: number
   ): Promise<AssignedDeveloper> {
-    return await myDataSource.query(`
+    const data = await myDataSource.query(`
     select ut.*,
     json_build_object(
 	  'id', u.id,
@@ -168,13 +168,13 @@ export class TicketResolver {
     inner join users u on u.id = ut."userId"
     where ut."ticketId" = ${ticketId}
     `);
+
+    return data[0];
   }
 
   @Query(() => TicketsByPriority)
-  async ticketsByPriority(
-    @Ctx() { req }: MyContext
-  ): Promise<TicketsByPriority> {
-    return await Ticket.query(`
+  async ticketsByPriority(@Ctx() { req }: MyContext) {
+    const data = await Ticket.query(`
     select 
       count(case when priority='low' then 'low' end) as low,
       count(case when priority='medium' then 'medium' end) as medium,
@@ -187,11 +187,12 @@ export class TicketResolver {
     where 
       user_ticket."userId" = ${req.session.userId}
     `);
+    return data[0];
   }
 
   @Query(() => TicketsByType)
   async ticketsByType(@Ctx() { req }: MyContext): Promise<TicketsByType> {
-    return await Ticket.query(`
+    const data = await Ticket.query(`
     select 
       count(case when "type"='issue' then 'issue' end) as issue,
       count(case when "type"='bug' then 'bug' end) as bug,
@@ -203,6 +204,7 @@ export class TicketResolver {
     where 
       user_ticket."userId" = ${req.session.userId}
     `);
+    return data[0];
   }
 
   @Query(() => TicketsByStatus)

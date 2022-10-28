@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import {
   BarElement,
   CategoryScale,
@@ -7,7 +8,10 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import { withUrqlClient } from "next-urql";
 import { Bar } from "react-chartjs-2";
+import { useTicketsByPriorityQuery } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -18,6 +22,8 @@ ChartJS.register(
 );
 
 const TicketsByPriority = () => {
+  const [, getticket] = useTicketsByPriorityQuery();
+  // console.log(data);
   const chartData = {
     labels: ["Low", "Medium", "High", "Immediate"],
     datasets: [
@@ -44,7 +50,18 @@ const TicketsByPriority = () => {
     },
   };
 
+  return (
+    <Button
+      onClick={async () => {
+        const data = await getticket();
+        console.log(data);
+      }}
+    >
+      Get Data
+    </Button>
+  );
+
   return <Bar options={chartOptions} data={chartData} />;
 };
 
-export default TicketsByPriority;
+export default withUrqlClient(createUrqlClient)(TicketsByPriority);
