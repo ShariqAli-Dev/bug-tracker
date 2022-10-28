@@ -1,6 +1,7 @@
 import { Comment } from "../entities/Comment";
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Mutation,
@@ -12,6 +13,7 @@ import { myDataSource } from "../data-source";
 import { Ticket } from "../entities/Ticket";
 import { Users } from "../entities/Users";
 import { User_Ticket } from "../entities/User_Ticket";
+import { MyContext } from "../types";
 
 @InputType()
 class createTicketInput {
@@ -90,6 +92,38 @@ class AssignedDeveloper {
   user: Users;
 }
 
+@ObjectType()
+class TicketsByPriority {
+  @Field()
+  low: string;
+  @Field()
+  medium: string;
+  @Field()
+  high: string;
+  @Field()
+  immediate: string;
+}
+
+@ObjectType()
+class TicketsByType {
+  @Field()
+  feature: string;
+  @Field()
+  issue: string;
+  @Field()
+  bug: string;
+}
+
+@ObjectType()
+class TicketsByStatus {
+  @Field()
+  new: string;
+  @Field()
+  in_progress: string;
+  @Field()
+  resolved: string;
+}
+
 @Resolver()
 export class TicketResolver {
   @Query(() => [Ticket])
@@ -133,6 +167,57 @@ export class TicketResolver {
     from user_ticket ut
     inner join users u on u.id = ut."userId"
     where ut."ticketId" = ${ticketId}
+    `);
+  }
+
+  @Query(() => TicketsByPriority)
+  async ticketsByPriority(
+    @Ctx() { req }: MyContext
+  ): Promise<TicketsByPriority> {
+    return await Ticket.query(`
+    select 
+      count(case when priority='low' then 'low' end) as low,
+      count(case when priority='medium' then 'medium' end) as medium,
+      count(case when priority='high' then 'high' end) as high,
+      count(case when priority='immediate' then 'immediate' end) as "immediate"
+    from 
+      ticket
+    inner join 
+      user_ticket on ticket.id = user_ticket."ticketId"
+    where 
+      user_ticket."userId" = ${req.session.userId}
+    `);
+  }
+
+  @Query(() => TicketsByType)
+  async ticketsByType(@Ctx() { req }: MyContext): Promise<TicketsByType> {
+    return await Ticket.query(`
+    select 
+      count(case when "type"='issue' then 'issue' end) as issue,
+      count(case when "type"='bug' then 'bug' end) as bug,
+      count(case when "type"='feature' then 'feature' end) as feature
+    from 
+      ticket
+    inner join 
+      user_ticket on ticket.id = user_ticket."ticketId"
+    where 
+      user_ticket."userId" = ${req.session.userId}
+    `);
+  }
+
+  @Query(() => TicketsByStatus)
+  async ticketsByStatus(@Ctx() { req }: MyContext): Promise<TicketsByStatus> {
+    return await Ticket.query(`
+    select 
+      count(case when status='new' then 'new' end) as "new",
+      count(case when status='in progress' then 'in progress' end) as in_progress,
+      count(case when status='resolved' then 'resolved' end) as resolved
+    from 
+      ticket
+    inner join 
+      user_ticket on ticket.id = user_ticket."ticketId"
+    where 
+      user_ticket."userId" = ${req.session.userId}
     `);
   }
 
