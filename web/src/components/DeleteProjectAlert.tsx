@@ -7,6 +7,7 @@ import {
   AlertDialogOverlay,
   Button,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { MutableRefObject } from "react";
 import { useDeleteProjectMutation } from "../generated/graphql";
 
@@ -24,6 +25,7 @@ const DeleteProjectAlert = ({
   onClose,
 }: AlertProps) => {
   const [, deleteProject] = useDeleteProjectMutation();
+  const router = useRouter();
   return (
     <>
       <AlertDialog
@@ -56,6 +58,7 @@ const DeleteProjectAlert = ({
                     projectId,
                   });
                   onClose();
+                  router.push("/dashboard");
                 }}
                 ml={3}
                 _hover={{
