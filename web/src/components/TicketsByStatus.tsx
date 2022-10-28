@@ -1,8 +1,14 @@
 import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import { useTicketsByStatusQuery } from "../generated/graphql";
 ChartJs.register(Tooltip, Title, ArcElement, Legend);
 
 const TicketsByStatus = () => {
+  const [{ data, fetching }] = useTicketsByStatusQuery();
+  if (fetching) {
+    return <></>;
+  }
+
   return (
     <Pie
       options={{
@@ -22,7 +28,11 @@ const TicketsByStatus = () => {
       data={{
         datasets: [
           {
-            data: [4, 8, 2],
+            data: [
+              data?.ticketsByStatus.new,
+              data?.ticketsByStatus.in_progress,
+              data?.ticketsByStatus.resolved,
+            ],
             backgroundColor: ["#666666", "#999999", "#B2B2B2"],
           },
         ],

@@ -158,7 +158,7 @@ export class TicketResolver {
   async assignedDevelopers(
     @Arg("ticketId") ticketId: number
   ): Promise<AssignedDeveloper> {
-    const data = await myDataSource.query(`
+    return await myDataSource.query(`
     select ut.*,
     json_build_object(
 	  'id', u.id,
@@ -168,8 +168,6 @@ export class TicketResolver {
     inner join users u on u.id = ut."userId"
     where ut."ticketId" = ${ticketId}
     `);
-
-    return data[0];
   }
 
   @Query(() => TicketsByPriority)
@@ -209,7 +207,7 @@ export class TicketResolver {
 
   @Query(() => TicketsByStatus)
   async ticketsByStatus(@Ctx() { req }: MyContext): Promise<TicketsByStatus> {
-    return await Ticket.query(`
+    const data = await Ticket.query(`
     select 
       count(case when status='new' then 'new' end) as "new",
       count(case when status='in progress' then 'in progress' end) as in_progress,
@@ -221,6 +219,8 @@ export class TicketResolver {
     where 
       user_ticket."userId" = ${req.session.userId}
     `);
+
+    return data[0];
   }
 
   @Mutation(() => Ticket)
