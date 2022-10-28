@@ -263,12 +263,13 @@ const EditTicketModal = ({
                             ({ userId }) => ({ userId })
                           ),
                         });
+                      } else {
+                        await deleteTicket({
+                          ticketId: ticketData.id,
+                          team: [],
+                        });
                       }
-                      await deleteTicket({
-                        ticketId: ticketData.id,
-                        team: [],
-                      });
-
+                      setTicketId(undefined);
                       onClose();
                       return true;
                     }}

@@ -1,3 +1,4 @@
+import { Comment } from "../entities/Comment";
 import {
   Arg,
   Field,
@@ -264,6 +265,10 @@ export class TicketResolver {
       "userId" in (${deleteString})
       `);
     }
+    Comment.query(`
+    delete from "comment"
+    where "comment"."ticketId" = ${ticketId}
+    `);
     await Ticket.delete(ticketId);
     return true;
   }
