@@ -1,3 +1,4 @@
+import { Ticket } from "../entities/Ticket";
 import {
   Arg,
   Ctx,
@@ -13,6 +14,8 @@ import { Project } from "../entities/Project";
 import { Users } from "../entities/Users";
 import { User_Project } from "../entities/User_Project";
 import { MyContext } from "../types";
+import { User_Ticket } from "../entities/User_Ticket";
+import { Comment } from "../entities/Comment";
 
 @ObjectType()
 class AssignedPersonnel {
@@ -22,12 +25,6 @@ class AssignedPersonnel {
   @Field()
   userId: number;
 
-  @Field()
-  user: Users;
-}
-
-@InputType()
-class ProjectTeam {
   @Field()
   user: Users;
 }
@@ -128,28 +125,36 @@ export class ProjectResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteTicket(
-    @Arg("projectId") projectId: number,
-    @Arg("team", () => [ProjectTeam], { nullable: true })
-    team: ProjectTeam[]
-  ) {
-    if (team.length) {
-      let deleteString = "";
-
-      team.forEach(({ user }, mdx) => {
-        deleteString += `${user.id}`;
-        if (mdx !== team.length - 1) {
-          deleteString += ",";
-        }
-      });
-
-      User_Project.query(`
-      delete from user_ticket
-      where
-      "projectId" = ${projectId} and
-      "userId" in (${deleteString})
-      `);
-    }
+  async deleteProject(@Arg("projectId") projectId: number) {
+    // delete commments
+    await Comment.query(`
+    delete from "comment"
+    where "comment"."ticketId" in 
+      (
+      select "id" from ticket
+      where "ticket"."projectId" = ${projectId}
+      )
+    `);
+    // delete user_ticket
+    await User_Ticket.query(`
+    delete from user_ticket
+    where user_ticket."ticketId" in
+      (
+        select "id" from ticket
+        where ticket."projectId" = ${projectId}
+      )
+    `);
+    // delete tickets
+    await Ticket.query(`
+    delete from ticket
+    where ticket."projectId" = ${projectId}
+    `);
+    // delete assignedDevelopers
+    await User_Project.query(`
+    delete from user_project
+    where user_project."projectId" = ${projectId}
+    `);
+    // delete project
     await Project.delete(projectId);
     return true;
   }

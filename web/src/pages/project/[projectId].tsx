@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
-import Link from "next/link";
 import { ReactNode, useRef, useState } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
@@ -166,14 +165,14 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           </Box>
         </Flex>
       </Flex>
-      <DeleteProjectAlert
-        cancelRef={cancelRef}
-        isOpen={isOpen}
-        onClose={onClose}
-        assignedPersonnel={
-          personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
-        }
-      />
+      {!archivedTicketsFetch && (
+        <DeleteProjectAlert
+          cancelRef={cancelRef}
+          isOpen={isOpen}
+          onClose={onClose}
+          projectId={projectId}
+        />
+      )}
     </>
   );
 };

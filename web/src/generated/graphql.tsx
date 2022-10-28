@@ -125,7 +125,7 @@ export type MutationDeleteNotificationArgs = {
 
 
 export type MutationDeleteProjectArgs = {
-  id: Scalars['Float'];
+  projectId: Scalars['Float'];
 };
 
 
@@ -422,6 +422,13 @@ export type DeleteCommentMutationVariables = Exact<{
 
 export type DeleteCommentMutation = { __typename?: 'Mutation', deleteComment: boolean };
 
+export type DeleteProjectMutationVariables = Exact<{
+  projectId: Scalars['Float'];
+}>;
+
+
+export type DeleteProjectMutation = { __typename?: 'Mutation', deleteProject: boolean };
+
 export type DeleteTicketMutationVariables = Exact<{
   team: Array<DeleteDev> | DeleteDev;
   ticketId: Scalars['Float'];
@@ -667,6 +674,15 @@ export const DeleteCommentDocument = gql`
 
 export function useDeleteCommentMutation() {
   return Urql.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument);
+};
+export const DeleteProjectDocument = gql`
+    mutation DeleteProject($projectId: Float!) {
+  deleteProject(projectId: $projectId)
+}
+    `;
+
+export function useDeleteProjectMutation() {
+  return Urql.useMutation<DeleteProjectMutation, DeleteProjectMutationVariables>(DeleteProjectDocument);
 };
 export const DeleteTicketDocument = gql`
     mutation DeleteTicket($team: [deleteDev!]!, $ticketId: Float!) {

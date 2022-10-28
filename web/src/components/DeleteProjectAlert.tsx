@@ -1,23 +1,29 @@
 import {
-  Button,
   AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
   AlertDialogBody,
+  AlertDialogContent,
   AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
 } from "@chakra-ui/react";
 import { MutableRefObject } from "react";
-import { AssignedPersonnel } from "../types";
+import { useDeleteProjectMutation } from "../generated/graphql";
 
 interface AlertProps {
   isOpen: boolean;
   cancelRef: MutableRefObject<any>;
-  assignedPersonnel: AssignedPersonnel[];
+  projectId: number;
   onClose: () => void;
 }
 
-const DeleteProjectAlert = ({ isOpen, cancelRef, onClose }: AlertProps) => {
+const DeleteProjectAlert = ({
+  isOpen,
+  cancelRef,
+  projectId,
+  onClose,
+}: AlertProps) => {
+  const [, deleteProject] = useDeleteProjectMutation();
   return (
     <>
       <AlertDialog
@@ -45,7 +51,12 @@ const DeleteProjectAlert = ({ isOpen, cancelRef, onClose }: AlertProps) => {
                 border="2px"
                 margin={2}
                 padding={1}
-                onClick={onClose}
+                onClick={async () => {
+                  await deleteProject({
+                    projectId,
+                  });
+                  onClose();
+                }}
                 ml={3}
                 _hover={{
                   backgroundColor: "tertiary",
