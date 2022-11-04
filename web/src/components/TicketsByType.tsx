@@ -44,4 +44,4 @@ const TicketsByType = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(TicketsByType);
+export default withUrqlClient(createUrqlClient)(TicketsByType);

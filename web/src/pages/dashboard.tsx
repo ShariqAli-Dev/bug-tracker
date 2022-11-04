@@ -55,14 +55,14 @@ const Dashboard: NextPage = () => {
               height={{ base: "full", md: "90%" }}
               width={{ base: "60%", md: "27%" }}
             >
-              <TicketsByPriority />
+              <TicketsByPriority pageProps={{}} />
             </Box>
 
             <Box
               height={{ base: "full", md: "90%" }}
               width={{ base: "60%", md: "27%" }}
             >
-              <TicketsByStatus />
+              <TicketsByStatus pageProps={{}} />
             </Box>
           </Flex>
         </Flex>
