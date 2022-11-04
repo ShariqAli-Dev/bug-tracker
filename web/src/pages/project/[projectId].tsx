@@ -14,6 +14,7 @@ import AssignedPersonnel from "../../components/AssignedPersonnel";
 import DashHeader from "../../components/DashHeader";
 import DeleteProjectAlert from "../../components/DeleteProjectAlert";
 import NavBar from "../../components/Navbar";
+import ProjectModal from "../../components/ProjectModal";
 import ProjectTickets from "../../components/ProjectTickets";
 import TicketDetail from "../../components/TicketDetail";
 import {
@@ -63,8 +64,15 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
   const [ticketId, setTicketId] = useState<undefined | number>(undefined);
   const [viewArchived, setViewArchived] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: editProjectIsOpen,
+    onOpen: editProjectOnOpen,
+    onClose: editProjectOnClose,
+  } = useDisclosure();
   const router = useRouter();
   const cancelRef = useRef();
+  const initialRef = useRef();
+  const finalRef = useRef();
 
   return (
     <>
@@ -123,6 +131,25 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
                   {projectQuery?.project?.archived ? "Unarchive" : "Archive"}{" "}
                   Project
                 </Button>
+
+                <Button
+                  size="xs"
+                  color="tertiary"
+                  backgroundColor="primary"
+                  border="2px"
+                  margin={2}
+                  padding={1}
+                  _hover={{
+                    backgroundColor: "tertiary",
+                    color: "primary",
+                    border: "2px",
+                    borderColor: "primary",
+                  }}
+                  onClick={editProjectOnOpen}
+                >
+                  Edit Project
+                </Button>
+
                 <Button
                   size="xs"
                   color="tertiary"
@@ -185,6 +212,15 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           projectId={projectId}
         />
       )}
+      <ProjectModal
+        isEditing={true}
+        project={projectQuery?.project}
+        pageProps={{}}
+        isOpen={editProjectIsOpen}
+        onClose={editProjectOnClose}
+        finalRef={finalRef}
+        initialRef={initialRef}
+      />
     </>
   );
 };
