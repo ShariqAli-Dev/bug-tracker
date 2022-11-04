@@ -9,14 +9,20 @@ import {
   ModalOverlay,
   useToast,
 } from "@chakra-ui/react";
-import { InputField } from "./InputField";
-
 import { Form, Formik } from "formik";
 import { withUrqlClient } from "next-urql";
-import { useCreateProjectMutation } from "../generated/graphql";
+import { useRouter } from "next/router";
+import {
+  Project,
+  useCreateProjectMutation,
+  useUpdateProjectMutation,
+} from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { InputField } from "./InputField";
 
 interface ProjectModalProps {
+  isEditing?: boolean;
+  project?: Project;
   isOpen: boolean;
   onClose: () => void;
   finalRef: any;
@@ -28,9 +34,13 @@ const ProjectModal = ({
   onClose,
   finalRef,
   initialRef,
+  project,
+  isEditing,
 }: ProjectModalProps) => {
   const toast = useToast();
   const [, createProject] = useCreateProjectMutation();
+  const [, updateProject] = useUpdateProjectMutation();
+  const router = useRouter();
 
   return (
     <Modal
@@ -49,34 +59,46 @@ const ProjectModal = ({
         <ModalBody pb={8}>
           <Formik
             initialValues={{
-              name: "",
-              description: "",
+              name: project?.name || "",
+              description: project?.description || "",
             }}
             onSubmit={async (options) => {
               try {
-                await createProject({ options });
-                if (!toast.isActive("newProjectSuccess")) {
-                  toast({
-                    id: "newProjectSuccess",
-                    title: "Project Sucess",
-                    description: "We succesfully created the project",
-                    status: "success",
-                    duration: 3000,
-                    isClosable: true,
-                    variant: "subtle",
-                    containerStyle: {
-                      color: "primary",
+                if (isEditing) {
+                  await updateProject({
+                    options: {
+                      id: parseInt(project?.id as any),
+                      name: options.name,
+                      description: options.description,
                     },
-                    position: "top",
                   });
+                } else {
+                  await createProject({ options });
+                  if (!toast.isActive("newProjectSuccess")) {
+                    toast({
+                      id: "newProjectSuccess",
+                      title: "Project Sucess",
+                      description: "We succesfully created the project",
+                      status: "success",
+                      duration: 3000,
+                      isClosable: true,
+                      variant: "subtle",
+                      containerStyle: {
+                        color: "primary",
+                      },
+                      position: "top",
+                    });
+                  }
                 }
+                onClose();
+                router.reload();
               } catch {
                 if (!toast.isActive("newProjectError")) {
                   toast({
                     id: "newProjectError",
                     title: "Project Error",
                     description:
-                      "Unfortunately, we  could not create the project",
+                      "Unfortunately, we could not create the project",
                     status: "error",
                     duration: 3000,
                     isClosable: true,
@@ -116,7 +138,7 @@ const ProjectModal = ({
 
                 <Box width="full" display="flex" justifyContent="space-around">
                   <Button type="submit" isLoading={isSubmitting}>
-                    Create Project
+                    {isEditing ? "Edit" : "Create"} Project
                   </Button>
                   <Button onClick={onClose}>Cancel</Button>
                 </Box>

@@ -316,7 +316,7 @@ export type UpdateNotificationInput = {
 
 export type UpdateProjectInput = {
   description: Scalars['String'];
-  id?: InputMaybe<Scalars['Float']>;
+  id: Scalars['Float'];
   name: Scalars['String'];
 };
 
@@ -507,6 +507,13 @@ export type UpdateNotificationMutationVariables = Exact<{
 
 
 export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } | null };
+
+export type UpdateProjectMutationVariables = Exact<{
+  options: UpdateProjectInput;
+}>;
+
+
+export type UpdateProjectMutation = { __typename?: 'Mutation', updateProject?: { __typename?: 'Project', id: number } | null };
 
 export type UpdateTicketMutationVariables = Exact<{
   team: Array<TeamMembers> | TeamMembers;
@@ -829,6 +836,17 @@ export const UpdateNotificationDocument = gql`
 
 export function useUpdateNotificationMutation() {
   return Urql.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument);
+};
+export const UpdateProjectDocument = gql`
+    mutation UpdateProject($options: UpdateProjectInput!) {
+  updateProject(options: $options) {
+    id
+  }
+}
+    `;
+
+export function useUpdateProjectMutation() {
+  return Urql.useMutation<UpdateProjectMutation, UpdateProjectMutationVariables>(UpdateProjectDocument);
 };
 export const UpdateTicketDocument = gql`
     mutation UpdateTicket($team: [teamMembers!]!, $options: editTicketInput!) {

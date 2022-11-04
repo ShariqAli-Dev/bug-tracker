@@ -1,0 +1,5 @@
+mutation UpdateProject($options: UpdateProjectInput!) {
+  updateProject(options: $options) {
+    id
+  }
+}
