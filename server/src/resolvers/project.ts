@@ -53,7 +53,7 @@ export class ProjectResolver {
 
   @Query(() => Project, { nullable: true })
   async project(@Arg("id") id: number): Promise<Project | null> {
-    return await Project.findOne({ where: { id, archived: false } });
+    return await Project.findOne({ where: { id } });
   }
 
   @Query(() => [AssignedPersonnel])
