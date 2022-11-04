@@ -1,14 +1,16 @@
-import { Chart as ChartJs, Tooltip, Title, ArcElement, Legend } from "chart.js";
+import { ArcElement, Chart as ChartJs, Legend, Title, Tooltip } from "chart.js";
+import { withUrqlClient } from "next-urql";
 import { Pie } from "react-chartjs-2";
 import { useTicketsByStatusQuery } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 ChartJs.register(Tooltip, Title, ArcElement, Legend);
 
 const TicketsByStatus = () => {
   const [{ data, fetching }] = useTicketsByStatusQuery();
+
   if (fetching) {
     return <></>;
   }
-
   return (
     <Pie
       options={{
@@ -42,4 +44,4 @@ const TicketsByStatus = () => {
   );
 };
 
-export default TicketsByStatus;
+export default withUrqlClient(createUrqlClient)(TicketsByStatus);

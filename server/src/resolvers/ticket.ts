@@ -219,7 +219,6 @@ export class TicketResolver {
     where 
       user_ticket."userId" = ${req.session.userId}
     `);
-
     return data[0];
   }
 
