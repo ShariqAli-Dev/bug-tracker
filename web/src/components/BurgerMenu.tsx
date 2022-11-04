@@ -33,28 +33,20 @@ const BurgerMenu: NextPage = () => {
           </MenuItem>
 
           {/* Roles */}
-          <MenuItem
+          {/* <MenuItem
             onClick={() => router.push("roles")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             Manage Roles
-          </MenuItem>
+          </MenuItem> */}
 
           {/* Manage Project Users */}
-          <MenuItem
+          {/* <MenuItem
             onClick={() => router.push("users")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             Manage Project Users
-          </MenuItem>
-
-          {/* My Projects */}
-          <MenuItem
-            onClick={() => router.push("username/projects")}
-            icon={<CAiOutlineUsergroupAdd />}
-          >
-            My Projects
-          </MenuItem>
+          </MenuItem> */}
 
           {/* My Tickets */}
           <MenuItem
@@ -65,12 +57,12 @@ const BurgerMenu: NextPage = () => {
           </MenuItem>
 
           {/*User Profile */}
-          <MenuItem
+          {/* <MenuItem
             onClick={() => router.push("username")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             User Profile
-          </MenuItem>
+          </MenuItem> */}
         </MenuList>
       </Menu>
     </Center>
