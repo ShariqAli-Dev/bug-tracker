@@ -112,7 +112,14 @@ const EditTicketModal = ({
           <Formik
             initialValues={{ ...ticketData }}
             onSubmit={async (
-              { projectId, updatedAt, creator, __typename, ...options },
+              {
+                projectId,
+                updatedAt,
+                creator,
+                __typename,
+                archived,
+                ...options
+              },
               { resetForm }
             ) => {
               let filteredTeam = team.filter(
@@ -124,7 +131,10 @@ const EditTicketModal = ({
                 name: member.name,
                 selected: member.selected,
               }));
-              updateTicket({ options, team: filteredTeam });
+              updateTicket({
+                options: { ...options },
+                team: filteredTeam,
+              });
               // invalidation
               resetForm();
             }}

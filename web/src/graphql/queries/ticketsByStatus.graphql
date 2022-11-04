@@ -1,0 +1,7 @@
+query TicketsByStatus {
+  ticketsByStatus {
+    new
+    in_progress
+    resolved
+  }
+}

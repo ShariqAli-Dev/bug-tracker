@@ -53,7 +53,7 @@ export class ProjectResolver {
 
   @Query(() => Project, { nullable: true })
   async project(@Arg("id") id: number): Promise<Project | null> {
-    return await Project.findOne({ where: { id } });
+    return await Project.findOne({ where: { id, archived: false } });
   }
 
   @Query(() => [AssignedPersonnel])
@@ -122,6 +122,17 @@ export class ProjectResolver {
     }
 
     return project;
+  }
+
+  @Mutation(() => Boolean)
+  async archiveProject(@Arg("id") id: number) {
+    const project = await Project.findOne({ where: { id } });
+    if (!project) {
+      return false;
+    }
+    await Project.update({ id }, { archived: !project.archived });
+
+    return true;
   }
 
   @Mutation(() => Boolean)

@@ -54,6 +54,7 @@ export type FieldError = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  archiveProject: Scalars['Boolean'];
   archiveTicket?: Maybe<Ticket>;
   assignUsers: Scalars['Boolean'];
   changePassword: UserResponse;
@@ -73,6 +74,11 @@ export type Mutation = {
   updateNotification?: Maybe<Notification>;
   updateProject?: Maybe<Project>;
   updateTicket?: Maybe<Ticket>;
+};
+
+
+export type MutationArchiveProjectArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -208,6 +214,9 @@ export type Query = {
   ticket?: Maybe<Ticket>;
   ticketComments: Array<TicketComment>;
   tickets: Array<Ticket>;
+  ticketsByPriority: TicketsByPriority;
+  ticketsByStatus: TicketsByStatus;
+  ticketsByType: TicketsByType;
   userNotifications: Array<Notification>;
   users: Array<Users>;
 };
@@ -276,6 +285,28 @@ export type TicketComment = {
   id: Scalars['Float'];
   message: Scalars['String'];
   user: Users;
+};
+
+export type TicketsByPriority = {
+  __typename?: 'TicketsByPriority';
+  high: Scalars['String'];
+  immediate: Scalars['String'];
+  low: Scalars['String'];
+  medium: Scalars['String'];
+};
+
+export type TicketsByStatus = {
+  __typename?: 'TicketsByStatus';
+  in_progress: Scalars['String'];
+  new: Scalars['String'];
+  resolved: Scalars['String'];
+};
+
+export type TicketsByType = {
+  __typename?: 'TicketsByType';
+  bug: Scalars['String'];
+  feature: Scalars['String'];
+  issue: Scalars['String'];
 };
 
 export type UpdateNotificationInput = {
@@ -362,6 +393,13 @@ export type TeamMembers = {
   name: Scalars['String'];
   selected: Scalars['Boolean'];
 };
+
+export type ArchiveProjectMutationVariables = Exact<{
+  archiveProjectId: Scalars['Float'];
+}>;
+
+
+export type ArchiveProjectMutation = { __typename?: 'Mutation', archiveProject: boolean };
 
 export type ArchiveTicketMutationVariables = Exact<{
   archiveTicketId: Scalars['Float'];
@@ -521,7 +559,7 @@ export type ProjectQueryVariables = Exact<{
 }>;
 
 
-export type ProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: number, name: string, description: string, createdAt: any, updatedAt: any } | null };
+export type ProjectQuery = { __typename?: 'Query', project?: { __typename?: 'Project', id: number, name: string, description: string, archived: boolean, createdAt: any, updatedAt: any } | null };
 
 export type ProjectTicketsQueryVariables = Exact<{
   projectId: Scalars['Float'];
@@ -544,6 +582,21 @@ export type TicketCommentsQueryVariables = Exact<{
 
 export type TicketCommentsQuery = { __typename?: 'Query', ticketComments: Array<{ __typename?: 'TicketComment', id: number, message: string, user: { __typename?: 'Users', id: number, name: string } }> };
 
+export type TicketsByPriorityQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TicketsByPriorityQuery = { __typename?: 'Query', ticketsByPriority: { __typename?: 'TicketsByPriority', low: string, medium: string, high: string, immediate: string } };
+
+export type TicketsByStatusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TicketsByStatusQuery = { __typename?: 'Query', ticketsByStatus: { __typename?: 'TicketsByStatus', new: string, in_progress: string, resolved: string } };
+
+export type TicketsByTypeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TicketsByTypeQuery = { __typename?: 'Query', ticketsByType: { __typename?: 'TicketsByType', feature: string, issue: string, bug: string } };
+
 export type UserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -560,6 +613,15 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number, email: string }> };
 
 
+export const ArchiveProjectDocument = gql`
+    mutation ArchiveProject($archiveProjectId: Float!) {
+  archiveProject(id: $archiveProjectId)
+}
+    `;
+
+export function useArchiveProjectMutation() {
+  return Urql.useMutation<ArchiveProjectMutation, ArchiveProjectMutationVariables>(ArchiveProjectDocument);
+};
 export const ArchiveTicketDocument = gql`
     mutation ArchiveTicket($archiveTicketId: Float!) {
   archiveTicket(id: $archiveTicketId) {
@@ -880,6 +942,7 @@ export const ProjectDocument = gql`
     id
     name
     description
+    archived
     createdAt
     updatedAt
   }
@@ -941,6 +1004,46 @@ export const TicketCommentsDocument = gql`
 
 export function useTicketCommentsQuery(options: Omit<Urql.UseQueryArgs<TicketCommentsQueryVariables>, 'query'>) {
   return Urql.useQuery<TicketCommentsQuery, TicketCommentsQueryVariables>({ query: TicketCommentsDocument, ...options });
+};
+export const TicketsByPriorityDocument = gql`
+    query TicketsByPriority {
+  ticketsByPriority {
+    low
+    medium
+    high
+    immediate
+  }
+}
+    `;
+
+export function useTicketsByPriorityQuery(options?: Omit<Urql.UseQueryArgs<TicketsByPriorityQueryVariables>, 'query'>) {
+  return Urql.useQuery<TicketsByPriorityQuery, TicketsByPriorityQueryVariables>({ query: TicketsByPriorityDocument, ...options });
+};
+export const TicketsByStatusDocument = gql`
+    query TicketsByStatus {
+  ticketsByStatus {
+    new
+    in_progress
+    resolved
+  }
+}
+    `;
+
+export function useTicketsByStatusQuery(options?: Omit<Urql.UseQueryArgs<TicketsByStatusQueryVariables>, 'query'>) {
+  return Urql.useQuery<TicketsByStatusQuery, TicketsByStatusQueryVariables>({ query: TicketsByStatusDocument, ...options });
+};
+export const TicketsByTypeDocument = gql`
+    query TicketsByType {
+  ticketsByType {
+    feature
+    issue
+    bug
+  }
+}
+    `;
+
+export function useTicketsByTypeQuery(options?: Omit<Urql.UseQueryArgs<TicketsByTypeQueryVariables>, 'query'>) {
+  return Urql.useQuery<TicketsByTypeQuery, TicketsByTypeQueryVariables>({ query: TicketsByTypeDocument, ...options });
 };
 export const UserNotificationsDocument = gql`
     query UserNotifications {

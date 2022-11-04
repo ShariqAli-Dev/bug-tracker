@@ -13,11 +13,9 @@ import { AiOutlineUsergroupAdd } from "react-icons/ai";
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
   { title: "Dashboard", url: "dashboard" },
-  { title: "Manage Roles", url: "roles" },
-  { title: "Manage Project Users", url: "users" },
-  { title: "My Projects", url: "projects" },
+  // { title: "Manage Roles", url: "roles" },
+  // { title: "Manage Project Users", url: "users" },
   { title: "My Tickets", url: "tickets" },
-  { title: "User Profile", url: "profile" },
 ];
 
 const NavBar = () => {
@@ -48,6 +46,7 @@ const NavBar = () => {
               p={5}
               onClick={() => router.push(`/${item.url}`)}
               key={item.title}
+              cursor="pointer"
             >
               <Flex flexDir="row" alignItems="center">
                 <CAiOutlineUsergroupAdd color="secondary" size="25px" />

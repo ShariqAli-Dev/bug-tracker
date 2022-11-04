@@ -26,7 +26,7 @@ const BurgerMenu: NextPage = () => {
         <MenuList>
           {/* Dashboard */}
           <MenuItem
-            onClick={() => router.push("dashboard")}
+            onClick={() => router.push("/dashboard")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             Dashboard

@@ -1,0 +1,3 @@
+mutation ArchiveProject($archiveProjectId: Float!) {
+  archiveProject(id: $archiveProjectId)
+}

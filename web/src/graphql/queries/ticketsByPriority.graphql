@@ -1,0 +1,8 @@
+query TicketsByPriority {
+  ticketsByPriority {
+    low
+    medium
+    high
+    immediate
+  }
+}
