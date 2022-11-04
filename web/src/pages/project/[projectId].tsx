@@ -49,6 +49,7 @@ export const SectionHeader = ({ title, children }: SectionHeaderProps) => {
 };
 
 const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
+  const [disabled, setDisabled] = useState(false);
   const [{ data: projectQuery }] = useProjectQuery({
     variables: { projectId },
   });
@@ -112,7 +113,9 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
                     border: "2px",
                     borderColor: "primary",
                   }}
+                  disabled={disabled}
                   onClick={async () => {
+                    setDisabled(true);
                     await archiveProject({ archiveProjectId: projectId });
                     router.push("/dashboard");
                   }}
