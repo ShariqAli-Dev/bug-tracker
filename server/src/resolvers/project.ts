@@ -40,7 +40,7 @@ class CreateProjectInput {
 
 @InputType()
 class UpdateProjectInput extends CreateProjectInput {
-  @Field({ nullable: true })
+  @Field()
   id!: number;
 }
 
@@ -114,7 +114,7 @@ export class ProjectResolver {
     if (!project) return null;
 
     if (
-      typeof id !== "undefined" &&
+      project &&
       typeof name !== "undefined" &&
       typeof description !== "undefined"
     ) {
