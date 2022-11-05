@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import BurgerMenu from "../components/BurgerMenu";
 import MyProjectsTable from "../components/MyProjectsTable";
 import NavBar from "../components/Navbar";
 import TicketsByPriority from "../components/TicketsByPriority";
@@ -27,11 +28,18 @@ const Dashboard: NextPage = () => {
 
       {/* Components */}
       <Flex w="full" flexDirection="column" overflowY="auto">
-        <Box>
-          <Text align="center" fontSize="3xl">
+        <Flex w="full">
+          <Box margin="auto">
+            <BurgerMenu />
+          </Box>
+          <Text
+            width={{ base: "95%", sm: "100%" }}
+            align="center"
+            fontSize="3xl"
+          >
             Dashboard
           </Text>
-        </Box>
+        </Flex>
         {/* Contents */} {/* <DaGrid/> */}
         <Flex
           flexDirection="column"

@@ -24,7 +24,7 @@ const BurgerMenu: NextPage = () => {
           <HamburgerIcon size="25px" />
         </MenuButton>
         <MenuList>
-          {/* Dashboard */}
+          {/* Dashbosard */}
           <MenuItem
             onClick={() => router.push("/dashboard")}
             icon={<CAiOutlineUsergroupAdd />}
