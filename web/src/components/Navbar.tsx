@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   chakra,
   Flex,
   Heading,
@@ -9,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { useLogoutMutation } from "../generated/graphql";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
@@ -20,6 +22,7 @@ const navbar = [
 
 const NavBar = () => {
   const router = useRouter();
+  const [{ fetching }, logout] = useLogoutMutation();
   return (
     <Stack>
       {/* Home title, user imgage */}
@@ -60,6 +63,28 @@ const NavBar = () => {
             </Box>
           );
         })}
+
+        <Button
+          size="xs"
+          color="tertiary"
+          backgroundColor="primary"
+          border="2px"
+          padding={3}
+          _hover={{
+            backgroundColor: "tertiary",
+            color: "primary",
+            border: "2px",
+            borderColor: "primary",
+          }}
+          disabled={fetching}
+          onClick={async () => {
+            await logout({});
+            await router.push("/");
+            router.reload();
+          }}
+        >
+          Logout
+        </Button>
       </Flex>
     </Stack>
   );
