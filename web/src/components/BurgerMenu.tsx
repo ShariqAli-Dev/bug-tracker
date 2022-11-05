@@ -5,17 +5,22 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Button,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { useLogoutMutation } from "../generated/graphql";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const HamburgerIcon = chakra(GiHamburgerMenu);
 
 const BurgerMenu: NextPage = () => {
   const router = useRouter();
+  const [{ fetching }, logout] = useLogoutMutation();
 
   return (
     <Center display={{ base: "inline", md: "none" }}>
@@ -63,10 +68,34 @@ const BurgerMenu: NextPage = () => {
           >
             User Profile
           </MenuItem> */}
+
+          <MenuItem>
+            <Button
+              size="xs"
+              color="tertiary"
+              backgroundColor="primary"
+              border="2px"
+              padding={3}
+              _hover={{
+                backgroundColor: "tertiary",
+                color: "primary",
+                border: "2px",
+                borderColor: "primary",
+              }}
+              disabled={fetching}
+              onClick={async () => {
+                await logout({});
+                await router.push("/");
+                router.reload();
+              }}
+            >
+              Logout
+            </Button>
+          </MenuItem>
         </MenuList>
       </Menu>
     </Center>
   );
 };
 
-export default BurgerMenu;
+export default withUrqlClient(createUrqlClient)(BurgerMenu);

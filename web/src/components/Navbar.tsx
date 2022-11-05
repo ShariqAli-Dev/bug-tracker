@@ -8,9 +8,11 @@ import {
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useLogoutMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
@@ -90,4 +92,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default withUrqlClient(createUrqlClient)(NavBar);
