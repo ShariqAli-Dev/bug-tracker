@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useLogoutMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import { FaBug } from "react-icons/fa";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
@@ -28,20 +29,9 @@ const NavBar = () => {
   return (
     <Stack>
       {/* Home title, user imgage */}
-      <Flex color="primary" margin={3} flexDir="row" alignItems="center">
-        <Image
-          w="30%"
-          alt="user icon"
-          src="https://cdn-icons-png.flaticon.com/512/236/236831.png"
-        />
-        <Heading
-          as="h2"
-          size={{ base: "xs", md: "sm", xl: "md" }}
-          textAlign="center"
-          color="primary"
-        >
-          WELCOME
-        </Heading>
+      <Flex color="primary" margin={3} flexDir="column" alignItems="center">
+        <FaBug size={45} />
+        <Text fontSize="xl">Bug Tracker</Text>
       </Flex>
       {/* Home navbar */}
       <Flex flexDir="column">
