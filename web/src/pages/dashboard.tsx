@@ -1,11 +1,11 @@
+import { Box, Flex, Text } from "@chakra-ui/react";
 import type { NextPage } from "next";
-import { Box, Flex } from "@chakra-ui/react";
-import NavBar from "../components/Navbar";
-import DashHeader from "../components/DashHeader";
+import BurgerMenu from "../components/BurgerMenu";
 import MyProjectsTable from "../components/MyProjectsTable";
-import TicketsByType from "../components/TicketsByType";
+import NavBar from "../components/Navbar";
 import TicketsByPriority from "../components/TicketsByPriority";
 import TicketsByStatus from "../components/TicketsByStatus";
+import TicketsByType from "../components/TicketsByType";
 
 const Dashboard: NextPage = () => {
   return (
@@ -28,8 +28,18 @@ const Dashboard: NextPage = () => {
 
       {/* Components */}
       <Flex w="full" flexDirection="column" overflowY="auto">
-        {/* DashHeader Component */}
-        <DashHeader pageProps={{}} />
+        <Flex w="full">
+          <Box margin="auto">
+            <BurgerMenu />
+          </Box>
+          <Text
+            width={{ base: "95%", sm: "100%" }}
+            align="center"
+            fontSize="3xl"
+          >
+            Dashboard
+          </Text>
+        </Flex>
         {/* Contents */} {/* <DaGrid/> */}
         <Flex
           flexDirection="column"

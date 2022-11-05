@@ -11,7 +11,7 @@ import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import { ReactNode, useRef, useState } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
-import DashHeader from "../../components/DashHeader";
+import BurgerMenu from "../../components/BurgerMenu";
 import DeleteProjectAlert from "../../components/DeleteProjectAlert";
 import NavBar from "../../components/Navbar";
 import ProjectModal from "../../components/ProjectModal";
@@ -90,9 +90,8 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
 
         {/* Inner Section */}
         <Flex w="full" flexDir="column" overflowY="auto">
-          {/* Dash Header */}
-          <DashHeader pageProps={{}} />
           {/* Contents */}
+          <BurgerMenu />
           <Box
             backgroundColor="white"
             marginTop={8}
