@@ -136,6 +136,13 @@ export class TicketResolver {
     return await Ticket.findOne({ where: { id } });
   }
 
+  @Query(() => [Ticket], { nullable: true })
+  async userTickets(@Ctx() { req }: MyContext): Promise<Ticket[] | null> {
+    return await Ticket.query(`select * from user_ticket as ut
+    inner join ticket on ticket.id = ut."ticketId"
+    where ut."userId" = ${req.session.userId}`);
+  }
+
   @Query(() => [Ticket])
   async projectTickets(@Arg("projectId") projectId: number): Promise<Ticket[]> {
     return await Ticket.find({
