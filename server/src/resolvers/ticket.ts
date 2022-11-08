@@ -124,6 +124,12 @@ class TicketsByStatus {
   resolved: string;
 }
 
+@ObjectType()
+class UserTicket extends Ticket {
+  @Field()
+  name: string;
+}
+
 @Resolver()
 export class TicketResolver {
   @Query(() => [Ticket])
@@ -136,10 +142,11 @@ export class TicketResolver {
     return await Ticket.findOne({ where: { id } });
   }
 
-  @Query(() => [Ticket], { nullable: true })
-  async userTickets(@Ctx() { req }: MyContext): Promise<Ticket[] | null> {
+  @Query(() => [UserTicket], { nullable: true })
+  async userTickets(@Ctx() { req }: MyContext): Promise<UserTicket[] | null> {
     return await Ticket.query(`select * from user_ticket as ut
     inner join ticket on ticket.id = ut."ticketId"
+	  inner join project on ticket."projectId" = project.id
     where ut."userId" = ${req.session.userId}`);
   }
 
