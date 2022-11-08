@@ -1,6 +1,4 @@
 import {
-  Box,
-  Button,
   chakra,
   Flex,
   IconButton,
@@ -13,46 +11,51 @@ import {
   Thead,
   Tooltip,
   Tr,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
 import { withUrqlClient } from "next-urql";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { useUserProjectsQuery } from "../generated/graphql";
+import { useUserTicketsQuery, UserTicket } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import ProjectModal from "./ProjectModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
-const MyProjectsTable = () => {
-  const [tableData, setTableData] = useState([]);
-  const [{ data, fetching }] = useUserProjectsQuery();
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const finalRef = useRef(null);
-  const initialRef = useRef(null);
+interface MyTicketsTableProps {
+  tickets: UserTicket[];
+}
 
+const MyTicketsTable = (props: MyTicketsTableProps) => {
+  const [{ data, fetching }] = useUserTicketsQuery();
   const columns = useMemo(
     () => [
       {
-        Header: "My Projects",
+        Header: "My Tickets",
         columns: [
           {
             Header: "Project",
-            accessor: "project.name",
+            accessor: "name",
           },
           {
-            Header: "Description",
-            accessor: "project.description",
+            Header: "Ticket",
+            accessor: "title",
+          },
+          {
+            Header: "Status",
+            accessor: "status",
+          },
+          {
+            Header: "Priority",
+            accessor: "priority",
           },
           {
             Header: "",
-            accessor: "details",
+            accessor: "view ticket",
           },
         ],
       },
@@ -76,82 +79,53 @@ const MyProjectsTable = () => {
   } = useTable(
     {
       columns,
-      data: tableData,
+      data: props.tickets,
       initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
   );
-
-  useEffect(() => {
-    if (!fetching && data?.UserProjects) {
-      setTableData(data?.UserProjects as any);
-    } else {
-      return;
-    }
-  }, [data, fetching]);
-
   if (fetching) {
     return <></>;
   }
-
   return (
     <>
-      <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
-        <Flex
-          justifyContent="space-between"
-          alignItems="center"
-          backgroundColor="primary"
-          color="tertiary"
-          w="full"
-        >
-          <Box margin="6px" ref={finalRef}>
-            <Text>Your Projects</Text>
-            <Text display={{ base: "none", md: "block" }}>
-              All the projects you have in the database
-            </Text>
-          </Box>
-          <Button
-            marginRight="6px"
-            color="primary"
-            backgroundColor="tertiary"
-            border="1px"
-            borderColor="primary"
-            onClick={onOpen}
-          >
-            Create New Project
-          </Button>
-        </Flex>
-
+      <TableContainer marginTop={"5rem"}>
         <Table
           {...getTableBodyProps()}
-          size={{ base: "sm", lg: "md" }}
+          size={{ base: "sm", sm: "md", md: "lg" }}
           border="2px"
           borderColor="primary"
         >
           <Thead border="2px" borderColor="primary">
-            {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()} key={nanoid()}>
+            {headerGroups.map((headerGroup, hdx) => (
+              <Tr
+                {...headerGroup.getHeaderGroupProps()}
+                key={`headerGroup${hdx}`}
+              >
                 {headerGroup.headers
-                  .filter((header) => header.Header !== "My Projects")
-                  .map((column) => (
-                    <Th
-                      {...column.getHeaderProps()}
-                      key={nanoid()}
-                      border="2px"
-                      borderColor="primary"
-                    >
-                      {column.render("Header")}
-                    </Th>
-                  ))}
+                  .filter((header) => header.Header !== "My Tickets")
+                  .map((column, cdx) => {
+                    return (
+                      <Th
+                        {...column.getHeaderProps()}
+                        key={cdx}
+                        border="2px"
+                        borderColor="primary"
+                      >
+                        {column.render("Header")}
+                      </Th>
+                    );
+                  })}
               </Tr>
             ))}
           </Thead>
           <Tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {page.map((row, rdx) => {
               prepareRow(row);
               return (
-                <Tr {...row.getRowProps()} key={nanoid()}>
+                <Tr {...row.getRowProps()} key={rdx}>
                   {row.cells.map((cell) => {
+                    const definiteData = data?.userTickets as any;
                     return (
                       <Td
                         {...cell.getCellProps()}
@@ -163,8 +137,7 @@ const MyProjectsTable = () => {
                         {!cell.column.Header && (
                           <Link
                             href={`/project/${parseInt(
-                              data?.UserProjects[parseInt(row.id)]
-                                .projectId as any
+                              definiteData[parseInt(row.id)].projectId as any
                             )}`}
                           >
                             <Text
@@ -172,7 +145,7 @@ const MyProjectsTable = () => {
                               cursor="pointer"
                               textAlign="center"
                             >
-                              Details
+                              View Ticket
                             </Text>
                           </Link>
                         )}
@@ -185,7 +158,7 @@ const MyProjectsTable = () => {
           </Tbody>
         </Table>
       </TableContainer>
-      <Flex justifyContent="center" alignItems="center">
+      <Flex justifyContent="center" alignItems="center" marginTop="4rem">
         {/* Chevron Left */}
         <Tooltip label="First Page">
           <IconButton
@@ -243,15 +216,8 @@ const MyProjectsTable = () => {
           />
         </Tooltip>
       </Flex>
-      <ProjectModal
-        pageProps={{}}
-        isOpen={isOpen}
-        onClose={onClose}
-        finalRef={finalRef}
-        initialRef={initialRef}
-      />
     </>
   );
 };
 
-export default withUrqlClient(createUrqlClient)(MyProjectsTable);
+export default withUrqlClient(createUrqlClient)(MyTicketsTable);

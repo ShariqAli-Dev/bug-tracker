@@ -218,6 +218,7 @@ export type Query = {
   ticketsByStatus: TicketsByStatus;
   ticketsByType: TicketsByType;
   userNotifications: Array<Notification>;
+  userTickets?: Maybe<Array<UserTicket>>;
   users: Array<Users>;
 };
 
@@ -335,6 +336,21 @@ export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<Users>;
+};
+
+export type UserTicket = {
+  __typename?: 'UserTicket';
+  archived: Scalars['Boolean'];
+  creator: Scalars['String'];
+  description: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  priority: Scalars['String'];
+  projectId: Scalars['Float'];
+  status: Scalars['String'];
+  title: Scalars['String'];
+  type: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type User_Project = {
@@ -613,6 +629,11 @@ export type UserProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserProjectsQuery = { __typename?: 'Query', UserProjects: Array<{ __typename?: 'User_Project', projectId: number, userId: number, project: { __typename?: 'Project', id: number, name: string, description: string } }> };
+
+export type UserTicketsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserTicketsQuery = { __typename?: 'Query', userTickets?: Array<{ __typename?: 'UserTicket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, archived: boolean, updatedAt: any, name: string }> | null };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1094,6 +1115,27 @@ export const UserProjectsDocument = gql`
 
 export function useUserProjectsQuery(options?: Omit<Urql.UseQueryArgs<UserProjectsQueryVariables>, 'query'>) {
   return Urql.useQuery<UserProjectsQuery, UserProjectsQueryVariables>({ query: UserProjectsDocument, ...options });
+};
+export const UserTicketsDocument = gql`
+    query UserTickets {
+  userTickets {
+    id
+    projectId
+    creator
+    title
+    description
+    priority
+    type
+    status
+    archived
+    updatedAt
+    name
+  }
+}
+    `;
+
+export function useUserTicketsQuery(options?: Omit<Urql.UseQueryArgs<UserTicketsQueryVariables>, 'query'>) {
+  return Urql.useQuery<UserTicketsQuery, UserTicketsQueryVariables>({ query: UserTicketsDocument, ...options });
 };
 export const UsersDocument = gql`
     query Users {
