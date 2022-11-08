@@ -4,9 +4,11 @@ import { withUrqlClient } from "next-urql";
 import BurgerMenu from "../components/BurgerMenu";
 import MyTicketsTable from "../components/MyTicketsTable";
 import NavBar from "../components/Navbar";
+import { useUserTicketsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Tickets: NextPage = () => {
+  const [{ data, fetching }] = useUserTicketsQuery();
   return (
     <Flex
       h={{ base: "140vh", md: "100vh" }}
@@ -40,7 +42,9 @@ const Tickets: NextPage = () => {
           </Text>
         </Flex>
         {/* Contents */} {/* <DaGrid/> */}
-        <MyTicketsTable />
+        {!fetching && (
+          <MyTicketsTable pageProps={{}} tickets={data?.userTickets || []} />
+        )}
       </Flex>
     </Flex>
   );

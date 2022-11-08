@@ -13,18 +13,24 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
+import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import { useMemo } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { useUserTicketsQuery } from "../generated/graphql";
+import { useUserTicketsQuery, UserTicket } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
 
-const MyTicketsTable = () => {
+interface MyTicketsTableProps {
+  tickets: UserTicket[];
+}
+
+const MyTicketsTable = (props: MyTicketsTableProps) => {
   const [{ data, fetching }] = useUserTicketsQuery();
   const columns = useMemo(
     () => [
@@ -73,7 +79,7 @@ const MyTicketsTable = () => {
   } = useTable(
     {
       columns,
-      data: data?.userTickets as any,
+      data: props.tickets,
       initialState: { pageIndex: 0, pageSize: 5 },
     },
     usePagination
@@ -214,4 +220,4 @@ const MyTicketsTable = () => {
   );
 };
 
-export default MyTicketsTable;
+export default withUrqlClient(createUrqlClient)(MyTicketsTable);
