@@ -50,7 +50,7 @@ const BurgerMenu: NextPage = () => {
 
           {/* My Tickets */}
           <MenuItem
-            onClick={() => router.push("username/tickets")}
+            onClick={() => router.push("/tickets")}
             icon={<CAiOutlineUsergroupAdd />}
           >
             My Tickets
