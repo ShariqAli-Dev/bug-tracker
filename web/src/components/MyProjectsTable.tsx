@@ -107,7 +107,7 @@ const MyProjectsTable = () => {
           <Box margin="6px" ref={finalRef}>
             <Text>Your Projects</Text>
             <Text display={{ base: "none", md: "block" }}>
-              Alll the projects you have in the database
+              All the projects you have in the database
             </Text>
           </Box>
           <Button
