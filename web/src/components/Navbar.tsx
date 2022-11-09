@@ -10,7 +10,10 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
-import { useLogoutMutation } from "../generated/graphql";
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import { FaBug, FaLock, FaUserAlt } from "react-icons/fa";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
@@ -23,23 +26,22 @@ const navbar = [
 const NavBar = () => {
   const router = useRouter();
   const [{ fetching }, logout] = useLogoutMutation();
+  const [{ data, fetching: meFetch }] = useMeQuery();
   return (
     <Stack>
       {/* Home title, user imgage */}
-      <Flex color="primary" margin={3} flexDir="row" alignItems="center">
-        <Image
-          w="30%"
-          alt="user icon"
-          src="https://cdn-icons-png.flaticon.com/512/236/236831.png"
-        />
+      <Flex color="primary" margin={3} flexDir="column" alignItems="center">
+        <FaBug style={{ margin: "1rem" }} size={45} />
+
         <Heading
           as="h2"
           size={{ base: "xs", md: "sm", xl: "md" }}
           textAlign="center"
           color="primary"
         >
-          WELCOME
+          Bug Tracker
         </Heading>
+        {!meFetch && <Text>{data?.me?.role}</Text>}
       </Flex>
       {/* Home navbar */}
       <Flex flexDir="column">
@@ -90,4 +92,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default withUrqlClient(createUrqlClient)(NavBar);

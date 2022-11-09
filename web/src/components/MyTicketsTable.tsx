@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   chakra,
   Flex,
   IconButton,
@@ -89,10 +91,29 @@ const MyTicketsTable = (props: MyTicketsTableProps) => {
   }
   return (
     <>
-      <TableContainer marginTop={"5rem"}>
+      <TableContainer
+        marginTop={"5rem"}
+        width={{ md: "80%" }}
+        marginRight="auto"
+        marginLeft="auto"
+      >
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          backgroundColor="primary"
+          color="tertiary"
+          w="full"
+        >
+          <Box margin="6px">
+            <Text>Your Tickets</Text>
+            <Text display={{ base: "none", md: "block" }}>
+              All the tickets you have in the database
+            </Text>
+          </Box>
+        </Flex>
         <Table
           {...getTableBodyProps()}
-          size={{ base: "sm", sm: "md", md: "lg" }}
+          size={{ base: "sm", sm: "md" }}
           border="2px"
           borderColor="primary"
         >

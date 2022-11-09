@@ -85,7 +85,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           boxShadow="2px 0 5px -2px"
           display={{ base: "none", md: "flex" }}
         >
-          <NavBar />
+          <NavBar pageProps={{}} />
         </Flex>
 
         {/* Inner Section */}
