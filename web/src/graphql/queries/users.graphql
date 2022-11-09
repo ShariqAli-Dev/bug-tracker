@@ -1,7 +1,8 @@
 query Users {
   users {
-    name
     id
     email
+    role
+    name
   }
 }
