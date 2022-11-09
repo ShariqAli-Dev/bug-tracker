@@ -42,15 +42,37 @@ const Adminstration: NextPage = () => {
           flexDirection={{ base: "column", md: "row" }}
           alignItems="center"
           justifyContent="space-around"
-          backgroundColor="red"
+          //   backgroundColor="red"
           marginTop="4rem"
           height="40%"
         >
-          <Box>
+          <Box height="full" width={{ base: "85%", md: "45%" }}>
             <Text>Organization</Text>
+            <Box
+              overflowY="auto"
+              scrollBehavior="auto"
+              height="full"
+              width="full"
+              borderColor="light-blue"
+              borderWidth={0.1}
+              borderRadius={"xl"}
+            >
+              testng
+            </Box>
           </Box>
-          <Box>
-            <Text>Edit User Information</Text>
+          <Box height="full" width={{ base: "85%", md: "45%" }}>
+            <Text>Edit User Information</Text>{" "}
+            <Box
+              overflowY="auto"
+              scrollBehavior="auto"
+              height="full"
+              width="full"
+              borderColor="light-blue"
+              borderWidth={0.1}
+              borderRadius={"xl"}
+            >
+              testng
+            </Box>
           </Box>
         </Flex>
       </Flex>
