@@ -9,9 +9,9 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Adminstration: NextPage = () => {
   const [{ data: users, fetching }] = useUsersQuery();
-  const [selectedUser, setSelectedUser] = useState<Users | undefined>(
-    undefined
-  );
+  const [selectedUser, setSelectedUser] = useState<
+    undefined | { name: string; id: number; email: string; role: string }
+  >(undefined);
 
   if (fetching) {
     return <></>;
@@ -69,13 +69,14 @@ const Adminstration: NextPage = () => {
               borderRadius={"xl"}
               paddingTop="1rem"
             >
-              {users?.users.map((u) => (
+              {users?.users.map((u, udx) => (
                 <Flex
                   width="full"
                   justifyContent={"space-between"}
                   fontSize={"1rem"}
                   key={u.email}
                   cursor="pointer"
+                  onClick={() => setSelectedUser(users.users[udx])}
                 >
                   <Box
                     display="flex"
@@ -101,7 +102,7 @@ const Adminstration: NextPage = () => {
               borderRadius={"xl"}
               paddingTop="1rem"
             >
-              testng
+              <Text>{selectedUser?.name}</Text>
             </Box>
           </Box>
         </Flex>
