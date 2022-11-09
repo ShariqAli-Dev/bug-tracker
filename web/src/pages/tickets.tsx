@@ -24,7 +24,7 @@ const Tickets: NextPage = () => {
         boxShadow="2px 0 5px -2px "
         display={{ base: "none", md: "flex" }}
       >
-        <NavBar />
+        <NavBar pageProps={{}} />
       </Flex>
 
       {/* Components */}
