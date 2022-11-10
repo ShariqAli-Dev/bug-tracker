@@ -1,4 +1,13 @@
-import { Box, Container, Flex, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Flex,
+  FormControl,
+  FormLabel,
+  Select,
+  Text,
+} from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import type { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import { useState } from "react";
@@ -16,6 +25,7 @@ const Adminstration: NextPage = () => {
   if (fetching) {
     return <></>;
   }
+  console.log(users?.users[0]);
 
   return (
     <Flex
@@ -102,7 +112,51 @@ const Adminstration: NextPage = () => {
               borderRadius={"xl"}
               paddingTop="1rem"
             >
-              <Text>{selectedUser?.name}</Text>
+              <Text fontSize="3xl" marginLeft="1rem" color="primary">
+                {selectedUser?.name}
+              </Text>
+              <Flex marginLeft="1rem">
+                <Text fontWeight="semibold" color="primary" fontSize="md">
+                  Email:
+                </Text>
+                <Text marginLeft="1rem">{selectedUser?.email}</Text>
+              </Flex>
+              <Formik
+                initialValues={{ ...selectedUser }}
+                onSubmit={async (options) => {}}
+              >
+                {({ values, handleChange, isSubmitting }) => (
+                  <Form>
+                    <FormControl width="full">
+                      <Flex alignItems="center">
+                        <FormLabel
+                          fontSize="md"
+                          color="primary"
+                          fontWeight="semibold"
+                          paddingLeft="1rem"
+                        >
+                          Role
+                        </FormLabel>
+                        <Select
+                          value={values.role}
+                          id="role"
+                          name="role"
+                          onChange={handleChange}
+                          width="40%"
+                          marginLeft="1rem"
+                        >
+                          <option value="admin">Admin</option>
+                          <option value="project manager">
+                            Project Manager
+                          </option>
+                          <option value="submitter">Submitter</option>
+                          <option value="developer">Developer</option>
+                        </Select>
+                      </Flex>
+                    </FormControl>
+                  </Form>
+                )}
+              </Formik>
             </Box>
           </Box>
         </Flex>
