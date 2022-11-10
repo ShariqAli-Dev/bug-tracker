@@ -21,6 +21,9 @@ import { Users } from "../entities/Users";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
 import { sendMail } from "../utils/sendMail";
+import { Comment } from "../entities/Comment";
+import { User_Ticket } from "src/entities/User_Ticket";
+import { User_Project } from "src/entities/User_Project";
 
 @ObjectType()
 class FieldError {
@@ -279,5 +282,31 @@ export class UserResolver {
         resolve(true);
       })
     );
+  }
+
+  @Mutation(() => Boolean)
+  async deleteUser(@Arg("id") id: number): Promise<boolean> {
+    const user = await Users.findOne({ where: { id } });
+    if (!user) {
+      return false;
+    }
+    Comment.query(`
+    delete from "comment"
+    where "comment"."userId" = ${id}
+    `);
+
+    await User_Ticket.query(`
+    delete from user_ticket
+    where user_ticket."userId" = ${id}
+    `);
+
+    await User_Project.query(`
+    delete from user_project
+    where user_project."userid" = ${id}
+    `);
+
+    Users.delete(id);
+
+    return true;
   }
 }
