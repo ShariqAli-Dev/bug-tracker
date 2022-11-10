@@ -75,6 +75,20 @@ export class UserResolver {
     });
   }
 
+  @Query(() => Boolean)
+  async changeRole(
+    @Ctx() { req }: MyContext,
+    @Arg("role") role: string
+  ): Promise<boolean> {
+    console.log("session", req.session);
+    const user = await Users.findOne({ where: { id: req.session.userId } });
+    if (!user) {
+      return false;
+    }
+    await Users.update({ id: req.session.userId }, { role });
+    return true;
+  }
+
   @Query(() => String)
   @UseMiddleware(isAuth)
   bye() {
