@@ -75,7 +75,7 @@ export class UserResolver {
     });
   }
 
-  @Query(() => Boolean)
+  @Mutation(() => Boolean)
   async changeRole(
     @Ctx() { req }: MyContext,
     @Arg("role") role: string
