@@ -8,26 +8,16 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
-import { useRouter } from "next/router";
 import { MutableRefObject } from "react";
-import { useDeleteProjectMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface AlertProps {
   isOpen: boolean;
   cancelRef: MutableRefObject<any>;
-  projectId: number;
   onClose: () => void;
 }
 
-const DeleteProjectAlert = ({
-  isOpen,
-  cancelRef,
-  projectId,
-  onClose,
-}: AlertProps) => {
-  const [, deleteProject] = useDeleteProjectMutation();
-  const router = useRouter();
+const DeleteTicketAlert = ({ isOpen, cancelRef, onClose }: AlertProps) => {
   return (
     <>
       <AlertDialog
@@ -38,7 +28,7 @@ const DeleteProjectAlert = ({
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Customer
+              Delete User
             </AlertDialogHeader>
 
             <AlertDialogBody>
@@ -55,13 +45,7 @@ const DeleteProjectAlert = ({
                 border="2px"
                 margin={2}
                 padding={1}
-                onClick={async () => {
-                  await deleteProject({
-                    projectId,
-                  });
-                  onClose();
-                  router.push("/dashboard");
-                }}
+                onClick={async () => {}}
                 ml={3}
                 _hover={{
                   backgroundColor: "tertiary",
@@ -80,4 +64,4 @@ const DeleteProjectAlert = ({
   );
 };
 
-export default withUrqlClient(createUrqlClient)(DeleteProjectAlert);
+export default withUrqlClient(createUrqlClient)(DeleteTicketAlert);

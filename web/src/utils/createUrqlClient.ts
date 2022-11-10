@@ -23,6 +23,15 @@ export const createUrqlClient = (ssrExchange: any) => {
       cacheExchange({
         updates: {
           Mutation: {
+            updateRole: (_result, args, cache, info) => {
+              const allFields = cache.inspectFields("Query");
+              const fieldInfos = allFields.filter(
+                (info) => info.fieldName === "users"
+              );
+              fieldInfos.forEach((fi) => {
+                cache.invalidate("Query", fi.fieldName, fi.arguments);
+              });
+            },
             updateProject: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(

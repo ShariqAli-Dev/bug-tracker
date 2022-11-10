@@ -80,7 +80,6 @@ export class UserResolver {
     @Ctx() { req }: MyContext,
     @Arg("role") role: string
   ): Promise<boolean> {
-    console.log("session", req.session);
     const user = await Users.findOne({ where: { id: req.session.userId } });
     if (!user) {
       return false;
