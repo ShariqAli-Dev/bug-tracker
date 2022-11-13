@@ -22,8 +22,8 @@ import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
 import { sendMail } from "../utils/sendMail";
 import { Comment } from "../entities/Comment";
-import { User_Ticket } from "src/entities/User_Ticket";
-import { User_Project } from "src/entities/User_Project";
+import { User_Ticket } from "../entities/User_Ticket";
+import { User_Project } from "../entities/User_Project";
 
 @ObjectType()
 class FieldError {
