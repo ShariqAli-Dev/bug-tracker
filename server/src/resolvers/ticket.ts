@@ -270,7 +270,10 @@ export class TicketResolver {
       return undefined;
     }
 
-    await Ticket.update({ id }, { archived: !ticket.archived });
+    await Ticket.update(
+      { id },
+      { archived: !ticket.archived, status: "resolved" }
+    );
     return ticket;
   }
 
