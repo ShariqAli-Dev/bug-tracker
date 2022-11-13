@@ -6,18 +6,40 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
-import { MutableRefObject } from "react";
+import { Dispatch, MutableRefObject, SetStateAction } from "react";
+import { useDeleteUserMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface AlertProps {
   isOpen: boolean;
   cancelRef: MutableRefObject<any>;
   onClose: () => void;
+  userId: number;
+  setSelectedUser: Dispatch<
+    SetStateAction<
+      | {
+          name: string;
+          id: number;
+          email: string;
+          role: string;
+        }
+      | undefined
+    >
+  >;
 }
 
-const DeleteTicketAlert = ({ isOpen, cancelRef, onClose }: AlertProps) => {
+const DeleteTicketAlert = ({
+  isOpen,
+  cancelRef,
+  onClose,
+  userId,
+  setSelectedUser,
+}: AlertProps) => {
+  const toast = useToast();
+  const [, deleteUser] = useDeleteUserMutation();
   return (
     <>
       <AlertDialog
@@ -45,7 +67,45 @@ const DeleteTicketAlert = ({ isOpen, cancelRef, onClose }: AlertProps) => {
                 border="2px"
                 margin={2}
                 padding={1}
-                onClick={async () => {}}
+                onClick={async () => {
+                  try {
+                    await deleteUser({ deleteUserId: userId });
+                    if (!toast.isActive("delete-user")) {
+                      toast({
+                        id: "delete-user",
+                        title: "Delete User",
+                        description: "succesfully deleted user",
+                        status: "success",
+                        duration: 3000,
+                        isClosable: true,
+                        variant: "subtle",
+                        containerStyle: {
+                          color: "primary",
+                        },
+                        position: "top",
+                      });
+                    }
+                  } catch (err) {
+                    if (!toast.isActive("delete-user-err")) {
+                      toast({
+                        id: "delete-user-err",
+                        title: "Request Failed",
+                        description: "could not process request",
+                        status: "error",
+                        duration: 3000,
+                        isClosable: true,
+                        variant: "subtle",
+                        containerStyle: {
+                          color: "primary",
+                        },
+                        position: "top",
+                      });
+                    }
+                  }
+
+                  onClose();
+                  setSelectedUser(undefined);
+                }}
                 ml={3}
                 _hover={{
                   backgroundColor: "tertiary",

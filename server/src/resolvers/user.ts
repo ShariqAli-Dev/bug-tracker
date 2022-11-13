@@ -302,7 +302,7 @@ export class UserResolver {
 
     await User_Project.query(`
     delete from user_project
-    where user_project."userid" = ${id}
+    where user_project."userId" = ${id}
     `);
 
     Users.delete(id);

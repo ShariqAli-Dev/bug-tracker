@@ -7,6 +7,7 @@ import {
   Select,
   Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import type { NextPage } from "next";
@@ -31,6 +32,7 @@ const Adminstration: NextPage = () => {
   const [{ data: me, fetching: meFetch }] = useMeQuery();
   const cancelRef = useRef();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const toast = useToast();
 
   if (fetching || meFetch) {
     return <></>;
@@ -224,6 +226,8 @@ const Adminstration: NextPage = () => {
         cancelRef={cancelRef}
         isOpen={isOpen}
         onClose={onClose}
+        userId={selectedUser?.id}
+        setSelectedUser={setSelectedUser}
       />
     </>
   );
