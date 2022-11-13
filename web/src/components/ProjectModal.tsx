@@ -137,10 +137,43 @@ const ProjectModal = ({
                 </Box>
 
                 <Box width="full" display="flex" justifyContent="space-around">
-                  <Button type="submit" isLoading={isSubmitting}>
+                  <Button
+                    type="submit"
+                    isLoading={isSubmitting}
+                    borderRadius={0}
+                    backgroundColor="primary"
+                    width="45%"
+                    marginTop={5}
+                    marginBottom={5}
+                    rounded="xl"
+                    color="tertiary"
+                    _hover={{
+                      backgroundColor: "tertiary",
+                      color: "primary",
+                      border: "2px",
+                      borderColor: "primary",
+                    }}
+                  >
                     {isEditing ? "Edit" : "Create"} Project
                   </Button>
-                  <Button onClick={onClose}>Cancel</Button>
+                  <Button
+                    onClick={onClose}
+                    borderRadius={0}
+                    backgroundColor="tertiary"
+                    width="45%"
+                    marginTop={5}
+                    marginBottom={5}
+                    rounded="xl"
+                    color="primary"
+                    border="2px"
+                    borderColor="primary"
+                    _hover={{
+                      backgroundColor: "primary",
+                      color: "tertiary",
+                    }}
+                  >
+                    Cancel
+                  </Button>
                 </Box>
               </Form>
             )}
