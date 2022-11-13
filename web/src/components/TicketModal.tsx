@@ -98,7 +98,6 @@ const TicketModal = ({
                   status: "new",
                 }}
                 onSubmit={async (options) => {
-                  console.log(options);
                   try {
                     const filteredTeam = team.filter(
                       (member) => member.selected
@@ -141,6 +140,7 @@ const TicketModal = ({
                       });
                     }
                   }
+                  onClose();
                 }}
               >
                 {({ values, handleChange, isSubmitting }) => (
