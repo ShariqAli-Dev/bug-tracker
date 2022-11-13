@@ -101,6 +101,7 @@ const TeamModal = (props: TeamModalProps) => {
                     });
                   }
                 }
+                props.onClose();
               }}
             >
               {({ isSubmitting }) => (
