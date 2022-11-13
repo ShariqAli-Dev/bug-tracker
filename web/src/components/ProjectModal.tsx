@@ -72,6 +72,7 @@ const ProjectModal = ({
                       description: options.description,
                     },
                   });
+                  router.reload();
                 } else {
                   await createProject({ options });
                   if (!toast.isActive("newProjectSuccess")) {
@@ -91,7 +92,6 @@ const ProjectModal = ({
                   }
                 }
                 onClose();
-                router.reload();
               } catch {
                 if (!toast.isActive("newProjectError")) {
                   toast({

@@ -58,6 +58,7 @@ export type Mutation = {
   archiveTicket?: Maybe<Ticket>;
   assignUsers: Scalars['Boolean'];
   changePassword: UserResponse;
+  changeRole: Scalars['Boolean'];
   createComment: Scalars['Boolean'];
   createNotification: Notification;
   createProject: Project;
@@ -66,6 +67,7 @@ export type Mutation = {
   deleteNotification: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   deleteTicket: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -96,6 +98,11 @@ export type MutationAssignUsersArgs = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+
+export type MutationChangeRoleArgs = {
+  role: Scalars['String'];
 };
 
 
@@ -138,6 +145,11 @@ export type MutationDeleteProjectArgs = {
 export type MutationDeleteTicketArgs = {
   team?: InputMaybe<Array<DeleteDev>>;
   ticketId: Scalars['Float'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -440,6 +452,13 @@ export type ChangePasswordMutationVariables = Exact<{
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null, user?: { __typename?: 'Users', id: number, email: string, role: string } | null } };
 
+export type ChangeRoleMutationVariables = Exact<{
+  role: Scalars['String'];
+}>;
+
+
+export type ChangeRoleMutation = { __typename?: 'Mutation', changeRole: boolean };
+
 export type CreateCommentMutationVariables = Exact<{
   options: CreateComment;
 }>;
@@ -490,6 +509,13 @@ export type DeleteTicketMutationVariables = Exact<{
 
 
 export type DeleteTicketMutation = { __typename?: 'Mutation', deleteTicket: boolean };
+
+export type DeleteUserMutationVariables = Exact<{
+  deleteUserId: Scalars['Float'];
+}>;
+
+
+export type DeleteUserMutation = { __typename?: 'Mutation', deleteUser: boolean };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -638,7 +664,7 @@ export type UserTicketsQuery = { __typename?: 'Query', userTickets?: Array<{ __t
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', name: string, id: number, email: string }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'Users', id: number, email: string, role: string, name: string }> };
 
 
 export const ArchiveProjectDocument = gql`
@@ -697,6 +723,15 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const ChangeRoleDocument = gql`
+    mutation ChangeRole($role: String!) {
+  changeRole(role: $role)
+}
+    `;
+
+export function useChangeRoleMutation() {
+  return Urql.useMutation<ChangeRoleMutation, ChangeRoleMutationVariables>(ChangeRoleDocument);
 };
 export const CreateCommentDocument = gql`
     mutation CreateComment($options: createComment!) {
@@ -782,6 +817,15 @@ export const DeleteTicketDocument = gql`
 
 export function useDeleteTicketMutation() {
   return Urql.useMutation<DeleteTicketMutation, DeleteTicketMutationVariables>(DeleteTicketDocument);
+};
+export const DeleteUserDocument = gql`
+    mutation DeleteUser($deleteUserId: Float!) {
+  deleteUser(id: $deleteUserId)
+}
+    `;
+
+export function useDeleteUserMutation() {
+  return Urql.useMutation<DeleteUserMutation, DeleteUserMutationVariables>(DeleteUserDocument);
 };
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
@@ -1140,9 +1184,10 @@ export function useUserTicketsQuery(options?: Omit<Urql.UseQueryArgs<UserTickets
 export const UsersDocument = gql`
     query Users {
   users {
-    name
     id
     email
+    role
+    name
   }
 }
     `;

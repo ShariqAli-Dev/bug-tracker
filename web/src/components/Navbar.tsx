@@ -4,23 +4,21 @@ import {
   chakra,
   Flex,
   Heading,
-  Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
+import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { FaBug } from "react-icons/fa";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
-import { FaBug, FaLock, FaUserAlt } from "react-icons/fa";
-import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
   { title: "Dashboard", url: "dashboard" },
-  // { title: "Manage Roles", url: "roles" },
-  // { title: "Manage Project Users", url: "users" },
   { title: "My Tickets", url: "tickets" },
+  { title: "Adminstration", url: "adminstration" },
 ];
 
 const NavBar = () => {

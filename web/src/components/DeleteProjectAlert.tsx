@@ -7,9 +7,11 @@ import {
   AlertDialogOverlay,
   Button,
 } from "@chakra-ui/react";
+import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import { MutableRefObject } from "react";
 import { useDeleteProjectMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface AlertProps {
   isOpen: boolean;
@@ -78,4 +80,4 @@ const DeleteProjectAlert = ({
   );
 };
 
-export default DeleteProjectAlert;
+export default withUrqlClient(createUrqlClient)(DeleteProjectAlert);

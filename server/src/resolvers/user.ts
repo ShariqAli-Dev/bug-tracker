@@ -21,6 +21,9 @@ import { Users } from "../entities/Users";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
 import { sendMail } from "../utils/sendMail";
+import { Comment } from "../entities/Comment";
+import { User_Ticket } from "../entities/User_Ticket";
+import { User_Project } from "../entities/User_Project";
 
 @ObjectType()
 class FieldError {
@@ -58,17 +61,6 @@ class UserResponse {
 
 @Resolver(Users)
 export class UserResolver {
-  // @FieldResolver(() => String)
-  // email(@Root() user: Users, @Ctx() { req }: MyContext) {
-  //   // this is the current user and it's okay to show them their own email
-  //   if (req.session.userId === user.id) {
-  //     return user.email;
-  //   }
-
-  //   // current user wants to see someone else's email
-  //   return "";
-  // }
-
   @Query(() => [Users])
   async users() {
     return await Users.find();
@@ -84,6 +76,19 @@ export class UserResolver {
     return Users.findOne({
       where: { id: req.session.userId },
     });
+  }
+
+  @Mutation(() => Boolean)
+  async changeRole(
+    @Ctx() { req }: MyContext,
+    @Arg("role") role: string
+  ): Promise<boolean> {
+    const user = await Users.findOne({ where: { id: req.session.userId } });
+    if (!user) {
+      return false;
+    }
+    await Users.update({ id: req.session.userId }, { role });
+    return true;
   }
 
   @Query(() => String)
@@ -277,5 +282,31 @@ export class UserResolver {
         resolve(true);
       })
     );
+  }
+
+  @Mutation(() => Boolean)
+  async deleteUser(@Arg("id") id: number): Promise<boolean> {
+    const user = await Users.findOne({ where: { id } });
+    if (!user) {
+      return false;
+    }
+    Comment.query(`
+    delete from "comment"
+    where "comment"."userId" = ${id}
+    `);
+
+    await User_Ticket.query(`
+    delete from user_ticket
+    where user_ticket."userId" = ${id}
+    `);
+
+    await User_Project.query(`
+    delete from user_project
+    where user_project."userId" = ${id}
+    `);
+
+    Users.delete(id);
+
+    return true;
   }
 }

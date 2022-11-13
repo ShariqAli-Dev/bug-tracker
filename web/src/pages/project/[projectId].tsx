@@ -209,6 +209,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
           isOpen={isOpen}
           onClose={onClose}
           projectId={projectId}
+          pageProps={{}}
         />
       )}
       <ProjectModal

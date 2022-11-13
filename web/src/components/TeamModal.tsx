@@ -115,32 +115,30 @@ const TeamModal = (props: TeamModalProps) => {
                     borderRadius={"xl"}
                   >
                     {availableUsers?.map(
-                      (u: User & { selected: boolean }, udx: number) => {
-                        return (
-                          <Flex
+                      (u: User & { selected: boolean }, udx: number) => (
+                        <Flex
+                          width="full"
+                          justifyContent={"space-between"}
+                          fontSize={"1rem"}
+                          key={u.email}
+                          backgroundColor={u.selected ? "primary" : "white"}
+                          color={u.selected ? "tertiary" : "secondary"}
+                          onClick={() => {
+                            availableUsers[udx].selected =
+                              !availableUsers[udx].selected;
+                            setAvailableUsers([...availableUsers]);
+                          }}
+                        >
+                          <Box
+                            display="flex"
+                            justifyContent="space-around"
                             width="full"
-                            justifyContent={"space-between"}
-                            fontSize={"1rem"}
-                            key={u.email}
-                            backgroundColor={u.selected ? "primary" : "white"}
-                            color={u.selected ? "tertiary" : "secondary"}
-                            onClick={() => {
-                              availableUsers[udx].selected =
-                                !availableUsers[udx].selected;
-                              setAvailableUsers([...availableUsers]);
-                            }}
                           >
-                            <Box
-                              display="flex"
-                              justifyContent="space-around"
-                              width="full"
-                            >
-                              <Text>{u.name}</Text>
-                              <Text>{u.email}</Text>
-                            </Box>
-                          </Flex>
-                        );
-                      }
+                            <Text>{u.name}</Text>
+                            <Text>{u.email}</Text>
+                          </Box>
+                        </Flex>
+                      )
                     )}
                   </Box>
                   {/* Submit button */}
