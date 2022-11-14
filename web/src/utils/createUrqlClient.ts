@@ -149,7 +149,9 @@ export const createUrqlClient = (ssrExchange: any) => {
             createTicket: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "projectTickets"
+                (info) =>
+                  info.fieldName === "projectTickets" ||
+                  info.fieldName === "userTickets"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
