@@ -200,6 +200,8 @@ export class TicketResolver {
       user_ticket on ticket.id = user_ticket."ticketId"
     where 
       user_ticket."userId" = ${req.session.userId}
+    and
+      ticket.archived = false
     `);
     return data[0];
   }
@@ -217,6 +219,8 @@ export class TicketResolver {
       user_ticket on ticket.id = user_ticket."ticketId"
     where 
       user_ticket."userId" = ${req.session.userId}
+    and
+      ticket.archived = false
     `);
     return data[0];
   }
@@ -234,6 +238,8 @@ export class TicketResolver {
       user_ticket on ticket.id = user_ticket."ticketId"
     where 
       user_ticket."userId" = ${req.session.userId}
+    and
+      ticket.archived = false
     `);
     return data[0];
   }
