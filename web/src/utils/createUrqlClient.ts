@@ -68,7 +68,11 @@ export const createUrqlClient = (ssrExchange: any) => {
             deleteProject: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "UserProjects"
+                (info) =>
+                  info.fieldName === "UserProjects" ||
+                  info.fieldName === "ticketsByPriority" ||
+                  info.fieldName === "ticketsByStatus" ||
+                  info.fieldName === "ticketsByType"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
