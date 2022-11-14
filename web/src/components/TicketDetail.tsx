@@ -23,7 +23,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
   }
 
   return (
-    <Box marginTop={{ base: "8rem", md: "auto" }}>
+    <Box marginTop={{ base: "12rem", md: "6rem" }}>
       <Text width="full" textAlign="center" fontSize="2xl" fontWeight="bold">
         Ticket Details
       </Text>

@@ -101,6 +101,7 @@ const TeamModal = (props: TeamModalProps) => {
                     });
                   }
                 }
+                props.onClose();
               }}
             >
               {({ isSubmitting }) => (
@@ -147,10 +148,44 @@ const TeamModal = (props: TeamModalProps) => {
                     display="flex"
                     justifyContent="space-around"
                   >
-                    <Button type="submit" isLoading={isSubmitting}>
-                      Assign Users
+                    <Button
+                      type="submit"
+                      isLoading={isSubmitting}
+                      borderRadius={0}
+                      backgroundColor="primary"
+                      width="45%"
+                      marginTop={5}
+                      marginBottom={5}
+                      rounded="xl"
+                      color="tertiary"
+                      _hover={{
+                        backgroundColor: "tertiary",
+                        color: "primary",
+                        border: "2px",
+                        borderColor: "primary",
+                      }}
+                    >
+                      Asssign Users
                     </Button>
-                    <Button onClick={props.onClose}>Cancel</Button>
+                    <Button
+                      // onClick={onClose}
+                      borderRadius={0}
+                      backgroundColor="tertiary"
+                      width="45%"
+                      marginTop={5}
+                      marginBottom={5}
+                      rounded="xl"
+                      color="primary"
+                      border="2px"
+                      borderColor="primary"
+                      _hover={{
+                        backgroundColor: "primary",
+                        color: "tertiary",
+                      }}
+                      onClick={props.onClose}
+                    >
+                      Cancel
+                    </Button>
                   </Box>
                 </Form>
               )}

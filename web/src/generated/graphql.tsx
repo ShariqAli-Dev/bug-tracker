@@ -659,7 +659,7 @@ export type UserProjectsQuery = { __typename?: 'Query', UserProjects: Array<{ __
 export type UserTicketsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserTicketsQuery = { __typename?: 'Query', userTickets?: Array<{ __typename?: 'UserTicket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, archived: boolean, updatedAt: any, name: string }> | null };
+export type UserTicketsQuery = { __typename?: 'Query', userTickets?: Array<{ __typename?: 'UserTicket', creator: string, title: string, description: string, priority: string, type: string, status: string, name: string }> | null };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1163,16 +1163,12 @@ export function useUserProjectsQuery(options?: Omit<Urql.UseQueryArgs<UserProjec
 export const UserTicketsDocument = gql`
     query UserTickets {
   userTickets {
-    id
-    projectId
     creator
     title
     description
     priority
     type
     status
-    archived
-    updatedAt
     name
   }
 }

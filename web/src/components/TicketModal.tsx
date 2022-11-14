@@ -98,7 +98,6 @@ const TicketModal = ({
                   status: "new",
                 }}
                 onSubmit={async (options) => {
-                  console.log(options);
                   try {
                     const filteredTeam = team.filter(
                       (member) => member.selected
@@ -141,6 +140,7 @@ const TicketModal = ({
                       });
                     }
                   }
+                  onClose();
                 }}
               >
                 {({ values, handleChange, isSubmitting }) => (
@@ -259,10 +259,43 @@ const TicketModal = ({
                       display="flex"
                       justifyContent="space-around"
                     >
-                      <Button type="submit" isLoading={isSubmitting}>
+                      <Button
+                        type="submit"
+                        isLoading={isSubmitting}
+                        borderRadius={0}
+                        backgroundColor="primary"
+                        width="45%"
+                        marginTop={5}
+                        marginBottom={5}
+                        rounded="xl"
+                        color="tertiary"
+                        _hover={{
+                          backgroundColor: "tertiary",
+                          color: "primary",
+                          border: "2px",
+                          borderColor: "primary",
+                        }}
+                      >
                         Create Ticket
                       </Button>
-                      <Button onClick={onClose}>Cancel</Button>
+                      <Button
+                        onClick={onClose}
+                        borderRadius={0}
+                        backgroundColor="tertiary"
+                        width="45%"
+                        marginTop={5}
+                        marginBottom={5}
+                        rounded="xl"
+                        color="primary"
+                        border="2px"
+                        borderColor="primary"
+                        _hover={{
+                          backgroundColor: "primary",
+                          color: "tertiary",
+                        }}
+                      >
+                        Cancel
+                      </Button>
                     </Box>
                   </Form>
                 )}

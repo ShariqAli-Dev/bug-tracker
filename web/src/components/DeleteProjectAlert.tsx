@@ -46,15 +46,27 @@ const DeleteProjectAlert = ({
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button
+                ref={cancelRef}
+                onClick={onClose}
+                borderRadius={0}
+                backgroundColor="tertiary"
+                rounded="xl"
+                color="primary"
+                border="2px"
+                borderColor="primary"
+                _hover={{
+                  backgroundColor: "primary",
+                  color: "tertiary",
+                }}
+              >
                 Cancel
               </Button>
               <Button
                 color="tertiary"
                 backgroundColor="primary"
                 border="2px"
-                margin={2}
-                padding={1}
+                rounded="xl"
                 onClick={async () => {
                   await deleteProject({
                     projectId,

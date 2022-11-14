@@ -58,7 +58,8 @@ export const createUrqlClient = (ssrExchange: any) => {
               const fieldInfos = allFields.filter(
                 (info) =>
                   info.fieldName === "UserProjects" ||
-                  info.fieldName === "project"
+                  info.fieldName === "project" ||
+                  info.fieldName === "user_tickets"
               );
 
               fieldInfos.forEach((fi) => {
@@ -68,7 +69,12 @@ export const createUrqlClient = (ssrExchange: any) => {
             deleteProject: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "UserProjects"
+                (info) =>
+                  info.fieldName === "UserProjects" ||
+                  info.fieldName === "ticketsByPriority" ||
+                  info.fieldName === "ticketsByStatus" ||
+                  info.fieldName === "ticketsByType" ||
+                  info.fieldName === "userTickets"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
@@ -79,7 +85,8 @@ export const createUrqlClient = (ssrExchange: any) => {
               const fieldInfos = allFields.filter(
                 (info) =>
                   info.fieldName === "projectTickets" ||
-                  info.fieldName === "archivedProjectTickets"
+                  info.fieldName === "archivedProjectTickets" ||
+                  info.fieldName === "userTickets"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
@@ -149,7 +156,12 @@ export const createUrqlClient = (ssrExchange: any) => {
             createTicket: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "projectTickets"
+                (info) =>
+                  info.fieldName === "projectTickets" ||
+                  info.fieldName === "userTickets" ||
+                  info.fieldName === "ticketsByPriority" ||
+                  info.fieldName === "ticketsByStatus" ||
+                  info.fieldName === "ticketsByType"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);

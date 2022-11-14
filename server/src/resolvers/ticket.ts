@@ -147,7 +147,9 @@ export class TicketResolver {
     return await Ticket.query(`select * from user_ticket as ut
     inner join ticket on ticket.id = ut."ticketId"
 	  inner join project on ticket."projectId" = project.id
-    where ut."userId" = ${req.session.userId}`);
+    where ut."userId" = ${req.session.userId}
+    and ticket.archived = false
+    `);
   }
 
   @Query(() => [Ticket])
@@ -198,6 +200,8 @@ export class TicketResolver {
       user_ticket on ticket.id = user_ticket."ticketId"
     where 
       user_ticket."userId" = ${req.session.userId}
+    and
+      ticket.archived = false
     `);
     return data[0];
   }
@@ -215,6 +219,8 @@ export class TicketResolver {
       user_ticket on ticket.id = user_ticket."ticketId"
     where 
       user_ticket."userId" = ${req.session.userId}
+    and
+      ticket.archived = false
     `);
     return data[0];
   }
@@ -232,6 +238,8 @@ export class TicketResolver {
       user_ticket on ticket.id = user_ticket."ticketId"
     where 
       user_ticket."userId" = ${req.session.userId}
+    and
+      ticket.archived = false
     `);
     return data[0];
   }
@@ -270,7 +278,10 @@ export class TicketResolver {
       return undefined;
     }
 
-    await Ticket.update({ id }, { archived: !ticket.archived });
+    await Ticket.update(
+      { id },
+      { archived: !ticket.archived, status: "resolved" }
+    );
     return ticket;
   }
 
