@@ -58,7 +58,8 @@ export const createUrqlClient = (ssrExchange: any) => {
               const fieldInfos = allFields.filter(
                 (info) =>
                   info.fieldName === "UserProjects" ||
-                  info.fieldName === "project"
+                  info.fieldName === "project" ||
+                  info.fieldName === "user_tickets"
               );
 
               fieldInfos.forEach((fi) => {
@@ -72,7 +73,8 @@ export const createUrqlClient = (ssrExchange: any) => {
                   info.fieldName === "UserProjects" ||
                   info.fieldName === "ticketsByPriority" ||
                   info.fieldName === "ticketsByStatus" ||
-                  info.fieldName === "ticketsByType"
+                  info.fieldName === "ticketsByType" ||
+                  info.fieldName === "userTickets"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
@@ -83,7 +85,8 @@ export const createUrqlClient = (ssrExchange: any) => {
               const fieldInfos = allFields.filter(
                 (info) =>
                   info.fieldName === "projectTickets" ||
-                  info.fieldName === "archivedProjectTickets"
+                  info.fieldName === "archivedProjectTickets" ||
+                  info.fieldName === "userTickets"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
