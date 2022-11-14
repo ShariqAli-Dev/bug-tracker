@@ -147,7 +147,9 @@ export class TicketResolver {
     return await Ticket.query(`select * from user_ticket as ut
     inner join ticket on ticket.id = ut."ticketId"
 	  inner join project on ticket."projectId" = project.id
-    where ut."userId" = ${req.session.userId}`);
+    where ut."userId" = ${req.session.userId}
+    and ticket.archived = false
+    `);
   }
 
   @Query(() => [Ticket])
