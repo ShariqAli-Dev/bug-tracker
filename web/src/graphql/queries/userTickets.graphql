@@ -1,15 +1,11 @@
 query UserTickets {
   userTickets {
-    id
-    projectId
     creator
     title
     description
     priority
     type
     status
-    archived
-    updatedAt
     name
   }
 }
