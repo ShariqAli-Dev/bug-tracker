@@ -21,7 +21,7 @@ import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { Ticket } from "../generated/graphql";
+import { Ticket, useMeQuery } from "../generated/graphql";
 import { SectionHeader } from "../pages/project/[projectId]";
 import EditTicketModal from "./EditTicketModal";
 import TicketModal from "./TicketModal";
@@ -52,6 +52,7 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   const [editTicketData, setEditTicketData] = useState<Ticket | undefined>(
     undefined
   );
+  const [{ data: me, fetching: meFetch }] = useMeQuery();
 
   const finalRef = useRef(null);
   const initialRef = useRef(null);
@@ -137,23 +138,30 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
               >
                 View {props.viewArchived ? "Tickets" : "Archived"}
               </Button>
-              <Button
-                size="xs"
-                color="tertiary"
-                backgroundColor="primary"
-                border="2px"
-                margin={2}
-                padding={1}
-                _hover={{
-                  backgroundColor: "tertiary",
-                  color: "primary",
-                  border: "2px",
-                  borderColor: "primary",
-                }}
-                onClick={newTicketOnOpen}
-              >
-                New Ticket
-              </Button>
+
+              {!meFetch &&
+              (me?.me?.role === "admin" ||
+                me?.me?.role === "project manager") ? (
+                <Button
+                  size="xs"
+                  color="tertiary"
+                  backgroundColor="primary"
+                  border="2px"
+                  margin={2}
+                  padding={1}
+                  _hover={{
+                    backgroundColor: "tertiary",
+                    color: "primary",
+                    border: "2px",
+                    borderColor: "primary",
+                  }}
+                  onClick={newTicketOnOpen}
+                >
+                  New Ticket
+                </Button>
+              ) : (
+                <></>
+              )}
             </Box>
           </Flex>
           <Text>A condensed view of the tickets</Text>
@@ -209,19 +217,28 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
                             >
                               <span style={{ textDecoration: "underline" }}>
                                 Details
-                              </span>{" "}
-                              |{" "}
-                              <span
-                                onClick={() => {
-                                  setEditTicketData(
-                                    props.projectTickets[parseInt(row.id)]
-                                  );
-                                  editTicketOnOpen();
-                                }}
-                                style={{ textDecoration: "underline" }}
-                              >
-                                Edit
                               </span>
+                              {!meFetch &&
+                              (me?.me?.role === "admin" ||
+                                me?.me?.role === "project manager") ? (
+                                <>
+                                  {" "}
+                                  |{" "}
+                                  <span
+                                    onClick={() => {
+                                      setEditTicketData(
+                                        props.projectTickets[parseInt(row.id)]
+                                      );
+                                      editTicketOnOpen();
+                                    }}
+                                    style={{ textDecoration: "underline" }}
+                                  >
+                                    Edit
+                                  </span>
+                                </>
+                              ) : (
+                                <></>
+                              )}
                             </Text>
                           )}
                         </Td>
