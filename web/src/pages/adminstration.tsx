@@ -138,7 +138,6 @@ const Adminstration: NextPage = () => {
                     <Formik
                       initialValues={{ ...selectedUser }}
                       onSubmit={async (options: any) => {
-                        console.log({ options });
                         await changeRole({ role: options.role });
                       }}
                     >
