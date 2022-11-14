@@ -22,7 +22,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { useUserProjectsQuery } from "../generated/graphql";
+import { useMeQuery, useUserProjectsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import ProjectModal from "./ProjectModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
@@ -36,6 +36,7 @@ const MyProjectsTable = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
   const initialRef = useRef(null);
+  const [{ data: me, fetching: meFetch }] = useMeQuery();
 
   const columns = useMemo(
     () => [
@@ -90,9 +91,11 @@ const MyProjectsTable = () => {
     }
   }, [data, fetching]);
 
-  if (fetching) {
+  if (fetching || meFetch) {
     return <></>;
   }
+
+  console.log(me?.me?.role);
 
   return (
     <>
@@ -104,22 +107,28 @@ const MyProjectsTable = () => {
           color="tertiary"
           w="full"
         >
-          <Box margin="6px" ref={finalRef}>
-            <Text>Your Projects</Text>
-            <Text display={{ base: "none", md: "block" }}>
-              All the projects you have in the database
-            </Text>
-          </Box>
-          <Button
-            marginRight="6px"
-            color="primary"
-            backgroundColor="tertiary"
-            border="1px"
-            borderColor="primary"
-            onClick={onOpen}
-          >
-            Create New Project
-          </Button>
+          <>
+            <Box margin="6px" ref={finalRef}>
+              <Text>Your Projects</Text>
+              <Text display={{ base: "none", md: "block" }}>
+                All the projects you have in the database
+              </Text>
+            </Box>
+            {me?.me?.role === "admin" || me?.me?.role === "project manager" ? (
+              <Button
+                marginRight="6px"
+                color="primary"
+                backgroundColor="tertiary"
+                border="1px"
+                borderColor="primary"
+                onClick={onOpen}
+              >
+                Create New Project
+              </Button>
+            ) : (
+              <></>
+            )}
+          </>
         </Flex>
 
         <Table
