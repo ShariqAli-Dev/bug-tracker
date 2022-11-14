@@ -21,6 +21,7 @@ import { useMemo, useRef } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
+import { useMeQuery } from "../generated/graphql";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
@@ -36,6 +37,7 @@ interface AssignedPersonnelProps {
 
 const AssignedPersonnel = (props: AssignedPersonnelProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [{ data: me, fetching: meFetch }] = useMeQuery();
   const finalRef = useRef(null);
   const initialRef = useRef(null);
   const columns = useMemo(
@@ -96,23 +98,28 @@ const AssignedPersonnel = (props: AssignedPersonnelProps) => {
         <SectionHeader>
           <Flex width="full" padding={2} justifyContent="space-between">
             <Heading>Team</Heading>
-            <Button
-              size="sm"
-              color="tertiary"
-              backgroundColor="primary"
-              border="2px"
-              margin={2}
-              padding={1}
-              _hover={{
-                backgroundColor: "tertiary",
-                color: "primary",
-                border: "2px",
-                borderColor: "primary",
-              }}
-              onClick={onOpen}
-            >
-              Manage Team
-            </Button>
+            {!meFetch &&
+            (me?.me?.role === "admin" || me?.me?.role === "project manager") ? (
+              <Button
+                size="sm"
+                color="tertiary"
+                backgroundColor="primary"
+                border="2px"
+                margin={2}
+                padding={1}
+                _hover={{
+                  backgroundColor: "tertiary",
+                  color: "primary",
+                  border: "2px",
+                  borderColor: "primary",
+                }}
+                onClick={onOpen}
+              >
+                Manage Team
+              </Button>
+            ) : (
+              <></>
+            )}
           </Flex>
           <Text>Current users on this project</Text>
         </SectionHeader>
