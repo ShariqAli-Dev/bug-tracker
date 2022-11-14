@@ -18,7 +18,6 @@ const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
   { title: "Dashboard", url: "dashboard" },
   { title: "My Tickets", url: "tickets" },
-  // { title: "Adminstration", url: "adminstration" },
 ];
 
 const NavBar = () => {
