@@ -91,11 +91,9 @@ const MyProjectsTable = () => {
     }
   }, [data, fetching]);
 
-  if (fetching || meFetch) {
+  if (fetching) {
     return <></>;
   }
-
-  console.log(me?.me?.role);
 
   return (
     <>
@@ -114,7 +112,8 @@ const MyProjectsTable = () => {
                 All the projects you have in the database
               </Text>
             </Box>
-            {me?.me?.role === "admin" || me?.me?.role === "project manager" ? (
+            {!meFetch &&
+            (me?.me?.role === "admin" || me?.me?.role === "project manager") ? (
               <Button
                 marginRight="6px"
                 color="primary"
