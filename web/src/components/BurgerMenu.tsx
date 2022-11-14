@@ -10,12 +10,14 @@ import { NextPage } from "next";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useRouter } from "next/router";
+import { useMeQuery } from "../generated/graphql";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const HamburgerIcon = chakra(GiHamburgerMenu);
 
 const BurgerMenu: NextPage = () => {
   const router = useRouter();
+  const [{ data, fetching }] = useMeQuery();
 
   return (
     <Center display={{ base: "inline", md: "none" }}>
@@ -39,12 +41,16 @@ const BurgerMenu: NextPage = () => {
             My Tickets
           </MenuItem>
 
-          <MenuItem
-            onClick={() => router.push("/adminstration")}
-            icon={<CAiOutlineUsergroupAdd />}
-          >
-            Adminstration
-          </MenuItem>
+          {!fetching && data?.me?.role === "admin" ? (
+            <MenuItem
+              onClick={() => router.push("/adminstration")}
+              icon={<CAiOutlineUsergroupAdd />}
+            >
+              Adminstration
+            </MenuItem>
+          ) : (
+            <></>
+          )}
         </MenuList>
       </Menu>
     </Center>
