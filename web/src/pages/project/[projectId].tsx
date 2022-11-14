@@ -21,6 +21,7 @@ import {
   useArchivedProjectTicketsQuery,
   useArchiveProjectMutation,
   useAssignedPersonnelQuery,
+  useMeQuery,
   useProjectQuery,
   useProjectTicketsQuery,
 } from "../../generated/graphql";
@@ -62,6 +63,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
     useArchivedProjectTicketsQuery({ variables: { projectId } });
   const [, archiveProject] = useArchiveProjectMutation();
   const [ticketId, setTicketId] = useState<undefined | number>(undefined);
+  const [{ data: me, fetching: meFetch }] = useMeQuery();
   const [viewArchived, setViewArchived] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -103,70 +105,76 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             <SectionHeader title={`Project: ${projectQuery?.project?.name}`}>
               <Text>{projectQuery?.project?.description}</Text>
 
-              <Flex
-                width="full"
-                justifyContent={{ base: "space-around", md: "start" }}
-              >
-                <Button
-                  size="xs"
-                  color="tertiary"
-                  backgroundColor="primary"
-                  border="2px"
-                  margin={2}
-                  padding={1}
-                  _hover={{
-                    backgroundColor: "tertiary",
-                    color: "primary",
-                    border: "2px",
-                    borderColor: "primary",
-                  }}
-                  disabled={disabled}
-                  onClick={async () => {
-                    setDisabled(true);
-                    await archiveProject({ archiveProjectId: projectId });
-                    router.push("/dashboard");
-                  }}
+              {!meFetch &&
+              (me?.me?.role === "admin" ||
+                me?.me?.role === "project manager") ? (
+                <Flex
+                  width="full"
+                  justifyContent={{ base: "space-around", md: "start" }}
                 >
-                  {projectQuery?.project?.archived ? "Unarchive" : "Archive"}{" "}
-                  Project
-                </Button>
+                  <Button
+                    size="xs"
+                    color="tertiary"
+                    backgroundColor="primary"
+                    border="2px"
+                    margin={2}
+                    padding={1}
+                    _hover={{
+                      backgroundColor: "tertiary",
+                      color: "primary",
+                      border: "2px",
+                      borderColor: "primary",
+                    }}
+                    disabled={disabled}
+                    onClick={async () => {
+                      setDisabled(true);
+                      await archiveProject({ archiveProjectId: projectId });
+                      router.push("/dashboard");
+                    }}
+                  >
+                    {projectQuery?.project?.archived ? "Unarchive" : "Archive"}{" "}
+                    Project
+                  </Button>
 
-                <Button
-                  size="xs"
-                  color="tertiary"
-                  backgroundColor="primary"
-                  border="2px"
-                  margin={2}
-                  padding={1}
-                  _hover={{
-                    backgroundColor: "tertiary",
-                    color: "primary",
-                    border: "2px",
-                    borderColor: "primary",
-                  }}
-                  onClick={editProjectOnOpen}
-                >
-                  Edit Project
-                </Button>
+                  <Button
+                    size="xs"
+                    color="tertiary"
+                    backgroundColor="primary"
+                    border="2px"
+                    margin={2}
+                    padding={1}
+                    _hover={{
+                      backgroundColor: "tertiary",
+                      color: "primary",
+                      border: "2px",
+                      borderColor: "primary",
+                    }}
+                    onClick={editProjectOnOpen}
+                  >
+                    Edit Project
+                  </Button>
 
-                <Button
-                  size="xs"
-                  color="tertiary"
-                  backgroundColor="primary"
-                  border="2px"
-                  margin={2}
-                  padding={1}
-                  _hover={{
-                    backgroundColor: "tertiary",
-                    color: "primary",
-                    border: "2px",
-                    borderColor: "primary",
-                  }}
-                  onClick={onOpen}
-                >
-                  Delete Project
-                </Button>
-              </Flex>
+                  <Button
+                    size="xs"
+                    color="tertiary"
+                    backgroundColor="primary"
+                    border="2px"
+                    margin={2}
+                    padding={1}
+                    _hover={{
+                      backgroundColor: "tertiary",
+                      color: "primary",
+                      border: "2px",
+                      borderColor: "primary",
+                    }}
+                    onClick={onOpen}
+                  >
+                    Delete Project
+                  </Button>
+                </Flex>
+              ) : (
+                <></>
+              )}
             </SectionHeader>
 
             {/* Duplex */}

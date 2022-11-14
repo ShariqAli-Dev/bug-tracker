@@ -18,7 +18,6 @@ const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const navbar = [
   { title: "Dashboard", url: "dashboard" },
   { title: "My Tickets", url: "tickets" },
-  { title: "Adminstration", url: "adminstration" },
 ];
 
 const NavBar = () => {
@@ -63,6 +62,27 @@ const NavBar = () => {
             </Box>
           );
         })}
+
+        {!meFetch && data?.me?.role === "admin" ? (
+          <Box
+            p={5}
+            onClick={() => router.push(`/adminstration`)}
+            key="adminstration"
+            cursor="pointer"
+          >
+            <Flex flexDir="row" alignItems="center">
+              <CAiOutlineUsergroupAdd color="secondary" size="25px" />
+              <Text
+                fontSize={{ base: "xs", md: "sm", lg: "md" }}
+                color="primary"
+              >
+                Adminstration
+              </Text>
+            </Flex>
+          </Box>
+        ) : (
+          <></>
+        )}
 
         <Button
           size="xs"
