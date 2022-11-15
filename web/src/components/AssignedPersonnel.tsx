@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   chakra,
   Flex,
@@ -13,7 +14,6 @@ import {
   Thead,
   Tooltip,
   Tr,
-  Box,
   useDisclosure,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
@@ -22,15 +22,15 @@ import { useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
-import { useAvilableUsersQuery, useMeQuery } from "../generated/graphql";
-const ArrowRight = chakra(AiOutlineArrowRight);
-const ArrowLeft = chakra(AiOutlineArrowLeft);
-const ChevronRight = chakra(BsChevronDoubleRight);
-const ChevronLeft = chakra(BsChevronDoubleLeft);
+import { useMeQuery } from "../generated/graphql";
 import { SectionHeader } from "../pages/project/[projectId]";
 import { AssignedPersonnel } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import TeamModal from "./TeamModal";
+const ArrowRight = chakra(AiOutlineArrowRight);
+const ArrowLeft = chakra(AiOutlineArrowLeft);
+const ChevronRight = chakra(BsChevronDoubleRight);
+const ChevronLeft = chakra(BsChevronDoubleLeft);
 
 interface AssignedPersonnelProps {
   assignedPersonnel: AssignedPersonnel[];

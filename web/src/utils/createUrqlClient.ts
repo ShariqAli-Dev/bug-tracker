@@ -138,7 +138,7 @@ export const createUrqlClient = (ssrExchange: any) => {
               const fieldInfos = allFields.filter(
                 (info) =>
                   info.fieldName === "assignedPersonnel" ||
-                  info.fieldName === "avilableUsers" ||
+                  info.fieldName === "availableUsers" ||
                   info.fieldName === "assignedDevelopers"
               );
               fieldInfos.forEach((fi) => {
