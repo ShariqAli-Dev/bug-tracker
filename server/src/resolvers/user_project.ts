@@ -7,11 +7,25 @@ import {
   Field,
   InputType,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
 import { myDataSource } from "../data-source";
+import { Users } from "../entities/Users";
+
+@ObjectType()
+class AssignedPersonnel {
+  @Field()
+  projectId: number;
+
+  @Field()
+  userId: number;
+
+  @Field()
+  user: Users;
+}
 
 @InputType()
 class assignTeamInput {
@@ -33,6 +47,35 @@ export class UserProjectResolver {
     ) project
     from user_project up
     inner join project p on p.id = up."projectId" where up."userId" = ${req.session.userId}
+    `);
+  }
+
+  @Query(() => [AssignedPersonnel])
+  async assignedPersonnel(@Arg("projectId") projectId: number) {
+    return await myDataSource.query(`
+    select up.*,
+    json_build_object(
+      'id', u.id,
+      'role', u.role,
+      'email', u.email,
+      'name', u.name
+    ) "user"
+    from user_project up
+    inner join users u on u.id = up."userId" where up."projectId" = ${projectId}
+    `);
+  }
+
+  // this function returns a list of users that are not in the current project
+  @Query(() => [Users])
+  async avilableUsers(
+    @Arg("projectId") projectId: number,
+    @Arg("isAdding") isAdding: boolean
+  ) {
+    return await myDataSource.query(`
+    select * from users 
+	    where "id" not in 
+		    (select "userId" from user_project
+			    where user_project."projectId" = ${projectId})
     `);
   }
 
