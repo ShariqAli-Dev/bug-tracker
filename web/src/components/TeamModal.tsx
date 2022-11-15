@@ -17,30 +17,40 @@ import { useEffect, useState } from "react";
 import {
   useAssignUsersMutation,
   useAvilableUsersQuery,
+  useMeQuery,
 } from "../generated/graphql";
 import { ProjectModalProps, User } from "../types";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface TeamModalProps extends ProjectModalProps {
   projectId: number;
+  isAddingUser: boolean;
 }
 
 const TeamModal = (props: TeamModalProps) => {
-  const [{ data: users, fetching: usersFetch }] = useAvilableUsersQuery({
-    variables: { projectId: props.projectId },
+  const [{ data: me, fetching: meFetch }] = useMeQuery();
+  const [{ data, fetching }] = useAvilableUsersQuery({
+    variables: { projectId: props.projectId, isAdding: props.isAddingUser },
   });
   const toast = useToast();
   const [availableUsers, setAvailableUsers] = useState<any>([]);
   const [, assignUsers] = useAssignUsersMutation();
 
   useEffect(() => {
-    if (!usersFetch) {
+    if (!fetching && !meFetch) {
       setAvailableUsers(
-        users?.avilableUsers.map((u) => ({ ...u, selected: false }))
+        data?.avilableUsers
+          .filter((u) => u.id !== me?.me?.id)
+          .map((u) => ({ ...u, selected: false }))
       );
     }
     return;
-  }, [users, usersFetch]);
+  }, [data, fetching, meFetch, me]);
+
+  if (fetching || meFetch) {
+    return <></>;
+  }
+
   return (
     <Modal
       initialFocusRef={props.initialRef}
@@ -56,7 +66,7 @@ const TeamModal = (props: TeamModalProps) => {
         <ModalHeader>Add Member</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={8}>
-          {!usersFetch && (
+          {!fetching && !meFetch && (
             <Formik
               initialValues={{}}
               onSubmit={async () => {
@@ -67,6 +77,7 @@ const TeamModal = (props: TeamModalProps) => {
                   await assignUsers({
                     projectId: props.projectId,
                     team: filteredTeam,
+                    isAdding: props.isAddingUser,
                   });
                   if (!toast.isActive("assignedUsersSuccess")) {
                     toast({
