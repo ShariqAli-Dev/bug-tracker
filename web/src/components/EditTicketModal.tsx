@@ -137,6 +137,7 @@ const EditTicketModal = ({
               });
               // invalidation
               resetForm();
+              onClose();
             }}
           >
             {({ values, handleChange, isSubmitting }) => (

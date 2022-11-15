@@ -70,6 +70,7 @@ const Adminstration: NextPage = () => {
                 width={{ base: "95%", sm: "100%" }}
                 align="center"
                 fontSize="3xl"
+                color="primary"
               >
                 Adminstration
               </Text>
@@ -84,7 +85,9 @@ const Adminstration: NextPage = () => {
               height="40%"
             >
               <Box height="full" width={{ base: "85%", md: "45%" }}>
-                <Text>Organization</Text>{" "}
+                <Text fontWeight="semibold" align="center" color="primary">
+                  Organization
+                </Text>
                 <Box
                   overflowY="auto"
                   scrollBehavior="auto"
@@ -103,6 +106,7 @@ const Adminstration: NextPage = () => {
                       key={u.email}
                       cursor="pointer"
                       onClick={() => setSelectedUser(users.users[udx])}
+                      color="primary"
                     >
                       <Box
                         display="flex"
@@ -117,7 +121,9 @@ const Adminstration: NextPage = () => {
                 </Box>
               </Box>
               <Box height="full" width={{ base: "85%", md: "45%" }}>
-                <Text>Edit User Information</Text>
+                <Text fontWeight="bold" align="center" color="primary">
+                  Edit User Information
+                </Text>
                 <Box
                   overflowY="auto"
                   scrollBehavior="auto"
@@ -127,6 +133,7 @@ const Adminstration: NextPage = () => {
                   borderWidth={0.1}
                   borderRadius={"xl"}
                   paddingTop="1rem"
+                  color="primary"
                 >
                   {selectedUser && (
                     <>
@@ -134,11 +141,7 @@ const Adminstration: NextPage = () => {
                         {selectedUser?.name}
                       </Text>
                       <Flex marginLeft="1rem">
-                        <Text
-                          fontWeight="semibold"
-                          color="primary"
-                          fontSize="md"
-                        >
+                        <Text fontWeight="semibold" fontSize="md">
                           Email:
                         </Text>
                         <Text marginLeft="1rem">{selectedUser?.email}</Text>

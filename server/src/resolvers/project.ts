@@ -1,33 +1,18 @@
-import { Ticket } from "../entities/Ticket";
 import {
   Arg,
   Ctx,
   Field,
   InputType,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
 } from "type-graphql";
-import { myDataSource } from "../data-source";
-import { Project } from "../entities/Project";
-import { Users } from "../entities/Users";
-import { User_Project } from "../entities/User_Project";
-import { MyContext } from "../types";
-import { User_Ticket } from "../entities/User_Ticket";
 import { Comment } from "../entities/Comment";
-
-@ObjectType()
-class AssignedPersonnel {
-  @Field()
-  projectId: number;
-
-  @Field()
-  userId: number;
-
-  @Field()
-  user: Users;
-}
+import { Project } from "../entities/Project";
+import { Ticket } from "../entities/Ticket";
+import { User_Project } from "../entities/User_Project";
+import { User_Ticket } from "../entities/User_Ticket";
+import { MyContext } from "../types";
 
 @InputType()
 class CreateProjectInput {
@@ -54,32 +39,6 @@ export class ProjectResolver {
   @Query(() => Project, { nullable: true })
   async project(@Arg("id") id: number): Promise<Project | null> {
     return await Project.findOne({ where: { id } });
-  }
-
-  @Query(() => [AssignedPersonnel])
-  async assignedPersonnel(@Arg("projectId") projectId: number) {
-    return await myDataSource.query(`
-    select up.*,
-    json_build_object(
-      'id', u.id,
-      'role', u.role,
-      'email', u.email,
-      'name', u.name
-    ) "user"
-    from user_project up
-    inner join users u on u.id = up."userId" where up."projectId" = ${projectId}
-    `);
-  }
-
-  // this function returns a list of users that are not in the current project
-  @Query(() => [Users])
-  async avilableUsers(@Arg("projectId") projectId: number) {
-    return await myDataSource.query(`
-    select * from users 
-	    where "id" not in 
-		    (select "userId" from user_project
-			    where user_project."projectId" = ${projectId})
-    `);
   }
 
   @Mutation(() => Project)

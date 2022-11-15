@@ -1,3 +1,7 @@
-mutation AssignUsers($team: [assignTeamInput!]!, $projectId: Float!) {
-  assignUsers(team: $team, projectId: $projectId)
+mutation AssignUsers(
+  $isAdding: Boolean!
+  $team: [assignTeamInput!]!
+  $projectId: Float!
+) {
+  assignUsers(isAdding: $isAdding, team: $team, projectId: $projectId)
 }

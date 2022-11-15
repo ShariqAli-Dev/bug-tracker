@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   chakra,
   Flex,
@@ -13,22 +14,23 @@ import {
   Thead,
   Tooltip,
   Tr,
-  Box,
   useDisclosure,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
-import { useMemo, useRef } from "react";
+import { withUrqlClient } from "next-urql";
+import { useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
 import { useMeQuery } from "../generated/graphql";
+import { SectionHeader } from "../pages/project/[projectId]";
+import { AssignedPersonnel } from "../types";
+import { createUrqlClient } from "../utils/createUrqlClient";
+import TeamModal from "./TeamModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
 const ArrowLeft = chakra(AiOutlineArrowLeft);
 const ChevronRight = chakra(BsChevronDoubleRight);
 const ChevronLeft = chakra(BsChevronDoubleLeft);
-import { SectionHeader } from "../pages/project/[projectId]";
-import { AssignedPersonnel } from "../types";
-import TeamModal from "./TeamModal";
 
 interface AssignedPersonnelProps {
   assignedPersonnel: AssignedPersonnel[];
@@ -38,6 +40,9 @@ interface AssignedPersonnelProps {
 const AssignedPersonnel = (props: AssignedPersonnelProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [{ data: me, fetching: meFetch }] = useMeQuery();
+  const [isAddingUser, setIsAddingUser] = useState<undefined | boolean>(
+    undefined
+  );
   const finalRef = useRef(null);
   const initialRef = useRef(null);
   const columns = useMemo(
@@ -96,27 +101,57 @@ const AssignedPersonnel = (props: AssignedPersonnelProps) => {
         ref={finalRef}
       >
         <SectionHeader>
-          <Flex width="full" padding={2} justifyContent="space-between">
+          <Flex
+            width="full"
+            padding={2}
+            justifyContent="space-between"
+            flexDirection={{ base: "column", lg: "row" }}
+          >
             <Heading>Team</Heading>
             {!meFetch &&
             (me?.me?.role === "admin" || me?.me?.role === "project manager") ? (
-              <Button
-                size="sm"
-                color="tertiary"
-                backgroundColor="primary"
-                border="2px"
-                margin={2}
-                padding={1}
-                _hover={{
-                  backgroundColor: "tertiary",
-                  color: "primary",
-                  border: "2px",
-                  borderColor: "primary",
-                }}
-                onClick={onOpen}
-              >
-                Manage Team
-              </Button>
+              <Flex alignItems="center" justifyContent={"space-between"}>
+                <Button
+                  size={{ base: "xs", xl: "sm" }}
+                  color="tertiary"
+                  backgroundColor="primary"
+                  border="2px"
+                  margin={2}
+                  padding={1}
+                  _hover={{
+                    backgroundColor: "tertiary",
+                    color: "primary",
+                    border: "2px",
+                    borderColor: "primary",
+                  }}
+                  onClick={() => {
+                    setIsAddingUser(true);
+                    onOpen();
+                  }}
+                >
+                  Add Member
+                </Button>
+                <Button
+                  size={{ base: "xs", xl: "sm" }}
+                  color="tertiary"
+                  backgroundColor="primary"
+                  border="2px"
+                  margin={2}
+                  padding={1}
+                  _hover={{
+                    backgroundColor: "tertiary",
+                    color: "primary",
+                    border: "2px",
+                    borderColor: "primary",
+                  }}
+                  onClick={() => {
+                    setIsAddingUser(false);
+                    onOpen();
+                  }}
+                >
+                  Remove Member
+                </Button>
+              </Flex>
             ) : (
               <></>
             )}
@@ -237,10 +272,10 @@ const AssignedPersonnel = (props: AssignedPersonnelProps) => {
         onClose={onClose}
         finalRef={finalRef}
         initialRef={initialRef}
-        assignedPersonnel={props.assignedPersonnel as AssignedPersonnel[]}
+        isAddingUser={isAddingUser}
       />
     </>
   );
 };
 
-export default AssignedPersonnel;
+export default withUrqlClient(createUrqlClient)(AssignedPersonnel);

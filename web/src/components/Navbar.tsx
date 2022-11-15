@@ -38,7 +38,11 @@ const NavBar = () => {
         >
           Bug Tracker
         </Heading>
-        {!meFetch && <Text>{data?.me?.role}</Text>}
+        {!meFetch && (
+          <Text align="center" color="primary">
+            {data?.me?.role}
+          </Text>
+        )}
       </Flex>
       {/* Home navbar */}
       <Flex flexDir="column">

@@ -37,6 +37,7 @@ const Tickets: NextPage = () => {
             width={{ base: "95%", sm: "100%" }}
             align="center"
             fontSize="3xl"
+            color="primary"
           >
             Tickets
           </Text>

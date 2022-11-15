@@ -7,11 +7,25 @@ import {
   Field,
   InputType,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
 import { myDataSource } from "../data-source";
+import { Users } from "../entities/Users";
+
+@ObjectType()
+class AssignedPersonnel {
+  @Field()
+  projectId: number;
+
+  @Field()
+  userId: number;
+
+  @Field()
+  user: Users;
+}
 
 @InputType()
 class assignTeamInput {
@@ -36,25 +50,72 @@ export class UserProjectResolver {
     `);
   }
 
+  @Query(() => [AssignedPersonnel])
+  async assignedPersonnel(@Arg("projectId") projectId: number) {
+    return await myDataSource.query(`
+    select up.*,
+    json_build_object(
+      'id', u.id,
+      'role', u.role,
+      'email', u.email,
+      'name', u.name
+    ) "user"
+    from user_project up
+    inner join users u on u.id = up."userId" where up."projectId" = ${projectId}
+    `);
+  }
+
+  // this function returns a list of users that are not in the current project
+  @Query(() => [Users])
+  async availableUsers(
+    @Arg("projectId") projectId: number,
+    @Arg("isAdding") isAdding: boolean
+  ) {
+    return await myDataSource.query(`
+    select * from users 
+	    where "id" ${isAdding ? "not" : ""} in 
+		    (select "userId" from user_project
+			    where user_project."projectId" = ${projectId})
+    `);
+  }
+
   @Mutation(() => Boolean)
   async assignUsers(
     @Arg("projectId") projectId: number,
-    @Arg("team", () => [assignTeamInput]) team: assignTeamInput[]
+    @Arg("team", () => [assignTeamInput]) team: assignTeamInput[],
+    @Arg("isAdding") isAdding: boolean
   ) {
     if (team.length) {
-      let queryString = "";
-      team.forEach((m, mdx) => {
-        queryString += `(${projectId}, ${m.id})`;
-        if (mdx !== team.length - 1) {
-          queryString += ",";
-        }
-      });
-      User_Project.query(`
-      insert into user_project
+      if (isAdding) {
+        let queryString = "";
+
+        team.forEach((m, mdx) => {
+          queryString += `(${projectId}, ${m.id})`;
+          if (mdx !== team.length - 1) {
+            queryString += ",";
+          }
+        });
+
+        User_Project.query(`
+        insert into user_project
         ("projectId", "userId")
-      values
-        ${queryString}
-      `);
+        values ${queryString}
+        `);
+      } else {
+        let queryString = "";
+
+        team.forEach((m, mdx) => {
+          queryString += `("projectId" = ${projectId} and "userId" = ${m.id})`;
+          if (mdx !== team.length - 1) {
+            queryString += " or ";
+          }
+        });
+
+        User_Project.query(`
+        delete from user_project
+        where ${queryString}
+        `);
+      }
     }
     return true;
   }

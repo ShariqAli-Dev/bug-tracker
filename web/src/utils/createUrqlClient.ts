@@ -136,7 +136,10 @@ export const createUrqlClient = (ssrExchange: any) => {
             assignUsers: (_result, args, cache, info) => {
               const allFields = cache.inspectFields("Query");
               const fieldInfos = allFields.filter(
-                (info) => info.fieldName === "assignedPersonnel"
+                (info) =>
+                  info.fieldName === "assignedPersonnel" ||
+                  info.fieldName === "availableUsers" ||
+                  info.fieldName === "assignedDevelopers"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
