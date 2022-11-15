@@ -214,7 +214,7 @@ export type Query = {
   archivedProjectTickets: Array<Ticket>;
   assignedDevelopers: Array<AssignedDeveloper>;
   assignedPersonnel: Array<AssignedPersonnel>;
-  avilableUsers: Array<Users>;
+  availableUsers: Array<Users>;
   bye: Scalars['String'];
   comments: Array<Comment>;
   hello: Scalars['String'];
@@ -251,7 +251,7 @@ export type QueryAssignedPersonnelArgs = {
 };
 
 
-export type QueryAvilableUsersArgs = {
+export type QueryAvailableUsersArgs = {
   isAdding: Scalars['Boolean'];
   projectId: Scalars['Float'];
 };
@@ -589,13 +589,13 @@ export type AssignedPersonnelQueryVariables = Exact<{
 
 export type AssignedPersonnelQuery = { __typename?: 'Query', assignedPersonnel: Array<{ __typename?: 'AssignedPersonnel', user: { __typename?: 'Users', id: number, email: string, name: string, role: string } }> };
 
-export type AvilableUsersQueryVariables = Exact<{
+export type AvailableUsersQueryVariables = Exact<{
   isAdding: Scalars['Boolean'];
   projectId: Scalars['Float'];
 }>;
 
 
-export type AvilableUsersQuery = { __typename?: 'Query', avilableUsers: Array<{ __typename?: 'Users', id: number, name: string, email: string }> };
+export type AvailableUsersQuery = { __typename?: 'Query', availableUsers: Array<{ __typename?: 'Users', id: number, name: string, email: string }> };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -988,9 +988,9 @@ export const AssignedPersonnelDocument = gql`
 export function useAssignedPersonnelQuery(options: Omit<Urql.UseQueryArgs<AssignedPersonnelQueryVariables>, 'query'>) {
   return Urql.useQuery<AssignedPersonnelQuery, AssignedPersonnelQueryVariables>({ query: AssignedPersonnelDocument, ...options });
 };
-export const AvilableUsersDocument = gql`
-    query AvilableUsers($isAdding: Boolean!, $projectId: Float!) {
-  avilableUsers(isAdding: $isAdding, projectId: $projectId) {
+export const AvailableUsersDocument = gql`
+    query AvailableUsers($isAdding: Boolean!, $projectId: Float!) {
+  availableUsers(isAdding: $isAdding, projectId: $projectId) {
     id
     name
     email
@@ -998,8 +998,8 @@ export const AvilableUsersDocument = gql`
 }
     `;
 
-export function useAvilableUsersQuery(options: Omit<Urql.UseQueryArgs<AvilableUsersQueryVariables>, 'query'>) {
-  return Urql.useQuery<AvilableUsersQuery, AvilableUsersQueryVariables>({ query: AvilableUsersDocument, ...options });
+export function useAvailableUsersQuery(options: Omit<Urql.UseQueryArgs<AvailableUsersQueryVariables>, 'query'>) {
+  return Urql.useQuery<AvailableUsersQuery, AvailableUsersQueryVariables>({ query: AvailableUsersDocument, ...options });
 };
 export const ByeDocument = gql`
     query Bye {

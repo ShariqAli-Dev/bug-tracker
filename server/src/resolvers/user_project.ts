@@ -67,7 +67,7 @@ export class UserProjectResolver {
 
   // this function returns a list of users that are not in the current project
   @Query(() => [Users])
-  async avilableUsers(
+  async availableUsers(
     @Arg("projectId") projectId: number,
     @Arg("isAdding") isAdding: boolean
   ) {
