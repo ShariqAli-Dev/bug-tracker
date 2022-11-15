@@ -90,6 +90,7 @@ export type MutationArchiveTicketArgs = {
 
 
 export type MutationAssignUsersArgs = {
+  isAdding: Scalars['Boolean'];
   projectId: Scalars['Float'];
   team: Array<AssignTeamInput>;
 };
@@ -438,6 +439,7 @@ export type ArchiveTicketMutationVariables = Exact<{
 export type ArchiveTicketMutation = { __typename?: 'Mutation', archiveTicket?: { __typename?: 'Ticket', id: number, projectId: number, creator: string, title: string, description: string, priority: string, type: string, status: string, archived: boolean, updatedAt: any } | null };
 
 export type AssignUsersMutationVariables = Exact<{
+  isAdding: Scalars['Boolean'];
   team: Array<AssignTeamInput> | AssignTeamInput;
   projectId: Scalars['Float'];
 }>;
@@ -593,7 +595,7 @@ export type AvilableUsersQueryVariables = Exact<{
 }>;
 
 
-export type AvilableUsersQuery = { __typename?: 'Query', avilableUsers: Array<{ __typename?: 'Users', id: number, email: string, role: string, name: string, createdAt: any, updatedAt: any }> };
+export type AvilableUsersQuery = { __typename?: 'Query', avilableUsers: Array<{ __typename?: 'Users', id: number, name: string, email: string }> };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -699,8 +701,8 @@ export function useArchiveTicketMutation() {
   return Urql.useMutation<ArchiveTicketMutation, ArchiveTicketMutationVariables>(ArchiveTicketDocument);
 };
 export const AssignUsersDocument = gql`
-    mutation AssignUsers($team: [assignTeamInput!]!, $projectId: Float!) {
-  assignUsers(team: $team, projectId: $projectId)
+    mutation AssignUsers($isAdding: Boolean!, $team: [assignTeamInput!]!, $projectId: Float!) {
+  assignUsers(isAdding: $isAdding, team: $team, projectId: $projectId)
 }
     `;
 
@@ -990,11 +992,8 @@ export const AvilableUsersDocument = gql`
     query AvilableUsers($isAdding: Boolean!, $projectId: Float!) {
   avilableUsers(isAdding: $isAdding, projectId: $projectId) {
     id
-    email
-    role
     name
-    createdAt
-    updatedAt
+    email
   }
 }
     `;

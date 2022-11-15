@@ -82,7 +82,8 @@ export class UserProjectResolver {
   @Mutation(() => Boolean)
   async assignUsers(
     @Arg("projectId") projectId: number,
-    @Arg("team", () => [assignTeamInput]) team: assignTeamInput[]
+    @Arg("team", () => [assignTeamInput]) team: assignTeamInput[],
+    @Arg("isAdding") isAdding: boolean
   ) {
     if (team.length) {
       let queryString = "";
@@ -93,7 +94,7 @@ export class UserProjectResolver {
         }
       });
       User_Project.query(`
-      insert into user_project
+      ${isAdding ? "insert into" : "remove from"} user_project
         ("projectId", "userId")
       values
         ${queryString}
