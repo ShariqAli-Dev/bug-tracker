@@ -86,19 +86,36 @@ export class UserProjectResolver {
     @Arg("isAdding") isAdding: boolean
   ) {
     if (team.length) {
-      let queryString = "";
-      team.forEach((m, mdx) => {
-        queryString += `(${projectId}, ${m.id})`;
-        if (mdx !== team.length - 1) {
-          queryString += ",";
-        }
-      });
-      User_Project.query(`
-      ${isAdding ? "insert into" : "remove from"} user_project
+      if (isAdding) {
+        let queryString = "";
+
+        team.forEach((m, mdx) => {
+          queryString += `(${projectId}, ${m.id})`;
+          if (mdx !== team.length - 1) {
+            queryString += ",";
+          }
+        });
+
+        User_Project.query(`
+        insert into user_project
         ("projectId", "userId")
-      values
-        ${queryString}
-      `);
+        values ${queryString}
+        `);
+      } else {
+        let queryString = "";
+
+        team.forEach((m, mdx) => {
+          queryString += `("projectId" = ${projectId} and "userId" = ${m.id})`;
+          if (mdx !== team.length - 1) {
+            queryString += " or ";
+          }
+        });
+
+        User_Project.query(`
+        delete from user_project
+        where ${queryString}
+        `);
+      }
     }
     return true;
   }
