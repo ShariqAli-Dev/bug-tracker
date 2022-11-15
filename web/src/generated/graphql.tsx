@@ -251,6 +251,7 @@ export type QueryAssignedPersonnelArgs = {
 
 
 export type QueryAvilableUsersArgs = {
+  isAdding: Scalars['Boolean'];
   projectId: Scalars['Float'];
 };
 
@@ -587,11 +588,12 @@ export type AssignedPersonnelQueryVariables = Exact<{
 export type AssignedPersonnelQuery = { __typename?: 'Query', assignedPersonnel: Array<{ __typename?: 'AssignedPersonnel', user: { __typename?: 'Users', id: number, email: string, name: string, role: string } }> };
 
 export type AvilableUsersQueryVariables = Exact<{
+  isAdding: Scalars['Boolean'];
   projectId: Scalars['Float'];
 }>;
 
 
-export type AvilableUsersQuery = { __typename?: 'Query', avilableUsers: Array<{ __typename?: 'Users', id: number, name: string, email: string }> };
+export type AvilableUsersQuery = { __typename?: 'Query', avilableUsers: Array<{ __typename?: 'Users', id: number, email: string, role: string, name: string, createdAt: any, updatedAt: any }> };
 
 export type ByeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -985,11 +987,14 @@ export function useAssignedPersonnelQuery(options: Omit<Urql.UseQueryArgs<Assign
   return Urql.useQuery<AssignedPersonnelQuery, AssignedPersonnelQueryVariables>({ query: AssignedPersonnelDocument, ...options });
 };
 export const AvilableUsersDocument = gql`
-    query AvilableUsers($projectId: Float!) {
-  avilableUsers(projectId: $projectId) {
+    query AvilableUsers($isAdding: Boolean!, $projectId: Float!) {
+  avilableUsers(isAdding: $isAdding, projectId: $projectId) {
     id
-    name
     email
+    role
+    name
+    createdAt
+    updatedAt
   }
 }
     `;

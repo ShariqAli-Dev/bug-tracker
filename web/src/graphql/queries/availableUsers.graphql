@@ -1,5 +1,5 @@
-query AvilableUsers($projectId: Float!) {
-  avilableUsers(projectId: $projectId) {
+query AvilableUsers($isAdding: Boolean!, $projectId: Float!) {
+  avilableUsers(isAdding: $isAdding, projectId: $projectId) {
     id
     name
     email
