@@ -186,6 +186,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
             >
               {!personnelFetch && (
                 <AssignedPersonnel
+                  pageProps={{}}
                   assignedPersonnel={
                     personnelQuery?.assignedPersonnel as AssignedPersonnelType[]
                   }
