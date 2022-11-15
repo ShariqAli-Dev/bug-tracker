@@ -16,7 +16,7 @@ import { withUrqlClient } from "next-urql";
 import { useEffect, useState } from "react";
 import {
   useAssignUsersMutation,
-  useAvilableUsersQuery,
+  useAvailableUsersQuery,
   useMeQuery,
 } from "../generated/graphql";
 import { ProjectModalProps, User } from "../types";
@@ -29,7 +29,7 @@ interface TeamModalProps extends ProjectModalProps {
 
 const TeamModal = (props: TeamModalProps) => {
   const [{ data: me, fetching: meFetch }] = useMeQuery();
-  const [{ data, fetching }] = useAvilableUsersQuery({
+  const [{ data, fetching }] = useAvailableUsersQuery({
     variables: { projectId: props.projectId, isAdding: props.isAddingUser },
   });
   const toast = useToast();
@@ -39,7 +39,7 @@ const TeamModal = (props: TeamModalProps) => {
   useEffect(() => {
     if (!fetching && !meFetch) {
       setAvailableUsers(
-        data?.avilableUsers
+        data?.availableUsers
           .filter((u) => u.id !== me?.me?.id)
           .map((u) => ({ ...u, selected: false }))
       );
