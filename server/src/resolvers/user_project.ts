@@ -73,7 +73,7 @@ export class UserProjectResolver {
   ) {
     return await myDataSource.query(`
     select * from users 
-	    where "id" ${isAdding ? "" : "not"} in 
+	    where "id" ${isAdding ? "not" : ""} in 
 		    (select "userId" from user_project
 			    where user_project."projectId" = ${projectId})
     `);
