@@ -9,10 +9,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
+import { withUrqlClient } from "next-urql";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FaBug } from "react-icons/fa";
 import { useLoginMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const avatars = [
   {
@@ -144,4 +146,4 @@ const Demo: NextPage = () => {
   );
 };
 
-export default Demo;
+export default withUrqlClient(createUrqlClient)(Demo);
