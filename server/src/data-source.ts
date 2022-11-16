@@ -9,7 +9,7 @@ import { Ticket } from "./entities/Ticket";
 import { Users } from "./entities/Users";
 import { User_Project } from "./entities/User_Project";
 import { User_Ticket } from "./entities/User_Ticket";
-
+import path from "path";
 export const myDataSource = new DataSource({
   type: "postgres",
   host: "localhost",
@@ -28,6 +28,6 @@ export const myDataSource = new DataSource({
     Users,
     User_Ticket,
   ],
-  // migrations: [path.join(__dirname, "./migrations/*")],
+  migrations: [path.join(__dirname, "./migrations/*")],
   subscribers: [],
 });

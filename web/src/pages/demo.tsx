@@ -6,31 +6,44 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
+import { withUrqlClient } from "next-urql";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { FaBug } from "react-icons/fa";
+import { useLoginMutation } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const avatars = [
   {
-    role: "DEMO_ADMIN",
+    role: "Demo Admin",
     url: "https://cdn-icons-png.flaticon.com/512/236/236831.png",
+    email: "demoAdmin@bugtracker.com",
   },
   {
-    role: "DEMO_PROJECT_MANAGER",
+    role: "Demo Project Manager",
     url: "https://cdn-icons-png.flaticon.com/512/236/236831.png",
+    email: "demoProjectManager@bugtracker.com",
   },
   {
-    role: "DEMO_DEVELOPER",
-    url: "https://cdn-icons-png.flaticon.com/512/146/146031.png",
-  },
-  {
-    role: "DEMO_SUBMITTER",
+    role: "Demo Submitter",
     url: "https://cdn-icons-png.flaticon.com/512/147/147142.png",
+    email: "demoSubmitter@bugtracker.com",
+  },
+  {
+    role: "Demo Developer",
+    url: "https://cdn-icons-png.flaticon.com/512/146/146031.png",
+    email: "demoDeveloper@bugtracker.com",
   },
 ];
 
 const Demo: NextPage = () => {
+  const router = useRouter();
+  const toast = useToast();
+  const [, login] = useLoginMutation();
+
   return (
     <Flex
       flexDirection="column"
@@ -63,9 +76,44 @@ const Demo: NextPage = () => {
           spacingX={{ base: "10px", sm: "30px", md: "50px", lg: "80px" }}
           spacingY={{ base: "40px", sm: "60px", md: "80px" }}
         >
-          {avatars.map(({ role, url }) => {
+          {avatars.map(({ role, url, email }) => {
             return (
-              <Box key={role} onClick={() => {}}>
+              <Box
+                key={role}
+                onClick={async () => {
+                  const { data } = await login({
+                    options: {
+                      password: process.env
+                        .NEXT_PUBLIC_DEMO_USER_PASSWORD as string,
+                      email,
+                    },
+                  });
+                  if (data?.login.errors) {
+                    if (!toast.isActive("login-error")) {
+                      toast({
+                        id: "login-error",
+                        title: data.login.errors[0].field,
+                        description: data.login.errors[0].message,
+                        status: "error",
+                        duration: 3000,
+                        isClosable: true,
+                        variant: "subtle",
+                        containerStyle: {
+                          color: "primary",
+                        },
+                        position: "top",
+                      });
+                    }
+                  } else if (data?.login.user) {
+                    if (typeof router.query.next === "string") {
+                      router.push(router.query.next);
+                    } else {
+                      // worked
+                      router.push("/dashboard");
+                    }
+                  }
+                }}
+              >
                 <Link href="dashboard">
                   <Box cursor="pointer">
                     <Flex
@@ -98,4 +146,4 @@ const Demo: NextPage = () => {
   );
 };
 
-export default Demo;
+export default withUrqlClient(createUrqlClient)(Demo);

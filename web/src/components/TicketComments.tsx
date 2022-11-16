@@ -15,6 +15,8 @@ import {
   useTicketCommentsQuery,
 } from "../generated/graphql";
 import { FaTrash } from "react-icons/fa";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 interface TicketCommentsProps {
   ticketId: number;
@@ -137,4 +139,4 @@ const TicketComments = ({ ticketId }: TicketCommentsProps) => {
   );
 };
 
-export default TicketComments;
+export default withUrqlClient(createUrqlClient)(TicketComments);

@@ -1,4 +1,5 @@
 import {
+  Button,
   Center,
   chakra,
   Menu,
@@ -7,10 +8,12 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
-import { useMeQuery } from "../generated/graphql";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { useLogoutMutation, useMeQuery } from "../generated/graphql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const HamburgerIcon = chakra(GiHamburgerMenu);
@@ -18,6 +21,7 @@ const HamburgerIcon = chakra(GiHamburgerMenu);
 const BurgerMenu: NextPage = () => {
   const router = useRouter();
   const [{ data, fetching }] = useMeQuery();
+  const [, logout] = useLogoutMutation();
 
   return (
     <Center display={{ base: "inline", md: "none" }}>
@@ -51,10 +55,33 @@ const BurgerMenu: NextPage = () => {
           ) : (
             <></>
           )}
+          <MenuItem display="flex" alignItems="center">
+            <Button
+              size="xs"
+              color="tertiary"
+              backgroundColor="primary"
+              border="2px"
+              padding={3}
+              _hover={{
+                backgroundColor: "tertiary",
+                color: "primary",
+                border: "2px",
+                borderColor: "primary",
+              }}
+              disabled={fetching}
+              onClick={async () => {
+                await logout({});
+                await router.push("/");
+                router.reload();
+              }}
+            >
+              Logout
+            </Button>
+          </MenuItem>
         </MenuList>
       </Menu>
     </Center>
   );
 };
 
-export default BurgerMenu;
+export default withUrqlClient(createUrqlClient)(BurgerMenu);

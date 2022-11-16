@@ -17,12 +17,14 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { nanoid } from "nanoid";
+import { withUrqlClient } from "next-urql";
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
 import { usePagination, useTable } from "react-table";
 import { Ticket, useMeQuery } from "../generated/graphql";
 import { SectionHeader } from "../pages/project/[projectId]";
+import { createUrqlClient } from "../utils/createUrqlClient";
 import EditTicketModal from "./EditTicketModal";
 import TicketModal from "./TicketModal";
 const ArrowRight = chakra(AiOutlineArrowRight);
@@ -334,4 +336,4 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
   );
 };
 
-export default ProjectTickets;
+export default withUrqlClient(createUrqlClient)(ProjectTickets);

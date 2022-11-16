@@ -142,7 +142,7 @@ const TicketDetail = ({ ticketId }: TicketDetailProps) => {
           </Box>
         </Box>
         {/* Comments */}
-        <TicketComments ticketId={ticketId} />
+        <TicketComments pageProps={{}} ticketId={ticketId} />
       </Flex>
     </Box>
   );

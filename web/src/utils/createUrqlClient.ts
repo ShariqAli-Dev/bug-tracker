@@ -109,7 +109,10 @@ export const createUrqlClient = (ssrExchange: any) => {
                 (info) =>
                   info.fieldName === "assignedPersonnel" ||
                   info.fieldName === "assignedDevelopers" ||
-                  info.fieldName === "projectTickets"
+                  info.fieldName === "projectTickets" ||
+                  info.fieldName === "ticketsByPriority" ||
+                  info.fieldName === "ticketsByStatus" ||
+                  info.fieldName === "ticketsByType"
               );
               fieldInfos.forEach((fi) => {
                 cache.invalidate("Query", fi.fieldName, fi.arguments);
