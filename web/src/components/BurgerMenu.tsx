@@ -11,6 +11,8 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { useMeQuery } from "../generated/graphql";
+import { withUrqlClient } from "next-urql";
+import { createUrqlClient } from "../utils/createUrqlClient";
 
 const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
 const HamburgerIcon = chakra(GiHamburgerMenu);
@@ -57,4 +59,4 @@ const BurgerMenu: NextPage = () => {
   );
 };
 
-export default BurgerMenu;
+export default withUrqlClient(createUrqlClient)(BurgerMenu);

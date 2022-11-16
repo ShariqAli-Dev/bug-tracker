@@ -31,7 +31,7 @@ const Tickets: NextPage = () => {
       <Flex w="full" flexDirection="column" overflowY="auto">
         <Flex w="full">
           <Box margin="auto">
-            <BurgerMenu />
+            <BurgerMenu pageProps={{}} />
           </Box>
           <Text
             width={{ base: "95%", sm: "100%" }}

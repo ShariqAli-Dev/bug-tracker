@@ -93,7 +93,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
         {/* Inner Section */}
         <Flex w="full" flexDir="column" overflowY="auto">
           {/* Contents */}
-          <BurgerMenu />
+          <BurgerMenu pageProps={{}} />
           <Box
             backgroundColor="white"
             marginTop={8}

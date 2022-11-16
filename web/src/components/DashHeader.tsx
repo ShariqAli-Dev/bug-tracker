@@ -42,7 +42,7 @@ const DashHeader = () => {
       {/* searchbar, notis, user profile */}
       <Box w={{ base: "full", md: "65%", xl: "45%" }}>
         <Flex justifyContent="space-around" alignItems="center" padding="1rem">
-          <BurgerMenu />
+          <BurgerMenu pageProps={{}} />
           <QueryForm />
           <Notifications pageProps={{}} />
           <UserActions />
