@@ -196,6 +196,7 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
 
               {!ticketsFetch && !archivedTicketsFetch && (
                 <ProjectTickets
+                  pageProps={{}}
                   projectTickets={
                     viewArchived
                       ? archivedTickets?.archivedProjectTickets

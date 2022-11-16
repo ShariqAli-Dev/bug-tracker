@@ -52,4 +52,4 @@ const DashHeader = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(DashHeader);
+export default withUrqlClient(createUrqlClient)(DashHeader);
