@@ -40,3 +40,5 @@ export const REDIS_SECRET = process.env.REDIS_SECRET || "keyboard cat";
 
 export const __passwordResetTokenSecret__ =
   process.env.PASSWORD_RESET_SECRET || "its a secret to us all";
+
+export const DEMO_USER_PASSWORD = process.env.DEMO_USER_PASSWORD;
