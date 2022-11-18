@@ -62,8 +62,12 @@ class UserResponse {
 @Resolver(Users)
 export class UserResolver {
   @Query(() => [Users])
-  async users() {
-    return await Users.find();
+  async users(@Ctx() { req }: MyContext) {
+    return await Users.query(
+      `select * from users where "id" ${
+        (req.session.userId as number) < 5 ? "<" : ">="
+      } 5`
+    );
   }
 
   @Query(() => Users, { nullable: true })
