@@ -24,7 +24,7 @@ const avatars = [
   },
   {
     role: "Demo Project Manager",
-    url: "https://cdn-icons-png.flaticon.com/512/236/236831.png",
+    url: "https://cdn-icons-png.flaticon.com/512/149/149072.png",
     email: "demoProjectManager@bugtracker.com",
   },
   {
