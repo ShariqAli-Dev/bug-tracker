@@ -166,7 +166,9 @@ const ProjectTickets = (props: ProjectTicketsProps) => {
               )}
             </Box>
           </Flex>
-          <Text>A condensed view of the tickets</Text>
+          <Text>
+            A condensed view of the {props.viewArchived && "archived"} tickets
+          </Text>
         </SectionHeader>
         <TableContainer whiteSpace="normal" style={{ width: "90%" }}>
           <Table
