@@ -69,13 +69,15 @@ export class UserProjectResolver {
   @Query(() => [Users])
   async availableUsers(
     @Arg("projectId") projectId: number,
-    @Arg("isAdding") isAdding: boolean
+    @Arg("isAdding") isAdding: boolean,
+    @Ctx() { req }: MyContext
   ) {
     return await myDataSource.query(`
     select * from users 
 	    where "id" ${isAdding ? "not" : ""} in 
 		    (select "userId" from user_project
 			    where user_project."projectId" = ${projectId})
+      and "id" ${(req.session.userId as number) < 5 ? "<" : ">="} 5
     `);
   }
 
