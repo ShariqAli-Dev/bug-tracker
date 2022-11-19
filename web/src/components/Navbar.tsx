@@ -11,14 +11,13 @@ import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { FaBug } from "react-icons/fa";
+import { MdOutlineSpaceDashboard, MdOutlineTask } from "react-icons/md";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
-const CAiOutlineUsergroupAdd = chakra(AiOutlineUsergroupAdd);
-const navbar = [
-  { title: "Dashboard", url: "dashboard" },
-  { title: "My Tickets", url: "tickets" },
-];
+const UserIcon = chakra(AiOutlineUsergroupAdd);
+const TicketIcon = chakra(MdOutlineTask);
+const DashboardIcon = chakra(MdOutlineSpaceDashboard);
 
 const NavBar = () => {
   const router = useRouter();
@@ -46,26 +45,33 @@ const NavBar = () => {
       </Flex>
       {/* Home navbar */}
       <Flex flexDir="column">
-        {navbar.map((item) => {
-          return (
-            <Box
-              p={5}
-              onClick={() => router.push(`/${item.url}`)}
-              key={item.title}
-              cursor="pointer"
-            >
-              <Flex flexDir="row" alignItems="center">
-                <CAiOutlineUsergroupAdd color="secondary" size="25px" />
-                <Text
-                  fontSize={{ base: "xs", md: "sm", lg: "md" }}
-                  color="primary"
-                >
-                  {item.title}
-                </Text>
-              </Flex>
-            </Box>
-          );
-        })}
+        <Box
+          p={5}
+          onClick={() => router.push(`/dashboard`)}
+          key="dashboard"
+          cursor="pointer"
+        >
+          <Flex flexDir="row" alignItems="center">
+            <DashboardIcon color="secondary" size="25px" />
+            <Text fontSize={{ base: "xs", md: "sm", lg: "md" }} color="primary">
+              Dashbaord
+            </Text>
+          </Flex>
+        </Box>
+
+        <Box
+          p={5}
+          onClick={() => router.push(`/dashboard`)}
+          key="tickets"
+          cursor="pointer"
+        >
+          <Flex flexDir="row" alignItems="center">
+            <TicketIcon color="secondary" size="25px" />
+            <Text fontSize={{ base: "xs", md: "sm", lg: "md" }} color="primary">
+              My Tickets
+            </Text>
+          </Flex>
+        </Box>
 
         {!meFetch && data?.me?.role === "admin" ? (
           <Box
@@ -74,8 +80,13 @@ const NavBar = () => {
             key="adminstration"
             cursor="pointer"
           >
-            <Flex flexDir="row" alignItems="center">
-              <CAiOutlineUsergroupAdd color="secondary" size="25px" />
+            <Flex
+              flexDir="row"
+              alignItems="center"
+              color="
+            pirmary"
+            >
+              <UserIcon color="primary" size="25px" />
               <Text
                 fontSize={{ base: "xs", md: "sm", lg: "md" }}
                 color="primary"

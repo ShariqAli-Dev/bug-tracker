@@ -265,15 +265,17 @@ const AssignedPersonnel = (props: AssignedPersonnelProps) => {
           </Tooltip>
         </Flex>
       </Box>
-      <TeamModal
-        pageProps={{}}
-        projectId={props.projectId}
-        isOpen={isOpen}
-        onClose={onClose}
-        finalRef={finalRef}
-        initialRef={initialRef}
-        isAddingUser={isAddingUser}
-      />
+      {typeof isAddingUser !== "undefined" && (
+        <TeamModal
+          pageProps={{}}
+          projectId={props.projectId}
+          isOpen={isOpen}
+          onClose={onClose}
+          finalRef={finalRef}
+          initialRef={initialRef}
+          isAddingUser={isAddingUser}
+        />
+      )}
     </>
   );
 };

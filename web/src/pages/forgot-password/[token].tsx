@@ -38,6 +38,7 @@ const ChangePassword: NextPage = () => {
       backgroundColor="blackAlpha.700"
       justifyContent="center"
       alignItems="center"
+      color="primary"
     >
       <Stack
         flexDir="column"
@@ -89,14 +90,14 @@ const ChangePassword: NextPage = () => {
                     <FormLabel>New Password</FormLabel>
                     <InputGroup>
                       <InputLeftElement pointerEvents="none">
-                        <CFaUserAlt color="gray.500" />
+                        <CFaUserAlt color="primary" />
                       </InputLeftElement>
                       <Input
                         boxShadow="md"
                         name="newPassword"
                         id="newPassword"
                         type="text"
-                        borderColor="blue"
+                        borderColor="primary"
                         value={values.newPassword}
                         onChange={handleChange}
                         required
@@ -107,12 +108,19 @@ const ChangePassword: NextPage = () => {
                     borderRadius={0}
                     type="submit"
                     variant="solid"
-                    colorScheme="facebook"
                     width="full"
+                    backgroundColor="primary"
+                    color="tertiary"
                     marginTop={5}
                     marginBottom={5}
                     rounded="xl"
                     isLoading={isSubmitting}
+                    _hover={{
+                      backgroundColor: "tertiary",
+                      color: "primary",
+                      border: "2px",
+                      borderColor: "primary",
+                    }}
                   >
                     Set New Password
                   </Button>
@@ -123,6 +131,7 @@ const ChangePassword: NextPage = () => {
                         justifyContent="center"
                         alignItems="center"
                         padding=".5rem"
+                        color="primary"
                       >
                         <Text
                           color="blackAlpha.700"
