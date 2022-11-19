@@ -48,6 +48,7 @@ const ForgotPassword: NextPage = () => {
         boxShadow="md"
         p={{ base: "1rem", sm: "2rem", md: "3rem" }}
         rounded="xl"
+        color="primary"
       >
         <Heading>Forgot your password?</Heading>
 
@@ -85,14 +86,14 @@ const ForgotPassword: NextPage = () => {
                     <FormLabel>Enter Email Address</FormLabel>
                     <InputGroup>
                       <InputLeftElement pointerEvents="none">
-                        <CFaUserAlt color="gray.500" />
+                        <CFaUserAlt color="primary" />
                       </InputLeftElement>
                       <Input
                         boxShadow="md"
                         name="email"
                         id="email"
                         type="email"
-                        borderColor="blue"
+                        borderColor="primary"
                         autoComplete="email"
                         value={values.email}
                         onChange={handleChange}
@@ -104,13 +105,20 @@ const ForgotPassword: NextPage = () => {
                     borderRadius={0}
                     type="submit"
                     variant="solid"
-                    colorScheme="facebook"
                     width="full"
                     marginTop={5}
                     marginBottom={5}
                     rounded="xl"
                     disabled={disabled}
                     isLoading={isSubmitting}
+                    color="tertiary"
+                    backgroundColor="primary"
+                    _hover={{
+                      backgroundColor: "tertiary",
+                      color: "primary",
+                      border: "2px",
+                      borderColor: "primary",
+                    }}
                   >
                     Request Reset Link
                   </Button>
@@ -120,6 +128,7 @@ const ForgotPassword: NextPage = () => {
                         justifyContent="center"
                         alignItems="center"
                         padding=".5rem"
+                        color="primary"
                       >
                         <Text
                           color="blackAlpha.700"
