@@ -9,15 +9,16 @@ import {
 } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { FaBug } from "react-icons/fa";
+import { MdOutlineSpaceDashboard, MdOutlineTask } from "react-icons/md";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
-import { MdOutlineTask, MdOutlineSpaceDashboard } from "react-icons/md";
-import { AiOutlineUsergroupAdd } from "react-icons/ai";
 
 const UserIcon = chakra(AiOutlineUsergroupAdd);
 const TicketIcon = chakra(MdOutlineTask);
 const DashboardIcon = chakra(MdOutlineSpaceDashboard);
+
 const NavBar = () => {
   const router = useRouter();
   const [{ fetching }, logout] = useLogoutMutation();
