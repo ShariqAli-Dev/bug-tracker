@@ -12,6 +12,7 @@ declare global {
       DATABASE_URL: string;
       REDIS_URL: string;
       PORT: string;
+      POSTGRES_USERNAME: string;
     }
   }
 }

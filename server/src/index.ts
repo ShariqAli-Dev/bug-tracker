@@ -1,3 +1,4 @@
+require("dotenv").config();
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";
@@ -15,6 +16,7 @@ import { ProjectResolver } from "./resolvers/project";
 import { TicketResolver } from "./resolvers/ticket";
 import { UserResolver } from "./resolvers/user";
 import { UserProjectResolver } from "./resolvers/user_project";
+
 const main = async () => {
   await myDataSource.initialize();
   await myDataSource.runMigrations();
@@ -22,7 +24,7 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
   redis.connect().catch(console.error);
 
   app.use(
@@ -72,7 +74,7 @@ const main = async () => {
     cors: false,
   });
 
-  app.listen(4000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log("server started on", "http://localhost:4000/graphql");
   });
 };
