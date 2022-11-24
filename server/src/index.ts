@@ -11,7 +11,6 @@ import { COOKIE_NAME, __prod__, REDIS_SECRET } from "./constants";
 import { myDataSource } from "./data-source";
 import { CommentResolver } from "./resolvers/comment";
 import { HelloResolver } from "./resolvers/hello";
-import { NotificationResolver } from "./resolvers/notification";
 import { ProjectResolver } from "./resolvers/project";
 import { TicketResolver } from "./resolvers/ticket";
 import { UserResolver } from "./resolvers/user";
@@ -27,9 +26,10 @@ const main = async () => {
   const redis = new Redis(process.env.REDIS_URL);
   redis.connect().catch(console.error);
 
+  app.set("trust proxy", 1);
   app.use(
     cors({
-      origin: ["https://studio.apollographql.com", "http://localhost:3000"],
+      origin: process.env.CORS_ORIGIN.split(" "),
       credentials: true,
     })
   );
@@ -45,6 +45,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: "lax",
         secure: __prod__, // cookie only works in https
+        domain: __prod__ ? ".shariqapps.dev" : undefined,
       },
       saveUninitialized: false,
       secret: REDIS_SECRET,
@@ -58,7 +59,6 @@ const main = async () => {
         HelloResolver,
         UserResolver,
         ProjectResolver,
-        NotificationResolver,
         UserProjectResolver,
         UserProjectResolver,
         CommentResolver,

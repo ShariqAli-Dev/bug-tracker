@@ -8,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Notification } from "./Notification";
 import { User_Project } from "./User_Project";
 import { Comment } from "./Comment";
 import { User_Ticket } from "./User_Ticket";
@@ -34,9 +33,6 @@ export class Users extends BaseEntity {
 
   @Column()
   password!: string;
-
-  @OneToMany(() => Notification, (notification) => notification.user)
-  notifications: Notification[];
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments: Comment[];

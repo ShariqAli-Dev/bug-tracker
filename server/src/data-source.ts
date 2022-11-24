@@ -5,7 +5,6 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { DB_NAME, PG_PASSWORD } from "./constants";
 import { Comment } from "./entities/Comment";
-import { Notification } from "./entities/Notification";
 import { Project } from "./entities/Project";
 import { Ticket } from "./entities/Ticket";
 import { Users } from "./entities/Users";
@@ -20,17 +19,9 @@ export const myDataSource = new DataSource({
   password: PG_PASSWORD,
   database: DB_NAME,
   url: process.env.DATABASE_URL,
-  synchronize: true,
+  // synchronize: true,
   logging: true,
-  entities: [
-    Comment,
-    Notification,
-    Project,
-    Ticket,
-    User_Project,
-    Users,
-    User_Ticket,
-  ],
+  entities: [Comment, Project, Ticket, User_Project, Users, User_Ticket],
   migrations: [path.join(__dirname, "./migrations/*")],
   subscribers: [],
 });
