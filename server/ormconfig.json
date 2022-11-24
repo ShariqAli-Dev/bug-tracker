@@ -4,7 +4,7 @@
   "port": 5432,
   "username": "postgres",
   "password": "password",
-  "database": "bug-tracker2",
+  "database": "bug-tracker",
   "entities": ["dist/entities/*.js"],
   "migrations": ["dist/migrations/*.js"]
 }

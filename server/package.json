@@ -13,7 +13,8 @@
     "start2": "ts-node src/index.ts",
     "dev2": "ndemon --exec ts-node src/index.ts",
     "typeorm": "typeorm-ts-node-commonjs",
-    "migration:create": "typeorm-ts-node-commonjs migration:create src/migrations/migrations"
+    "migration:create": "typeorm-ts-node-commonjs migration:create src/migrations/users",
+    "migration:generate": "yarn typeorm migration:generate src/migrations/Initial -d src/data-source"
   },
   "keywords": [],
   "author": "",
