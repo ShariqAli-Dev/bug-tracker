@@ -12,7 +12,7 @@ import { betterUpdateQuery } from "./betterUpdateQuery";
 
 export const createUrqlClient = (ssrExchange: any) => {
   return {
-    url: process.env.NEXT_PUBLIC_API_URL,
+    url: process.env.NEXT_PUBLIC_API_URL as string,
     fetchOptions: () => {
       return {
         credentials: "include", // sends a cookie
