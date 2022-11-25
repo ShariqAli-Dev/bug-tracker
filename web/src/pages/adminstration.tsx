@@ -157,7 +157,7 @@ const Adminstration: NextPage = () => {
                           await changeRole({ role: options.role });
                         }}
                       >
-                        {({ values, handleChange, isSubmitting }) => (
+                        {({ values, handleChange }) => (
                           <Form>
                             <FormControl width="full">
                               <Flex alignItems="center">
