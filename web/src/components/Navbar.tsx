@@ -61,7 +61,7 @@ const NavBar = () => {
 
         <Box
           p={5}
-          onClick={() => router.push(`/dashboard`)}
+          onClick={() => router.push(`/tickets`)}
           key="tickets"
           cursor="pointer"
         >
