@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { ReactNode, useRef, useState } from "react";
 import AssignedPersonnel from "../../components/AssignedPersonnel";
@@ -78,6 +79,13 @@ const ProjectDetails: NextPage<{ projectId: number }> = ({ projectId }) => {
 
   return (
     <>
+      <Head>
+        <title>Bug Tracker - ${projectQuery?.project?.name}</title>
+        <meta
+          name="Project Details"
+          content="Shows details and tickets for corresponding project"
+        />
+      </Head>
       <Flex h="100vh" overflow="hidden" scrollBehavior="auto" color="primary">
         {/* Sidebar Nav */}
         <Flex

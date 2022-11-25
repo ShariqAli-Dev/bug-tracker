@@ -23,6 +23,7 @@ import { Formik, Form } from "formik";
 import { useLoginMutation } from "../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
+import Head from "next/head";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
@@ -41,165 +42,174 @@ const Home: NextPage = () => {
   const handleShowPassword = () => setShowPassword(!showPassword);
 
   return (
-    <Flex
-      flexDirection="column"
-      width="100wh"
-      height="100vh"
-      backgroundColor="primary"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Stack
-        flexDir="column"
-        mb="2"
+    <>
+      <Head>
+        <title>Bug Tracker</title>
+        <meta
+          name="Bug Tracker App"
+          content="A collaborative bug tracking app that monitors and eliminates bugs in software development projects"
+        />
+      </Head>
+      <Flex
+        flexDirection="column"
+        width="100wh"
+        height="100vh"
+        backgroundColor="primary"
         justifyContent="center"
         alignItems="center"
-        backgroundColor="white"
-        boxShadow="md"
-        p={{ base: "1rem", sm: "2rem", md: "3rem" }}
-        rounded="xl"
-        width={{ base: "85%", md: "65%", lg: "45%", xl: "35%" }}
       >
-        {/* HEADING */}
-        <Flex color="primary" justifyContent="center" alignItems="center">
-          <FaBug style={{ margin: "1rem" }} size={45} />
-          <Heading>Bug Tracker Login</Heading>
-        </Flex>
+        <Stack
+          flexDir="column"
+          mb="2"
+          justifyContent="center"
+          alignItems="center"
+          backgroundColor="white"
+          boxShadow="md"
+          p={{ base: "1rem", sm: "2rem", md: "3rem" }}
+          rounded="xl"
+          width={{ base: "85%", md: "65%", lg: "45%", xl: "35%" }}
+        >
+          {/* HEADING */}
+          <Flex color="primary" justifyContent="center" alignItems="center">
+            <FaBug style={{ margin: "1rem" }} size={45} />
+            <Heading>Bug Tracker Login</Heading>
+          </Flex>
 
-        {/* FORM  */}
-        <Box minW={{ base: "90%", md: "458px" }}>
-          <Formik
-            initialValues={{ email: "", password: "" }}
-            onSubmit={async (values) => {
-              const { data } = await login({ options: values });
-              if (data?.login.errors) {
-                if (!toast.isActive("login-error")) {
-                  toast({
-                    id: "login-error",
-                    title: data.login.errors[0].field,
-                    description: data.login.errors[0].message,
-                    status: "error",
-                    duration: 3000,
-                    isClosable: true,
-                    variant: "subtle",
-                    containerStyle: {
-                      color: "primary",
-                    },
-                    position: "top",
-                  });
-                }
-              } else if (data?.login.user) {
-                if (typeof router.query.next === "string") {
-                  router.push(router.query.next);
-                } else {
-                  // worked
-                  router.push("/dashboard");
-                }
-              }
-            }}
-          >
-            {({ values, handleChange, isSubmitting }) => (
-              <Form>
-                <Stack spacing={4} p="1rem">
-                  {/* EMAIL */}
-                  <FormControl>
-                    <InputGroup color="#7A7A7A">
-                      <InputLeftElement pointerEvents="none">
-                        <CFaUserAlt />
-                      </InputLeftElement>
-                      <Input
-                        type="email"
-                        placeholder="Email Address"
-                        id="email"
-                        name="email"
-                        autoComplete="email"
-                        value={values.email}
-                        onChange={handleChange}
-                        required
-                      />
-                    </InputGroup>
-                  </FormControl>
-
-                  {/* PASSWORD */}
-                  <FormControl color="#7A7A7A">
-                    <InputGroup>
-                      <InputLeftElement pointerEvents="none">
-                        <CFaLock />
-                      </InputLeftElement>
-                      <Input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Password"
-                        id="password"
-                        name="password"
-                        autoComplete="current-password"
-                        value={values.password}
-                        onChange={handleChange}
-                        required
-                      />
-                      <InputRightElement>
-                        <Button
-                          width="4.5rem"
-                          size="sm"
-                          onClick={handleShowPassword}
-                        >
-                          {showPassword ? "Hide" : "Show"}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
-
-                    {/* SUBMIT Sign In */}
-                    <Button
-                      borderRadius={0}
-                      type="submit"
-                      variant="solid"
-                      width="full"
-                      marginTop={5}
-                      marginBottom={5}
-                      rounded="xl"
-                      color="tertiary"
-                      backgroundColor="primary"
-                      _hover={{
-                        backgroundColor: "tertiary",
+          {/* FORM  */}
+          <Box minW={{ base: "90%", md: "458px" }}>
+            <Formik
+              initialValues={{ email: "", password: "" }}
+              onSubmit={async (values) => {
+                const { data } = await login({ options: values });
+                if (data?.login.errors) {
+                  if (!toast.isActive("login-error")) {
+                    toast({
+                      id: "login-error",
+                      title: data.login.errors[0].field,
+                      description: data.login.errors[0].message,
+                      status: "error",
+                      duration: 3000,
+                      isClosable: true,
+                      variant: "subtle",
+                      containerStyle: {
                         color: "primary",
-                        border: "2px",
-                        borderColor: "primary",
-                      }}
-                      isLoading={isSubmitting}
-                    >
-                      Sign In
-                    </Button>
+                      },
+                      position: "top",
+                    });
+                  }
+                } else if (data?.login.user) {
+                  if (typeof router.query.next === "string") {
+                    router.push(router.query.next);
+                  } else {
+                    // worked
+                    router.push("/dashboard");
+                  }
+                }
+              }}
+            >
+              {({ values, handleChange, isSubmitting }) => (
+                <Form>
+                  <Stack spacing={4} p="1rem">
+                    {/* EMAIL */}
+                    <FormControl>
+                      <InputGroup color="#7A7A7A">
+                        <InputLeftElement pointerEvents="none">
+                          <CFaUserAlt />
+                        </InputLeftElement>
+                        <Input
+                          type="email"
+                          placeholder="Email Address"
+                          id="email"
+                          name="email"
+                          autoComplete="email"
+                          value={values.email}
+                          onChange={handleChange}
+                          required
+                        />
+                      </InputGroup>
+                    </FormControl>
 
-                    {/* BOTTOM  LINKS */}
-                    <FormHelperText textAlign="center">
-                      {helperTexts.map((helperText) => {
-                        return (
-                          <Flex
-                            justifyContent="center"
-                            alignItems="center"
-                            key={helperText.url}
-                            padding=".5rem"
-                            color="primary"
+                    {/* PASSWORD */}
+                    <FormControl color="#7A7A7A">
+                      <InputGroup>
+                        <InputLeftElement pointerEvents="none">
+                          <CFaLock />
+                        </InputLeftElement>
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Password"
+                          id="password"
+                          name="password"
+                          autoComplete="current-password"
+                          value={values.password}
+                          onChange={handleChange}
+                          required
+                        />
+                        <InputRightElement>
+                          <Button
+                            width="4.5rem"
+                            size="sm"
+                            onClick={handleShowPassword}
                           >
-                            <Text marginRight={1} fontSize="md">
-                              {helperText.text}
-                            </Text>
-                            <Text as="u" fontSize="md">
-                              <Link href={helperText.url}>
-                                {helperText.hyperText}
-                              </Link>
-                            </Text>
-                          </Flex>
-                        );
-                      })}
-                    </FormHelperText>
-                  </FormControl>
-                </Stack>
-              </Form>
-            )}
-          </Formik>
-        </Box>
-      </Stack>
-    </Flex>
+                            {showPassword ? "Hide" : "Show"}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
+
+                      {/* SUBMIT Sign In */}
+                      <Button
+                        borderRadius={0}
+                        type="submit"
+                        variant="solid"
+                        width="full"
+                        marginTop={5}
+                        marginBottom={5}
+                        rounded="xl"
+                        color="tertiary"
+                        backgroundColor="primary"
+                        _hover={{
+                          backgroundColor: "tertiary",
+                          color: "primary",
+                          border: "2px",
+                          borderColor: "primary",
+                        }}
+                        isLoading={isSubmitting}
+                      >
+                        Sign In
+                      </Button>
+
+                      {/* BOTTOM  LINKS */}
+                      <FormHelperText textAlign="center">
+                        {helperTexts.map((helperText) => {
+                          return (
+                            <Flex
+                              justifyContent="center"
+                              alignItems="center"
+                              key={helperText.url}
+                              padding=".5rem"
+                              color="primary"
+                            >
+                              <Text marginRight={1} fontSize="md">
+                                {helperText.text}
+                              </Text>
+                              <Text as="u" fontSize="md">
+                                <Link href={helperText.url}>
+                                  {helperText.hyperText}
+                                </Link>
+                              </Text>
+                            </Flex>
+                          );
+                        })}
+                      </FormHelperText>
+                    </FormControl>
+                  </Stack>
+                </Form>
+              )}
+            </Formik>
+          </Box>
+        </Stack>
+      </Flex>
+    </>
   );
 };
 
