@@ -174,7 +174,9 @@ export class UserResolver {
 
     await sendMail(
       email,
-      `<a href='${process.env.CORS_ORIGIN}/forgot-password/${token}'>reset password</a>`
+      `<a href='${
+        process.env.CORS_ORIGIN.split(" ")[0]
+      }/forgot-password/${token}'>reset password</a>`
     );
     return true;
   }

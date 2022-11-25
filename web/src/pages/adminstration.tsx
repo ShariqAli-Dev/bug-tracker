@@ -11,6 +11,7 @@ import {
 import { Form, Formik } from "formik";
 import type { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
 import BurgerMenu from "../components/BurgerMenu";
@@ -44,6 +45,10 @@ const Adminstration: NextPage = () => {
   } else {
     return (
       <>
+        <Head>
+          <title>Bug Tracker - Adminstration</title>
+          <meta name="Adminstration Page" content="Admin control page" />
+        </Head>
         <Flex
           h={{ base: "140vh", md: "100vh" }}
           flexDir="row"
@@ -152,7 +157,7 @@ const Adminstration: NextPage = () => {
                           await changeRole({ role: options.role });
                         }}
                       >
-                        {({ values, handleChange, isSubmitting }) => (
+                        {({ values, handleChange }) => (
                           <Form>
                             <FormControl width="full">
                               <Flex alignItems="center">
