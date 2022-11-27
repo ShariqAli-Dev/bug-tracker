@@ -1,4 +1,4 @@
-import { Users } from "src/entities/Users";
+import { Users } from "../entities/Users";
 import {
   Arg,
   Ctx,
