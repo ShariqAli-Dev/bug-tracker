@@ -1,3 +1,4 @@
+import { Users } from "src/entities/Users";
 import {
   Arg,
   Ctx,
@@ -60,6 +61,14 @@ export class ProjectResolver {
       userId: req.session.userId,
       projectId: createdProject.id,
     }).save();
+
+    const adminUsers = await Users.find({ where: { role: "admin" } });
+    adminUsers.forEach(async ({ id }) => {
+      await User_Project.create({
+        userId: id,
+        projectId: createdProject.id,
+      }).save();
+    });
 
     return createdProject;
   }
