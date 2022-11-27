@@ -1,9 +1,0 @@
-mutation UpdateNotification($options: UpdateNotificationInput!) {
-  updateNotification(options: $options) {
-    id
-    message
-    read
-    createdAt
-    updatedAt
-  }
-}

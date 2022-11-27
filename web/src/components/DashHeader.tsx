@@ -1,6 +1,5 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import QueryForm from "./QueryForm";
-import Notifications from "./Notifications";
 import UserActions from "./UserActions";
 import BurgerMenu from "./BurgerMenu";
 import { useMeQuery } from "../generated/graphql";
@@ -44,7 +43,6 @@ const DashHeader = () => {
         <Flex justifyContent="space-around" alignItems="center" padding="1rem">
           <BurgerMenu pageProps={{}} />
           <QueryForm />
-          <Notifications pageProps={{}} />
           <UserActions />
         </Flex>
       </Box>

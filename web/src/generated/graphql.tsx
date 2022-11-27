@@ -60,11 +60,9 @@ export type Mutation = {
   changePassword: UserResponse;
   changeRole: Scalars['Boolean'];
   createComment: Scalars['Boolean'];
-  createNotification: Notification;
   createProject: Project;
   createTicket: Ticket;
   deleteComment: Scalars['Boolean'];
-  deleteNotification: Scalars['Boolean'];
   deleteProject: Scalars['Boolean'];
   deleteTicket: Scalars['Boolean'];
   deleteUser: Scalars['Boolean'];
@@ -73,7 +71,6 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   register: UserResponse;
   unassignUser: Scalars['Boolean'];
-  updateNotification?: Maybe<Notification>;
   updateProject?: Maybe<Project>;
   updateTicket?: Maybe<Ticket>;
 };
@@ -112,11 +109,6 @@ export type MutationCreateCommentArgs = {
 };
 
 
-export type MutationCreateNotificationArgs = {
-  message: Scalars['String'];
-};
-
-
 export type MutationCreateProjectArgs = {
   options: CreateProjectInput;
 };
@@ -129,11 +121,6 @@ export type MutationCreateTicketArgs = {
 
 
 export type MutationDeleteCommentArgs = {
-  id: Scalars['Float'];
-};
-
-
-export type MutationDeleteNotificationArgs = {
   id: Scalars['Float'];
 };
 
@@ -174,11 +161,6 @@ export type MutationUnassignUserArgs = {
 };
 
 
-export type MutationUpdateNotificationArgs = {
-  options: UpdateNotificationInput;
-};
-
-
 export type MutationUpdateProjectArgs = {
   options: UpdateProjectInput;
 };
@@ -187,15 +169,6 @@ export type MutationUpdateProjectArgs = {
 export type MutationUpdateTicketArgs = {
   options: EditTicketInput;
   team: Array<TeamMembers>;
-};
-
-export type Notification = {
-  __typename?: 'Notification';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['Float'];
-  message: Scalars['String'];
-  read: Scalars['Boolean'];
-  updatedAt: Scalars['DateTime'];
 };
 
 export type Project = {
@@ -219,8 +192,6 @@ export type Query = {
   comments: Array<Comment>;
   hello: Scalars['String'];
   me?: Maybe<Users>;
-  notification?: Maybe<Notification>;
-  notifications: Array<Notification>;
   project?: Maybe<Project>;
   projectTickets: Array<Ticket>;
   projects: Array<Project>;
@@ -230,7 +201,6 @@ export type Query = {
   ticketsByPriority: TicketsByPriority;
   ticketsByStatus: TicketsByStatus;
   ticketsByType: TicketsByType;
-  userNotifications: Array<Notification>;
   userTickets?: Maybe<Array<UserTicket>>;
   users: Array<Users>;
 };
@@ -254,11 +224,6 @@ export type QueryAssignedPersonnelArgs = {
 export type QueryAvailableUsersArgs = {
   isAdding: Scalars['Boolean'];
   projectId: Scalars['Float'];
-};
-
-
-export type QueryNotificationArgs = {
-  id: Scalars['Float'];
 };
 
 
@@ -322,11 +287,6 @@ export type TicketsByType = {
   bug: Scalars['String'];
   feature: Scalars['String'];
   issue: Scalars['String'];
-};
-
-export type UpdateNotificationInput = {
-  id: Scalars['Float'];
-  read: Scalars['Boolean'];
 };
 
 export type UpdateProjectInput = {
@@ -469,13 +429,6 @@ export type CreateCommentMutationVariables = Exact<{
 
 export type CreateCommentMutation = { __typename?: 'Mutation', createComment: boolean };
 
-export type CreateNotificationMutationVariables = Exact<{
-  message: Scalars['String'];
-}>;
-
-
-export type CreateNotificationMutation = { __typename?: 'Mutation', createNotification: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } };
-
 export type CreateProjectMutationVariables = Exact<{
   options: CreateProjectInput;
 }>;
@@ -545,13 +498,6 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', user?: { __typename?: 'Users', id: number, email: string, role: string, name: string } | null, errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null } };
-
-export type UpdateNotificationMutationVariables = Exact<{
-  options: UpdateNotificationInput;
-}>;
-
-
-export type UpdateNotificationMutation = { __typename?: 'Mutation', updateNotification?: { __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any } | null };
 
 export type UpdateProjectMutationVariables = Exact<{
   options: UpdateProjectInput;
@@ -650,11 +596,6 @@ export type TicketsByTypeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TicketsByTypeQuery = { __typename?: 'Query', ticketsByType: { __typename?: 'TicketsByType', feature: string, issue: string, bug: string } };
 
-export type UserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserNotificationsQuery = { __typename?: 'Query', userNotifications: Array<{ __typename?: 'Notification', id: number, message: string, read: boolean, createdAt: any, updatedAt: any }> };
-
 export type UserProjectsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -663,7 +604,7 @@ export type UserProjectsQuery = { __typename?: 'Query', UserProjects: Array<{ __
 export type UserTicketsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserTicketsQuery = { __typename?: 'Query', userTickets?: Array<{ __typename?: 'UserTicket', creator: string, title: string, description: string, priority: string, type: string, status: string, name: string }> | null };
+export type UserTicketsQuery = { __typename?: 'Query', userTickets?: Array<{ __typename?: 'UserTicket', creator: string, title: string, description: string, priority: string, type: string, status: string, name: string, projectId: number }> | null };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -745,21 +686,6 @@ export const CreateCommentDocument = gql`
 
 export function useCreateCommentMutation() {
   return Urql.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument);
-};
-export const CreateNotificationDocument = gql`
-    mutation CreateNotification($message: String!) {
-  createNotification(message: $message) {
-    id
-    message
-    read
-    createdAt
-    updatedAt
-  }
-}
-    `;
-
-export function useCreateNotificationMutation() {
-  return Urql.useMutation<CreateNotificationMutation, CreateNotificationMutationVariables>(CreateNotificationDocument);
 };
 export const CreateProjectDocument = gql`
     mutation CreateProject($options: CreateProjectInput!) {
@@ -890,21 +816,6 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
-};
-export const UpdateNotificationDocument = gql`
-    mutation UpdateNotification($options: UpdateNotificationInput!) {
-  updateNotification(options: $options) {
-    id
-    message
-    read
-    createdAt
-    updatedAt
-  }
-}
-    `;
-
-export function useUpdateNotificationMutation() {
-  return Urql.useMutation<UpdateNotificationMutation, UpdateNotificationMutationVariables>(UpdateNotificationDocument);
 };
 export const UpdateProjectDocument = gql`
     mutation UpdateProject($options: UpdateProjectInput!) {
@@ -1132,21 +1043,6 @@ export const TicketsByTypeDocument = gql`
 export function useTicketsByTypeQuery(options?: Omit<Urql.UseQueryArgs<TicketsByTypeQueryVariables>, 'query'>) {
   return Urql.useQuery<TicketsByTypeQuery, TicketsByTypeQueryVariables>({ query: TicketsByTypeDocument, ...options });
 };
-export const UserNotificationsDocument = gql`
-    query UserNotifications {
-  userNotifications {
-    id
-    message
-    read
-    createdAt
-    updatedAt
-  }
-}
-    `;
-
-export function useUserNotificationsQuery(options?: Omit<Urql.UseQueryArgs<UserNotificationsQueryVariables>, 'query'>) {
-  return Urql.useQuery<UserNotificationsQuery, UserNotificationsQueryVariables>({ query: UserNotificationsDocument, ...options });
-};
 export const UserProjectsDocument = gql`
     query UserProjects {
   UserProjects {
@@ -1174,6 +1070,7 @@ export const UserTicketsDocument = gql`
     type
     status
     name
+    projectId
   }
 }
     `;
