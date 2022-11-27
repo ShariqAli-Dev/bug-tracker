@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { BsChevronDoubleLeft, BsChevronDoubleRight } from "react-icons/bs";
+import { MdRowing } from "react-icons/md";
 import { usePagination, useTable } from "react-table";
 import { useUserTicketsQuery, UserTicket } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
