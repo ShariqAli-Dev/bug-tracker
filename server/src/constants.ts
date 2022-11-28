@@ -29,7 +29,7 @@ export const CHART_STATUS = {
   RESOLVED: "resolved",
 };
 
-export const INITIAL_ROLE = ROLES.DEVELOPER;
+export const INITIAL_ROLE = ROLES.PROJECT_MANAGER;
 
 export const FORGET_PASSWORD_PREFIX = "forget-password:";
 export const __prod__ = process.env.NODE_ENV === "production";
