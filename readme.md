@@ -5,11 +5,7 @@
 
 Bug Tracker is a project management tool made for use as an internal tool within an organization. You can create multiple projects with their own individual tickets. With a tool such as this, a team of developers can efficiently plan and resolve issues arisen during the development lifecycle.
 
-## Usage
-
-Log into Bug Tracker affter creating an account and begin by adding a new project from the dashboard.
-
-<iframe>iframe for a video</iframe>
+## Usage: https://www.youtube.com/embed/2Svh41Qrmgw
 
 ## Stack
 
