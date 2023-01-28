@@ -115,7 +115,8 @@ const Demo: NextPage = () => {
                         router.push(router.query.next);
                       } else {
                         // worked
-                        router.push("/dashboard");
+                        await router.push("/dashboard");
+                        router.reload();
                       }
                     }
                   }}
