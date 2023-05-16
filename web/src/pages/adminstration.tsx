@@ -115,7 +115,7 @@ const Adminstration: NextPage = () => {
                       fontSize={"1rem"}
                       key={u.email}
                       cursor="pointer"
-                      onClick={() => setSelectedUser(users.users[udx])}
+                      onClick={() => setSelectedUser(users?.users[udx])}
                       color="primary"
                     >
                       <Box
