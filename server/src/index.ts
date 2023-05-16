@@ -45,7 +45,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: "lax",
         secure: __prod__, // cookie only works in https
-        domain: __prod__ ? ".shariqapps.dev" : undefined,
+        domain: __prod__ ? "bug-tracker-api.shariqapps.dev" : undefined,
       },
       saveUninitialized: false,
       secret: REDIS_SECRET,
