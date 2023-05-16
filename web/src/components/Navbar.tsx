@@ -73,7 +73,7 @@ const NavBar = () => {
           </Flex>
         </Box>
 
-        {!meFetch && data?.me?.role === "admin" ? (
+        {/* {!meFetch && data?.me?.role === "admin" ? (
           <Box
             p={5}
             onClick={() => router.push(`/adminstration`)}
@@ -97,7 +97,7 @@ const NavBar = () => {
           </Box>
         ) : (
           <></>
-        )}
+        )} */}
 
         <Button
           size="xs"

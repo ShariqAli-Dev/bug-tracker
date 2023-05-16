@@ -48,7 +48,7 @@ const BurgerMenu: NextPage = () => {
             My Tickets
           </MenuItem>
 
-          {!fetching && data?.me?.role === "admin" ? (
+          {/* {!fetching && data?.me?.role === "admin" ? (
             <MenuItem
               onClick={() => router.push("/adminstration")}
               icon={<UserIcon />}
@@ -57,7 +57,7 @@ const BurgerMenu: NextPage = () => {
             </MenuItem>
           ) : (
             <></>
-          )}
+          )} */}
           <MenuItem display="flex" alignItems="center">
             <Button
               size="xs"

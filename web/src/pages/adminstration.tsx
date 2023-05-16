@@ -13,7 +13,7 @@ import type { NextPage } from "next";
 import { withUrqlClient } from "next-urql";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import BurgerMenu from "../components/BurgerMenu";
 import DeleteUserAlert from "../components/DeleteUserAlert";
 import NavBar from "../components/Navbar";
@@ -34,6 +34,11 @@ const Adminstration: NextPage = () => {
   const cancelRef = useRef();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const router = useRouter();
+
+  useEffect(() => {
+    router.push("/dashboard");
+  });
+  return <>INVALID PAGE</>;
 
   if (fetching || meFetch) {
     return <></>;
