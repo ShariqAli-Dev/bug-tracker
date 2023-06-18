@@ -215,7 +215,6 @@ export class UserResolver {
         .insert()
         .into(Users)
         .values({
-          id: 200,
           email: options.email,
           name: options.name,
           password: hashedPassword,
