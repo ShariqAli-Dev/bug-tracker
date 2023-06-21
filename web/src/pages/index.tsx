@@ -16,7 +16,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaUserAlt, FaLock, FaBug } from "react-icons/fa";
 import { useRouter } from "next/router";
 import { Formik, Form } from "formik";
@@ -24,6 +24,7 @@ import { useLoginMutation } from "../generated/graphql";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import Head from "next/head";
+import axios from "axios";
 
 const helperTexts = [
   { text: "Forgot your", hyperText: "Password?", url: "forgot-password" },
@@ -40,7 +41,16 @@ const Home: NextPage = () => {
   const toast = useToast();
 
   const handleShowPassword = () => setShowPassword(!showPassword);
-
+  useEffect(() => {
+    axios
+      .get("https://bug-tracker-api.shariqapps.dev")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  });
   return (
     <>
       <Head>
