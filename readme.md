@@ -7,7 +7,7 @@ Bug Tracker is a project management tool made for use as an internal tool within
 
 ## Usage: www.youtube.com/watch?v=2Svh41Qrmgw
 
-## URL: https://www.bug-tracker.shariqapps.dev/
+## URL: https://bug-tracker.shariqapps.dev/
 
 ## Stack
 
