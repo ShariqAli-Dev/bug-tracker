@@ -55,18 +55,7 @@ const main = async () => {
   });
   app.get("/", (_, res) => {
     res.json({
-      PG_PASSWORD: process.env.PG_PASSWORD,
-      DB_NAME: process.env.DB_NAME,
-      POSTGRES_USERNAME: process.env.POSTGRES_USERNAME,
-      PASSWORD_RESET_SECRET: process.env.PASSWORD_RESET_SECRET,
-      DATABASE_URL: process.env.DATABASE_URL,
-      REDIS_SECRET: process.env.REDIS_SECRET,
-      COOKIE_NAME: process.env.COOKIE_NAME,
-      DEMO_USER_PASSWORD: process.env.DEMO_USER_PASSWORD,
-      REDIS_URL: process.env.REDIS_URL,
-      PORT: process.env.port,
-      CORS_ORIGIN: process.env.CORS_ORIGIN,
-      NODE_ENV: process.env.NODE_ENV,
+      message: "sanity check",
     });
   });
   const apolloServer = new ApolloServer({
